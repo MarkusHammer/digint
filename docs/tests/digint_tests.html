@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.1">
+<title>digint.tests.digint_tests API documentation</title>
+<meta name="description" content="digint_tests …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>digint.tests.digint_tests</code></h1>
+</header>
+<section id="section-intro">
+<p>digint_tests</p>
+<p>Holds test cases that specifically test the <code>digitint</code> class and it's capabilities.</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="digint.tests.digint_tests.DigintPreset"><code class="flex name class">
+<span>class <span class="ident">DigintPreset</span></span>
+<span>(</span><span>methodName='runTest')</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code><a title="digint.tests.digint_tests.DigintPreset" href="#digint.tests.digint_tests.DigintPreset">DigintPreset</a></code></p>
+<p>Tests the <code><a title="digint" href="../index.html">digint</a></code> class and it's capabilities using a contant collection of preset examples.</p>
+<p>Create an instance of the class that will use the named test
+method when executed. Raises a ValueError if the instance does
+not have a method with the specified name.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DigintPreset(unittest.TestCase):
+    &#34;&#34;&#34;
+    `DigintPreset`
+    
+    Tests the `digint` class and it&#39;s capabilities using a contant collection of preset examples.
+    &#34;&#34;&#34;
+    #formated as (source_int, source_base) : (popped_value, popping_index, remaining_int)
+    CONSTS = {
+        (987654321, 10) : (2, 1, 98765431),
+        (987654321, 10) : (9, -1, 87654321),
+        (987654321, 10) : (6, 5, 98754321),
+        (987654321, 10) : ([4,5,6], slice(3,6), 987321),
+        (0xABCDEF, 16) : (0xC, 3, 0xABDEF),
+        (0xABCDEF, 16) : (0xA, -1, 0xBCDEF),
+        (&#34;ABCDEF&#34;, 23) : (int(&#34;A&#34;, 23), -1, int(&#34;BCDEF&#34;, 23)),
+        (&#34;ABCDEF&#34;, 36) : (int(&#34;B&#34;, 36), 4, int(&#34;ACDEF&#34;, 36))
+    }
+
+    def test_get(self):
+        &#34;&#34;&#34;
+        `test_get`
+        
+        Tests that the `digint` class&#39;s `__getitem__` behaves as expected
+        using the tests case&#39;s contant examples.
+        &#34;&#34;&#34;
+        for inv, outv in self.CONSTS.items():
+            self.assertEqual(digitint(*inv).get_digit(outv[1]), outv[0])
+
+    def test_set(self):
+        &#34;&#34;&#34;
+        `test_set`
+        
+        Tests that the `digint` class&#39;s `__setitem__` behaves as expected
+        using the tests case&#39;s contant examples.
+        &#34;&#34;&#34;
+        for inv in self.CONSTS:
+            dintobj = digitint(*inv)
+            newval = randrange(0, dintobj.base - 1)
+            dintobj[2] = newval
+            self.assertEqual(dintobj[2], newval)
+
+    def test_del(self):
+        &#34;&#34;&#34;
+        `test_del`
+        
+        Tests that the `digint` class&#39;s `__delitem__` behaves as expected
+        using the tests case&#39;s contant examples.
+        &#34;&#34;&#34;
+        for inv, outv in self.CONSTS.items():
+            o = digitint(*inv)
+            del o[outv[1]]
+            self.assertEqual(int(o), outv[2])
+
+    def test_mask(self):
+        &#34;&#34;&#34;
+        `test_mask`
+        
+        Tests that the `digint` class&#39;s `mask` behaves as expected
+        using the tests case&#39;s contant examples.
+        &#34;&#34;&#34;
+        for inv, outv in self.CONSTS.items():
+            if not isinstance(outv[1], int):
+                continue
+            dintobj = digitint(*inv)
+            expected_mask = outv[0] * (dintobj.base ** absindex(outv[1], dintobj.digit_length()))
+            self.assertEqual(dintobj.mask(outv[1]), expected_mask)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>unittest.case.TestCase</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="digint.tests.digint_tests.DigintPreset.CONSTS"><code class="name">var <span class="ident">CONSTS</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="digint.tests.digint_tests.DigintPreset.test_del"><code class="name flex">
+<span>def <span class="ident">test_del</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>test_del</code></p>
+<p>Tests that the <code><a title="digint" href="../index.html">digint</a></code> class's <code>__delitem__</code> behaves as expected
+using the tests case's contant examples.</p></div>
+</dd>
+<dt id="digint.tests.digint_tests.DigintPreset.test_get"><code class="name flex">
+<span>def <span class="ident">test_get</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>test_get</code></p>
+<p>Tests that the <code><a title="digint" href="../index.html">digint</a></code> class's <code>__getitem__</code> behaves as expected
+using the tests case's contant examples.</p></div>
+</dd>
+<dt id="digint.tests.digint_tests.DigintPreset.test_mask"><code class="name flex">
+<span>def <span class="ident">test_mask</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>test_mask</code></p>
+<p>Tests that the <code><a title="digint" href="../index.html">digint</a></code> class's <code>mask</code> behaves as expected
+using the tests case's contant examples.</p></div>
+</dd>
+<dt id="digint.tests.digint_tests.DigintPreset.test_set"><code class="name flex">
+<span>def <span class="ident">test_set</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>test_set</code></p>
+<p>Tests that the <code><a title="digint" href="../index.html">digint</a></code> class's <code>__setitem__</code> behaves as expected
+using the tests case's contant examples.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="digint.tests.digint_tests.DigintRandom"><code class="flex name class">
+<span>class <span class="ident">DigintRandom</span></span>
+<span>(</span><span>methodName='runTest')</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code><a title="digint.tests.digint_tests.DigintRandom" href="#digint.tests.digint_tests.DigintRandom">DigintRandom</a></code></p>
+<p>Tests the <code><a title="digint" href="../index.html">digint</a></code> class and it's capabilities using randomly generated example values.</p>
+<p>Create an instance of the class that will use the named test
+method when executed. Raises a ValueError if the instance does
+not have a method with the specified name.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DigintRandom(unittest.TestCase):
+    &#34;&#34;&#34;
+    `DigintRandom`
+    
+    Tests the `digint` class and it&#39;s capabilities using randomly generated example values.
+    &#34;&#34;&#34;
+    def test_digit_length_decimal(self):
+        &#34;&#34;&#34;
+        `test_digit_length_decimal`
+        
+        Tests that the `digint` class&#39;s `digit_length` behaves as expected
+        with random values in base 10.
+        &#34;&#34;&#34;
+        for _ in range(5000):
+            val = randrange(-1000000, 1000000)
+            self.assertEqual(digitint(val, 10).digit_length(), len(str(abs(val))))
+
+    def test_digit_length_hex(self):
+        &#34;&#34;&#34;
+        `test_digit_length_hex`
+        
+        Tests that the `digint` class&#39;s `digit_length` behaves as expected
+        with random values in base 16.
+        &#34;&#34;&#34;
+        for _ in range(5000):
+            val = randrange(-1000000, 1000000)
+            self.assertEqual(digitint(val, 16).digit_length(), len(hex(abs(val)).lstrip(&#34;0x&#34;)))
+
+    def test_digit_length_bin(self):
+        &#34;&#34;&#34;
+        `test_digit_length_bin`
+        
+        Tests that the `digint` class&#39;s `digit_length` behaves as expected
+        with random values in base 2.
+        &#34;&#34;&#34;
+        for _ in range(5000):
+            val = randrange(-1000000, 1000000)
+            self.assertEqual(digitint(val, 2).digit_length(), val.bit_length())
+            self.assertEqual(digitint(val, 2).digit_length(), len(bin(abs(val)).lstrip(&#34;0b&#34;)))
+
+    def test_digit_length_oct(self):
+        &#34;&#34;&#34;
+        `test_digit_length_oct`
+        
+        Tests that the `digint` class&#39;s `digit_length` behaves as expected
+        with random values in base 8.
+        &#34;&#34;&#34;
+        for _ in range(5000):
+            val = randrange(-1000000, 1000000)
+            self.assertEqual(digitint(val, 8).digit_length(), len(oct(abs(val)).lstrip(&#34;0o&#34;)))</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>unittest.case.TestCase</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="digint.tests.digint_tests.DigintRandom.test_digit_length_bin"><code class="name flex">
+<span>def <span class="ident">test_digit_length_bin</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>test_digit_length_bin</code></p>
+<p>Tests that the <code><a title="digint" href="../index.html">digint</a></code> class's <code>digit_length</code> behaves as expected
+with random values in base 2.</p></div>
+</dd>
+<dt id="digint.tests.digint_tests.DigintRandom.test_digit_length_decimal"><code class="name flex">
+<span>def <span class="ident">test_digit_length_decimal</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>test_digit_length_decimal</code></p>
+<p>Tests that the <code><a title="digint" href="../index.html">digint</a></code> class's <code>digit_length</code> behaves as expected
+with random values in base 10.</p></div>
+</dd>
+<dt id="digint.tests.digint_tests.DigintRandom.test_digit_length_hex"><code class="name flex">
+<span>def <span class="ident">test_digit_length_hex</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>test_digit_length_hex</code></p>
+<p>Tests that the <code><a title="digint" href="../index.html">digint</a></code> class's <code>digit_length</code> behaves as expected
+with random values in base 16.</p></div>
+</dd>
+<dt id="digint.tests.digint_tests.DigintRandom.test_digit_length_oct"><code class="name flex">
+<span>def <span class="ident">test_digit_length_oct</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>test_digit_length_oct</code></p>
+<p>Tests that the <code><a title="digint" href="../index.html">digint</a></code> class's <code>digit_length</code> behaves as expected
+with random values in base 8.</p></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="digint.tests" href="index.html">digint.tests</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="digint.tests.digint_tests.DigintPreset" href="#digint.tests.digint_tests.DigintPreset">DigintPreset</a></code></h4>
+<ul class="">
+<li><code><a title="digint.tests.digint_tests.DigintPreset.test_del" href="#digint.tests.digint_tests.DigintPreset.test_del">test_del</a></code></li>
+<li><code><a title="digint.tests.digint_tests.DigintPreset.test_get" href="#digint.tests.digint_tests.DigintPreset.test_get">test_get</a></code></li>
+<li><code><a title="digint.tests.digint_tests.DigintPreset.test_mask" href="#digint.tests.digint_tests.DigintPreset.test_mask">test_mask</a></code></li>
+<li><code><a title="digint.tests.digint_tests.DigintPreset.test_set" href="#digint.tests.digint_tests.DigintPreset.test_set">test_set</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="digint.tests.digint_tests.DigintRandom" href="#digint.tests.digint_tests.DigintRandom">DigintRandom</a></code></h4>
+<ul class="">
+<li><code><a title="digint.tests.digint_tests.DigintRandom.test_digit_length_bin" href="#digint.tests.digint_tests.DigintRandom.test_digit_length_bin">test_digit_length_bin</a></code></li>
+<li><code><a title="digint.tests.digint_tests.DigintRandom.test_digit_length_decimal" href="#digint.tests.digint_tests.DigintRandom.test_digit_length_decimal">test_digit_length_decimal</a></code></li>
+<li><code><a title="digint.tests.digint_tests.DigintRandom.test_digit_length_hex" href="#digint.tests.digint_tests.DigintRandom.test_digit_length_hex">test_digit_length_hex</a></code></li>
+<li><code><a title="digint.tests.digint_tests.DigintRandom.test_digit_length_oct" href="#digint.tests.digint_tests.DigintRandom.test_digit_length_oct">test_digit_length_oct</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.1</a>.</p>
+</footer>
+</body>
+</html>

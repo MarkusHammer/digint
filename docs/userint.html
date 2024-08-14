@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.1">
+<title>digint.userint API documentation</title>
+<meta name="description" content="userint …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>digint.userint</code></h1>
+</header>
+<section id="section-intro">
+<p>userint</p>
+<p>Holds the <code><a title="digint.userint.UserInt" href="#digint.userint.UserInt">UserInt</a></code> and <code><a title="digint.userint.ExtendedUserInt" href="#digint.userint.ExtendedUserInt">ExtendedUserInt</a></code> classes.</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="digint.userint.ExtendedUserInt"><code class="flex name class">
+<span>class <span class="ident">ExtendedUserInt</span></span>
+<span>(</span><span>x: int)</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code><a title="digint.userint.ExtendedUserInt" href="#digint.userint.ExtendedUserInt">ExtendedUserInt</a></code></p>
+<p>A class the extends <code><a title="digint.userint.UserInt" href="#digint.userint.UserInt">UserInt</a></code>, adding some basic quality of life attributes.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ExtendedUserInt(UserInt):
+    &#34;&#34;&#34;
+    `ExtendedUserInt`
+
+    A class the extends `UserInt`, adding some basic quality of life attributes.
+    &#34;&#34;&#34;
+    @property
+    def sign(self) -&gt; int:
+        &#34;&#34;&#34;
+        `sign`
+
+        `-1` if `x` is negative, `1` if `x` is positive, `0` if `x` is `0`.
+        &#34;&#34;&#34;
+        return 0 if self.x == 0 else (1 if self.x &gt; 0 else -1)
+    @sign.setter
+    def sign(self, value:int):
+        value = max(min(value, 1), -1)
+        if value == 0:
+            self.x = 0
+        elif self.sign != value:
+            self.x *= -1</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="digint.userint.UserInt" href="#digint.userint.UserInt">UserInt</a></li>
+<li>typing.SupportsInt</li>
+<li>typing.SupportsFloat</li>
+<li>typing.SupportsAbs</li>
+<li>typing.SupportsComplex</li>
+<li>typing.SupportsRound</li>
+<li>typing.SupportsIndex</li>
+<li>typing.Protocol</li>
+<li>typing.Generic</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="digint.digint.PositionalBasedIntiger" href="digint.html#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="digint.userint.ExtendedUserInt.sign"><code class="name">prop <span class="ident">sign</span> : int</code></dt>
+<dd>
+<div class="desc"><p><code>sign</code></p>
+<p><code>-1</code> if <code>x</code> is negative, <code>1</code> if <code>x</code> is positive, <code>0</code> if <code>x</code> is <code>0</code>.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def sign(self) -&gt; int:
+    &#34;&#34;&#34;
+    `sign`
+
+    `-1` if `x` is negative, `1` if `x` is positive, `0` if `x` is `0`.
+    &#34;&#34;&#34;
+    return 0 if self.x == 0 else (1 if self.x &gt; 0 else -1)</code></pre>
+</details>
+</dd>
+<dt id="digint.userint.ExtendedUserInt.x"><code class="name">prop <span class="ident">x</span> : int</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.userint.UserInt" href="#digint.userint.UserInt">UserInt</a></code>.<code><a title="digint.userint.UserInt.x" href="#digint.userint.UserInt.x">x</a></code>
+</p>
+<div class="desc inherited"><p><code>x</code> …</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="digint.userint.ExtendedUserInt.bit_count"><code class="name flex">
+<span>def <span class="ident">bit_count</span></span>(<span>self) ‑> int</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.userint.UserInt" href="#digint.userint.UserInt">UserInt</a></code>.<code><a title="digint.userint.UserInt.bit_count" href="#digint.userint.UserInt.bit_count">bit_count</a></code>
+</p>
+<div class="desc inherited"><p><code>bit_count</code> …</p></div>
+</dd>
+<dt id="digint.userint.ExtendedUserInt.bit_length"><code class="name flex">
+<span>def <span class="ident">bit_length</span></span>(<span>self) ‑> int</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.userint.UserInt" href="#digint.userint.UserInt">UserInt</a></code>.<code><a title="digint.userint.UserInt.bit_length" href="#digint.userint.UserInt.bit_length">bit_length</a></code>
+</p>
+<div class="desc inherited"><p><code>bit_count</code> …</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="digint.userint.UserInt"><code class="flex name class">
+<span>class <span class="ident">UserInt</span></span>
+<span>(</span><span>x: int)</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code><a title="digint.userint.UserInt" href="#digint.userint.UserInt">UserInt</a></code></p>
+<p>A class making a extendable intiger type, using the x attribute.
+Based off of the intent of objects like <code>UserList</code>, for the <code>int</code> type.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@attr_forward_operators(&#34;x&#34;, &#34;xor&#34;, &#34;lshift&#34;, &#34;rshift&#34;, replace_existing=True, set_inline=True)
+@attr_forward_operators(&#34;x&#34;, &#34;and_&#34;, &#34;or_&#34;, replace_existing=True, set_inline=True)
+@attr_forward_operators(&#34;x&#34;, &#34;invert&#34;, replace_existing=True)
+@attr_forward_operators(&#34;x&#34;, &#34;neg&#34;, &#34;abs&#34;, &#34;pos&#34;, replace_existing=True)
+@attr_forward_operators(&#34;x&#34;, &#34;floordiv&#34;, &#34;mod&#34;, &#34;pow&#34;, set_inline=True)
+@attr_forward_operators(&#34;x&#34;, &#34;add&#34;, &#34;sub&#34;, &#34;mul&#34;, &#34;truediv&#34;, set_inline=True)
+@total_ordering
+@attr_forward_operators(&#34;x&#34;, &#34;lt&#34;, &#34;eq&#34;, &#34;gt&#34;, &#34;le&#34;, &#34;ge&#34;, replace_existing=True)
+class UserInt(*tuple(__USERINT_ABCS)):
+    &#34;&#34;&#34;
+    `UserInt`
+
+    A class making a extendable intiger type, using the x attribute.
+    Based off of the intent of objects like `UserList`, for the `int` type.
+    &#34;&#34;&#34;
+    def __init__(self, x:int):
+        self.__x:int = x
+
+    @property
+    def x(self) -&gt; int:
+        &#34;&#34;&#34;
+        `x`
+
+        The explicit value of the intiger.
+        &#34;&#34;&#34;
+        return self.__x
+    @x.setter
+    def x(self, value:int):
+        self.__x = value
+
+    def __int__(self):
+        return self.x
+    __index__ = __int__
+    __trunc__ = __int__
+    __floor__ = __int__
+    __ceil__ = __int__
+
+    def __bool__(self):
+        return bool(self.x)
+
+    def __bytes__(self):
+        return bytes(self.x)
+
+    def __float__(self):
+        return float(self.x)
+
+    def __complex__(self):
+        return complex(self.x)
+
+    def __str__(self):
+        return str(self.x)
+
+    def __repr__(self):
+        return repr(self.x)
+
+    def __format__(self, s):
+        return format(self.x, s)
+
+    def __round__(self, ndigits:Union[None, int] = None) -&gt; int:
+        return round(self.x, ndigits)
+
+    def bit_count(self) -&gt; int:
+        &#34;&#34;&#34;
+        `bit_count`
+
+        Number of ones in the binary representation of the absolute value of self.
+
+        Also known as the population count.
+        &#34;&#34;&#34;
+        return self.x.bit_count()
+
+    def bit_length(self) -&gt; int:
+        &#34;&#34;&#34;
+        `bit_count`
+
+        Number of bits necessary to represent self in binary.
+        &#34;&#34;&#34;
+        return self.x.bit_length()
+
+    #these are all handled by the decorators, but type checkers miss that sometimes
+    def __abs__(self): ...
+    def __neg__(self): ...
+    def __pos__(self): ...
+    def __invert__(self): ...</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>typing.SupportsInt</li>
+<li>typing.SupportsFloat</li>
+<li>typing.SupportsAbs</li>
+<li>typing.SupportsComplex</li>
+<li>typing.SupportsRound</li>
+<li>typing.SupportsIndex</li>
+<li>typing.Protocol</li>
+<li>typing.Generic</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="digint.userint.ExtendedUserInt" href="#digint.userint.ExtendedUserInt">ExtendedUserInt</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="digint.userint.UserInt.x"><code class="name">prop <span class="ident">x</span> : int</code></dt>
+<dd>
+<div class="desc"><p><code>x</code></p>
+<p>The explicit value of the intiger.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def x(self) -&gt; int:
+    &#34;&#34;&#34;
+    `x`
+
+    The explicit value of the intiger.
+    &#34;&#34;&#34;
+    return self.__x</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="digint.userint.UserInt.bit_count"><code class="name flex">
+<span>def <span class="ident">bit_count</span></span>(<span>self) ‑> int</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>bit_count</code></p>
+<p>Number of ones in the binary representation of the absolute value of self.</p>
+<p>Also known as the population count.</p></div>
+</dd>
+<dt id="digint.userint.UserInt.bit_length"><code class="name flex">
+<span>def <span class="ident">bit_length</span></span>(<span>self) ‑> int</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>bit_count</code></p>
+<p>Number of bits necessary to represent self in binary.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="digint.userint.attr_forward_operators"><code class="flex name class">
+<span>class <span class="ident">attr_forward_operators</span></span>
+<span>(</span><span>instance_attr_name: str, *opperator_names: str, set_undundered: bool = False, replace_existing: bool = False, set_inline: bool = False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code><a title="digint.userint.attr_forward_operators" href="#digint.userint.attr_forward_operators">attr_forward_operators</a></code></p>
+<p>Used to set an attribute of a class's opperators
+as the operators of it's containing class as well.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class attr_forward_operators:#pylint: disable=invalid-name
+    &#34;&#34;&#34;
+    `attr_forward_operators`
+
+    Used to set an attribute of a class&#39;s opperators
+    as the operators of it&#39;s containing class as well.
+    &#34;&#34;&#34;
+    class partial_opperator:#pylint: disable=invalid-name
+        &#34;&#34;&#34;
+        `partial_opperator`
+        
+        Used to get partial callable to a specific opperator of a attribute of the target class.
+        &#34;&#34;&#34;
+
+        def __init__(self, operator_module_attr_name:str, instance_attr_name:str):
+            self.op_func:Callable = getattr(operator, operator_module_attr_name)
+            self.instance_attr_name:str = instance_attr_name
+
+        def __call__(self, inst_self, *args, **kwargs):
+            return self.op_func(getattr(inst_self, self.instance_attr_name), *args, **kwargs)
+
+        def callable_method(self) -&gt; partialmethod:
+            &#34;&#34;&#34;
+            `callable_method`
+
+            Returns:
+                A partial callable method to the operator.
+            &#34;&#34;&#34;
+            return partialmethod(self)
+
+    class partial_inline_opperator:#pylint: disable=invalid-name
+        &#34;&#34;&#34;
+        `partial_inline_opperator`
+        
+        Similar to `partial_opperator`, but specifically compatable with inline opperators instead.
+        &#34;&#34;&#34;
+
+        def __init__(self, operator_module_attr_name:str, instance_attr_name:str):
+            self.op_func:Callable = getattr(operator, operator_module_attr_name)
+            self.instance_attr_name:str = instance_attr_name
+
+        def __call__(self, inst_self, *args, **kwargs):
+            setattr(inst_self,
+                    self.instance_attr_name,
+                    self.op_func(getattr(inst_self, self.instance_attr_name), *args, **kwargs))
+            return inst_self
+
+        def callable_method(self) -&gt; partialmethod:
+            &#34;&#34;&#34;
+            `callable_method`
+
+            Returns:
+                A partial callable method to the inline operator.
+            &#34;&#34;&#34;
+            return partialmethod(self)
+
+    @staticmethod
+    def undunder(name:str) -&gt; str:
+        &#34;&#34;&#34;
+        `undunder`
+
+        Removes underscores form an attribute name.
+
+        Arguments:
+            name -- The attribute to remove underscores from.
+
+        Returns:
+            The name with underscores removed.
+        &#34;&#34;&#34;
+        return name.strip(&#34;_&#34;)
+
+    @staticmethod
+    def dunder(name:str) -&gt; str:
+        &#34;&#34;&#34;
+        `dunder`
+
+        Add the proper amount of underscores to an attribute name.
+
+        Arguments:
+            name -- The attribute to add underscores to.
+
+        Returns:
+            The name with underscores added.
+        &#34;&#34;&#34;
+        return f&#34;__{attr_forward_operators.undunder(name)}__&#34;
+
+    @staticmethod
+    def inline_name(name:str) -&gt; str:
+        &#34;&#34;&#34;
+        `inline_name`
+
+        Gets returns the inline name for the given opperator.
+
+        Arguments:
+            name -- The operator to get the inline name of.
+
+        Returns:
+            The inline opperator name.
+        &#34;&#34;&#34;
+        return f&#34;i{attr_forward_operators.undunder(name)}&#34;
+
+    @staticmethod
+    def inline_name_dunder(name:str) -&gt; str:
+        &#34;&#34;&#34;
+        `inline_name_dunder`
+
+        Gets returns the inline double underscored name for the given opperator.
+
+        Arguments:
+            name -- The operator to get the underscored inline name of.
+
+        Returns:
+            The underscored inline opperator name.
+        &#34;&#34;&#34;
+        return f&#34;__i{attr_forward_operators.undunder(name)}__&#34;
+
+    def __init__(self,
+                 instance_attr_name:str,
+                 *opperator_names:str,
+                 set_undundered:bool = False,
+                 replace_existing:bool = False,
+                 set_inline:bool = False
+                ):
+        self.instance_attr_name:str = instance_attr_name
+        self.opperator_names:Tuple[str, ...] = opperator_names
+        self.set_undundered:bool = set_undundered
+        self.set_inline:bool = set_inline
+        self.replace_existing:bool = replace_existing
+
+    def __call__(self, cls:Type) -&gt; Type:
+        for op_name in self.opperator_names:
+            dundered = self.dunder(op_name)
+            undundered = self.undunder(op_name)
+
+            operator_name = None
+            if hasattr(operator, op_name) and isinstance(getattr(operator, op_name), Callable):
+                operator_name = op_name
+            elif hasattr(operator, undundered):
+                operator_name = undundered
+            elif hasattr(operator, dundered):
+                operator_name = dundered
+
+            if operator_name is None:
+                raise NameError(f&#34;Operator {op_name} was not found in the operators module&#34;)
+
+            op = self.partial_opperator(operator_name, self.instance_attr_name)
+            targets = {dundered : op.callable_method()}
+
+            if self.set_undundered:
+                targets[undundered] = op.callable_method()
+
+            if self.set_inline:
+                iop = self.partial_inline_opperator(operator_name,self.instance_attr_name)
+                targets[self.inline_name_dunder(op_name)] = iop.callable_method()
+                if self.set_undundered:
+                    targets[self.inline_name(op_name)] = iop.callable_method()
+
+            if not self.replace_existing:
+                for target_name in targets:
+                    if hasattr(cls, target_name):
+                        raise PermissionError(f&#34;Attempted to overwrite prexisting method {op_name}&#34;)
+
+            for name, func in targets.items():
+                setattr(cls, name, func)
+
+        return cls</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="digint.userint.attr_forward_operators.partial_inline_opperator"><code class="name">var <span class="ident">partial_inline_opperator</span></code></dt>
+<dd>
+<div class="desc"><p><code>partial_inline_opperator</code></p>
+<p>Similar to <code>partial_opperator</code>, but specifically compatable with inline opperators instead.</p></div>
+</dd>
+<dt id="digint.userint.attr_forward_operators.partial_opperator"><code class="name">var <span class="ident">partial_opperator</span></code></dt>
+<dd>
+<div class="desc"><p><code>partial_opperator</code></p>
+<p>Used to get partial callable to a specific opperator of a attribute of the target class.</p></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="digint.userint.attr_forward_operators.dunder"><code class="name flex">
+<span>def <span class="ident">dunder</span></span>(<span>name: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>dunder</code></p>
+<p>Add the proper amount of underscores to an attribute name.</p>
+<h2 id="arguments">Arguments</h2>
+<p>name &ndash; The attribute to add underscores to.</p>
+<h2 id="returns">Returns</h2>
+<p>The name with underscores added.</p></div>
+</dd>
+<dt id="digint.userint.attr_forward_operators.inline_name"><code class="name flex">
+<span>def <span class="ident">inline_name</span></span>(<span>name: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>inline_name</code></p>
+<p>Gets returns the inline name for the given opperator.</p>
+<h2 id="arguments">Arguments</h2>
+<p>name &ndash; The operator to get the inline name of.</p>
+<h2 id="returns">Returns</h2>
+<p>The inline opperator name.</p></div>
+</dd>
+<dt id="digint.userint.attr_forward_operators.inline_name_dunder"><code class="name flex">
+<span>def <span class="ident">inline_name_dunder</span></span>(<span>name: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>inline_name_dunder</code></p>
+<p>Gets returns the inline double underscored name for the given opperator.</p>
+<h2 id="arguments">Arguments</h2>
+<p>name &ndash; The operator to get the underscored inline name of.</p>
+<h2 id="returns">Returns</h2>
+<p>The underscored inline opperator name.</p></div>
+</dd>
+<dt id="digint.userint.attr_forward_operators.undunder"><code class="name flex">
+<span>def <span class="ident">undunder</span></span>(<span>name: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>undunder</code></p>
+<p>Removes underscores form an attribute name.</p>
+<h2 id="arguments">Arguments</h2>
+<p>name &ndash; The attribute to remove underscores from.</p>
+<h2 id="returns">Returns</h2>
+<p>The name with underscores removed.</p></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="digint" href="index.html">digint</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="digint.userint.ExtendedUserInt" href="#digint.userint.ExtendedUserInt">ExtendedUserInt</a></code></h4>
+<ul class="">
+<li><code><a title="digint.userint.ExtendedUserInt.bit_count" href="#digint.userint.ExtendedUserInt.bit_count">bit_count</a></code></li>
+<li><code><a title="digint.userint.ExtendedUserInt.bit_length" href="#digint.userint.ExtendedUserInt.bit_length">bit_length</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="digint.userint.UserInt" href="#digint.userint.UserInt">UserInt</a></code></h4>
+<ul class="">
+<li><code><a title="digint.userint.UserInt.bit_count" href="#digint.userint.UserInt.bit_count">bit_count</a></code></li>
+<li><code><a title="digint.userint.UserInt.bit_length" href="#digint.userint.UserInt.bit_length">bit_length</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="digint.userint.attr_forward_operators" href="#digint.userint.attr_forward_operators">attr_forward_operators</a></code></h4>
+<ul class="">
+<li><code><a title="digint.userint.attr_forward_operators.dunder" href="#digint.userint.attr_forward_operators.dunder">dunder</a></code></li>
+<li><code><a title="digint.userint.attr_forward_operators.inline_name" href="#digint.userint.attr_forward_operators.inline_name">inline_name</a></code></li>
+<li><code><a title="digint.userint.attr_forward_operators.inline_name_dunder" href="#digint.userint.attr_forward_operators.inline_name_dunder">inline_name_dunder</a></code></li>
+<li><code><a title="digint.userint.attr_forward_operators.undunder" href="#digint.userint.attr_forward_operators.undunder">undunder</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.1</a>.</p>
+</footer>
+</body>
+</html>

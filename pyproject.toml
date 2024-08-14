@@ -1,0 +1,93 @@
+#pyproject.toml for the digint Python module
+#THX https://packaging.python.org/en/latest/specifications/declaring-project-metadata/#entry-points
+#THX https://pypi.org/project/validate-pyproject/
+
+[project]
+    dynamic = ["readme", "version"]
+    name = "digint"
+    description = "A Python module for manipulating positional integers across any numerical base, providing advanced digit-level control."
+    authors = [{ name = "Markus Hammer", email = "107761433+MarkusHammer@users.noreply.github.com" }]
+    license = { file = "LICENSE" }
+    dependencies = ["typing_extensions<=3.10"]
+    requires-python = ">=3.7"
+    classifiers = [
+        "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: Developers",
+        "Intended Audience :: Science/Research",
+        "Intended Audience :: Education",
+        "Typing :: Typed",
+        "Natural Language :: English",
+        "Topic :: Scientific/Engineering :: Mathematics",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12"
+    ]
+    keywords = [
+        "integer",
+        "digit",
+        "digitwise",
+        "bitwise",
+        "manipulation",
+        "number",
+        "numeric",
+        "numerical",
+        "bases",
+        "positional",
+        "number systems",
+        "mathematics",
+        "binary",
+        "hexadecimal",
+        "custom",
+        "notation"
+    ]
+    [project.optional-dependencies]
+        dev = ["setuptools>=64.0.0", "pip-tools", "validate-pyproject[all]", "build", "twine", "coverage", "pdoc3", "pyright", "pylint"]
+    [project.urls]
+        Homepage = "https://github.com/MarkusHammer/digint"
+        Documentation = "https://MarkusHammer.github.io/digint"
+        Github  = "https://github.com/MarkusHammer/digint"
+        Issues = "https://github.com/MarkusHammer/digint/issues"
+        "Pull Requests" = "https://github.com/MarkusHammer/digint/pulls"
+        Git = "https://github.com/MarkusHammer/digint.git"
+
+[build-system]
+    requires = ["setuptools"]
+    build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+    zip-safe = true
+    [tool.setuptools.dynamic]
+        version = {attr = "digint.__version__"}
+        readme = {file = ["README.md", "SECURITY.md", "LICENSE"], content-type = "text/markdown"}
+    [tool.setuptools.packages.find]
+        where = ["."]
+        include = ["digint*"]
+        exclude = ["digint.tests*"]
+        namespaces = false
+
+[tool.coverage.run]
+    data_file = "./reports/.coverage"
+[tool.coverage.report]
+    ignore_errors = true
+    skip_empty = true
+    precision = 4
+    omit=["**/tests/**"]
+    exclude_lines = [
+        "^\\s*continue\\b",
+        "^\\s*return\\b",
+        "^\\s*raise\\b",
+        "^\\s*except\\b",
+        "^\\s*warnings\\.warn\\(",
+        "^\\s*warn\\(",
+    ]
+
+[tool.pylint.'MESSAGES CONTROL']
+    disable="no-else-return,too-many-arguments,too-many-branches,too-many-return-statements,too-many-instance-attributes,too-few-public-methods"
+
+[tool.pyright]
+    typeCheckingMode="standard"
