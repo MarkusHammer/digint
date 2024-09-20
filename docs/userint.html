@@ -54,6 +54,84 @@ hljs.highlightAll();
 
     A class the extends `UserInt`, adding some basic quality of life attributes.
     &#34;&#34;&#34;
+
+    def __init__(self, x:int):
+        super().__init__(x)
+
+        self.__x:int = x
+        self.__high:Optional[int] = None
+        self.__low:Optional[int] = None
+        self.on_changed:Optional[Callable[[&#39;ExtendedUserInt&#39;, int], Any]] = None
+        &#34;&#34;&#34;
+        `on_changed`
+
+        The `Callable` call back to be called **after** the
+        `x` property is set, providing a reference to
+        the current instance after the change is applied,
+        and the `int` value `x` was previous to the change.
+
+        When set to `None` (as by default), no callback will be triggered.
+        &#34;&#34;&#34;
+
+    @property
+    def x(self) -&gt; int:
+        &#34;&#34;&#34;
+        `x`
+
+        The explicit value of the intiger.
+        &#34;&#34;&#34;
+        return self.__x
+
+    @x.setter
+    def x(self, value:int):
+        if self.limit_low is not None:
+            value = max(value, self.limit_low)
+        if self.limit_high is not None:
+            value = min(value, self.limit_high)
+        old = self.__x
+        self.__x = value
+        if callable(self.on_changed):
+            self.on_changed(self, old) # pylint:disable=not-callable
+
+    @property
+    def limit_high(self) -&gt; Optional[int]:
+        &#34;&#34;&#34;
+        limit_high
+
+        The high limit for the value of `x`, if any.
+        `None` means there is no limit.
+        Raises `ValueError` when the high limit is lower than the low limit, if both are not `None`.
+        &#34;&#34;&#34;
+        return self.__high
+
+    @limit_high.setter
+    def limit_high(self, value:Optional[int]):
+        if value is not None and self.limit_low is not None and self.limit_low &gt; value:
+            raise ValueError(&#34;A high limit must not be less than the low limit&#34;)
+        self.__high = value
+        if self.__high is not None and self.x &gt; self.__high:
+            self.x = self.__high
+
+    @property
+    def limit_low(self) -&gt; Optional[int]:
+        &#34;&#34;&#34;
+        limit_low
+
+        The low limit for the value of `x`, if any.
+        `None` means there is no limit.
+        Raises `ValueError` when the low limit is higher than the high limit,
+        if both are not `None`.
+        &#34;&#34;&#34;
+        return self.__low
+
+    @limit_low.setter
+    def limit_low(self, value:Optional[int]):
+        if value is not None and self.limit_high is not None and self.limit_high &lt; value:
+            raise ValueError(&#34;A low limit must not be greater than the high limit&#34;)
+        self.__low = value
+        if self.__low is not None and self.x &gt; self.__low:
+            self.x = self.__low
+
     @property
     def sign(self) -&gt; int:
         &#34;&#34;&#34;
@@ -62,6 +140,7 @@ hljs.highlightAll();
         `-1` if `x` is negative, `1` if `x` is positive, `0` if `x` is `0`.
         &#34;&#34;&#34;
         return 0 if self.x == 0 else (1 if self.x &gt; 0 else -1)
+
     @sign.setter
     def sign(self, value:int):
         value = max(min(value, 1), -1)
@@ -81,6 +160,7 @@ hljs.highlightAll();
 <li>typing.SupportsIndex</li>
 <li>typing.Protocol</li>
 <li>typing.Generic</li>
+<li>collections.abc.Hashable</li>
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
@@ -88,6 +168,61 @@ hljs.highlightAll();
 </ul>
 <h3>Instance variables</h3>
 <dl>
+<dt id="digint.userint.ExtendedUserInt.limit_high"><code class="name">prop <span class="ident">limit_high</span> : Optional[int]</code></dt>
+<dd>
+<div class="desc"><p>limit_high</p>
+<p>The high limit for the value of <code>x</code>, if any.
+<code>None</code> means there is no limit.
+Raises <code>ValueError</code> when the high limit is lower than the low limit, if both are not <code>None</code>.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def limit_high(self) -&gt; Optional[int]:
+    &#34;&#34;&#34;
+    limit_high
+
+    The high limit for the value of `x`, if any.
+    `None` means there is no limit.
+    Raises `ValueError` when the high limit is lower than the low limit, if both are not `None`.
+    &#34;&#34;&#34;
+    return self.__high</code></pre>
+</details>
+</dd>
+<dt id="digint.userint.ExtendedUserInt.limit_low"><code class="name">prop <span class="ident">limit_low</span> : Optional[int]</code></dt>
+<dd>
+<div class="desc"><p>limit_low</p>
+<p>The low limit for the value of <code>x</code>, if any.
+<code>None</code> means there is no limit.
+Raises <code>ValueError</code> when the low limit is higher than the high limit,
+if both are not <code>None</code>.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def limit_low(self) -&gt; Optional[int]:
+    &#34;&#34;&#34;
+    limit_low
+
+    The low limit for the value of `x`, if any.
+    `None` means there is no limit.
+    Raises `ValueError` when the low limit is higher than the high limit,
+    if both are not `None`.
+    &#34;&#34;&#34;
+    return self.__low</code></pre>
+</details>
+</dd>
+<dt id="digint.userint.ExtendedUserInt.on_changed"><code class="name">var <span class="ident">on_changed</span></code></dt>
+<dd>
+<div class="desc"><p><code>on_changed</code></p>
+<p>The <code>Callable</code> call back to be called <strong>after</strong> the
+<code>x</code> property is set, providing a reference to
+the current instance after the change is applied,
+and the <code>int</code> value <code>x</code> was previous to the change.</p>
+<p>When set to <code>None</code> (as by default), no callback will be triggered.</p></div>
+</dd>
 <dt id="digint.userint.ExtendedUserInt.sign"><code class="name">prop <span class="ident">sign</span> : int</code></dt>
 <dd>
 <div class="desc"><p><code>sign</code></p>
@@ -113,6 +248,19 @@ def sign(self) -&gt; int:
 <code><a title="digint.userint.UserInt" href="#digint.userint.UserInt">UserInt</a></code>.<code><a title="digint.userint.UserInt.x" href="#digint.userint.UserInt.x">x</a></code>
 </p>
 <div class="desc inherited"><p><code>x</code> …</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def x(self) -&gt; int:
+    &#34;&#34;&#34;
+    `x`
+
+    The explicit value of the intiger.
+    &#34;&#34;&#34;
+    return self.__x</code></pre>
+</details>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -177,6 +325,7 @@ class UserInt(*tuple(__USERINT_ABCS)):
         The explicit value of the intiger.
         &#34;&#34;&#34;
         return self.__x
+
     @x.setter
     def x(self, value:int):
         self.__x = value
@@ -187,6 +336,9 @@ class UserInt(*tuple(__USERINT_ABCS)):
     __trunc__ = __int__
     __floor__ = __int__
     __ceil__ = __int__
+
+    def __hash__(self):
+        return hash(self.x)
 
     def __bool__(self):
         return bool(self.x)
@@ -230,7 +382,7 @@ class UserInt(*tuple(__USERINT_ABCS)):
         &#34;&#34;&#34;
         return self.x.bit_length()
 
-    #these are all handled by the decorators, but type checkers miss that sometimes
+    # these are all handled by the decorators, but type checkers miss that sometimes
     def __abs__(self): ...
     def __neg__(self): ...
     def __pos__(self): ...
@@ -246,6 +398,7 @@ class UserInt(*tuple(__USERINT_ABCS)):
 <li>typing.SupportsIndex</li>
 <li>typing.Protocol</li>
 <li>typing.Generic</li>
+<li>collections.abc.Hashable</li>
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
@@ -303,17 +456,17 @@ as the operators of it's containing class as well.</p></div>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class attr_forward_operators:#pylint: disable=invalid-name
+<pre><code class="python">class attr_forward_operators: # pylint:disable=invalid-name
     &#34;&#34;&#34;
     `attr_forward_operators`
 
     Used to set an attribute of a class&#39;s opperators
     as the operators of it&#39;s containing class as well.
     &#34;&#34;&#34;
-    class partial_opperator:#pylint: disable=invalid-name
+    class partial_opperator: # pylint:disable=invalid-name
         &#34;&#34;&#34;
         `partial_opperator`
-        
+
         Used to get partial callable to a specific opperator of a attribute of the target class.
         &#34;&#34;&#34;
 
@@ -333,10 +486,10 @@ as the operators of it's containing class as well.</p></div>
             &#34;&#34;&#34;
             return partialmethod(self)
 
-    class partial_inline_opperator:#pylint: disable=invalid-name
+    class partial_inline_opperator: # pylint:disable=invalid-name
         &#34;&#34;&#34;
         `partial_inline_opperator`
-        
+
         Similar to `partial_opperator`, but specifically compatable with inline opperators instead.
         &#34;&#34;&#34;
 
@@ -425,7 +578,7 @@ as the operators of it's containing class as well.</p></div>
                  set_undundered:bool = False,
                  replace_existing:bool = False,
                  set_inline:bool = False
-                ):
+                 ):
         self.instance_attr_name:str = instance_attr_name
         self.opperator_names:Tuple[str, ...] = opperator_names
         self.set_undundered:bool = set_undundered
@@ -438,7 +591,7 @@ as the operators of it's containing class as well.</p></div>
             undundered = self.undunder(op_name)
 
             operator_name = None
-            if hasattr(operator, op_name) and isinstance(getattr(operator, op_name), Callable):
+            if hasattr(operator, op_name) and callable(getattr(operator, op_name)):
                 operator_name = op_name
             elif hasattr(operator, undundered):
                 operator_name = undundered

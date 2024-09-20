@@ -7,19 +7,20 @@ Holds the `UserInt` and `ExtendedUserInt` classes.
 import operator
 from functools import partialmethod, total_ordering
 from sys import version_info
-from .typings import * #pylint:disable=unused-wildcard-import, wildcard-import
+from .typings import * # pylint:disable=unused-wildcard-import, wildcard-import
 
-class attr_forward_operators:#pylint: disable=invalid-name
+
+class attr_forward_operators: # pylint:disable=invalid-name
     """
     `attr_forward_operators`
 
     Used to set an attribute of a class's opperators
     as the operators of it's containing class as well.
     """
-    class partial_opperator:#pylint: disable=invalid-name
+    class partial_opperator: # pylint:disable=invalid-name
         """
         `partial_opperator`
-        
+
         Used to get partial callable to a specific opperator of a attribute of the target class.
         """
 
@@ -39,10 +40,10 @@ class attr_forward_operators:#pylint: disable=invalid-name
             """
             return partialmethod(self)
 
-    class partial_inline_opperator:#pylint: disable=invalid-name
+    class partial_inline_opperator: # pylint:disable=invalid-name
         """
         `partial_inline_opperator`
-        
+
         Similar to `partial_opperator`, but specifically compatable with inline opperators instead.
         """
 
@@ -131,7 +132,7 @@ class attr_forward_operators:#pylint: disable=invalid-name
                  set_undundered:bool = False,
                  replace_existing:bool = False,
                  set_inline:bool = False
-                ):
+                 ):
         self.instance_attr_name:str = instance_attr_name
         self.opperator_names:Tuple[str, ...] = opperator_names
         self.set_undundered:bool = set_undundered
@@ -144,7 +145,7 @@ class attr_forward_operators:#pylint: disable=invalid-name
             undundered = self.undunder(op_name)
 
             operator_name = None
-            if hasattr(operator, op_name) and isinstance(getattr(operator, op_name), Callable):
+            if hasattr(operator, op_name) and callable(getattr(operator, op_name)):
                 operator_name = op_name
             elif hasattr(operator, undundered):
                 operator_name = undundered
@@ -176,13 +177,16 @@ class attr_forward_operators:#pylint: disable=invalid-name
 
         return cls
 
+
 __USERINT_ABCS:List[Type] = [SupportsInt,
-                           SupportsFloat,
-                           SupportsAbs,
-                           SupportsComplex,
-                           SupportsRound]
-if version_info.minor >= 10:
+                             SupportsFloat,
+                             SupportsAbs,
+                             SupportsComplex,
+                             SupportsRound]
+if version_info.major >= 3 and version_info.minor >= 10:
     __USERINT_ABCS.append(SupportsIndex)
+    __USERINT_ABCS.append(HashableABC)
+
 
 @attr_forward_operators("x", "xor", "lshift", "rshift", replace_existing=True, set_inline=True)
 @attr_forward_operators("x", "and_", "or_", replace_existing=True, set_inline=True)
@@ -210,6 +214,7 @@ class UserInt(*tuple(__USERINT_ABCS)):
         The explicit value of the intiger.
         """
         return self.__x
+
     @x.setter
     def x(self, value:int):
         self.__x = value
@@ -220,6 +225,9 @@ class UserInt(*tuple(__USERINT_ABCS)):
     __trunc__ = __int__
     __floor__ = __int__
     __ceil__ = __int__
+
+    def __hash__(self):
+        return hash(self.x)
 
     def __bool__(self):
         return bool(self.x)
@@ -263,11 +271,12 @@ class UserInt(*tuple(__USERINT_ABCS)):
         """
         return self.x.bit_length()
 
-    #these are all handled by the decorators, but type checkers miss that sometimes
+    # these are all handled by the decorators, but type checkers miss that sometimes
     def __abs__(self): ...
     def __neg__(self): ...
     def __pos__(self): ...
     def __invert__(self): ...
+
 
 class ExtendedUserInt(UserInt):
     """
@@ -275,6 +284,84 @@ class ExtendedUserInt(UserInt):
 
     A class the extends `UserInt`, adding some basic quality of life attributes.
     """
+
+    def __init__(self, x:int):
+        super().__init__(x)
+
+        self.__x:int = x
+        self.__high:Optional[int] = None
+        self.__low:Optional[int] = None
+        self.on_changed:Optional[Callable[['ExtendedUserInt', int], Any]] = None
+        """
+        `on_changed`
+
+        The `Callable` call back to be called **after** the
+        `x` property is set, providing a reference to
+        the current instance after the change is applied,
+        and the `int` value `x` was previous to the change.
+
+        When set to `None` (as by default), no callback will be triggered.
+        """
+
+    @property
+    def x(self) -> int:
+        """
+        `x`
+
+        The explicit value of the intiger.
+        """
+        return self.__x
+
+    @x.setter
+    def x(self, value:int):
+        if self.limit_low is not None:
+            value = max(value, self.limit_low)
+        if self.limit_high is not None:
+            value = min(value, self.limit_high)
+        old = self.__x
+        self.__x = value
+        if callable(self.on_changed):
+            self.on_changed(self, old) # pylint:disable=not-callable
+
+    @property
+    def limit_high(self) -> Optional[int]:
+        """
+        limit_high
+
+        The high limit for the value of `x`, if any.
+        `None` means there is no limit.
+        Raises `ValueError` when the high limit is lower than the low limit, if both are not `None`.
+        """
+        return self.__high
+
+    @limit_high.setter
+    def limit_high(self, value:Optional[int]):
+        if value is not None and self.limit_low is not None and self.limit_low > value:
+            raise ValueError("A high limit must not be less than the low limit")
+        self.__high = value
+        if self.__high is not None and self.x > self.__high:
+            self.x = self.__high
+
+    @property
+    def limit_low(self) -> Optional[int]:
+        """
+        limit_low
+
+        The low limit for the value of `x`, if any.
+        `None` means there is no limit.
+        Raises `ValueError` when the low limit is higher than the high limit,
+        if both are not `None`.
+        """
+        return self.__low
+
+    @limit_low.setter
+    def limit_low(self, value:Optional[int]):
+        if value is not None and self.limit_high is not None and self.limit_high < value:
+            raise ValueError("A low limit must not be greater than the high limit")
+        self.__low = value
+        if self.__low is not None and self.x > self.__low:
+            self.x = self.__low
+
     @property
     def sign(self) -> int:
         """
@@ -283,6 +370,7 @@ class ExtendedUserInt(UserInt):
         `-1` if `x` is negative, `1` if `x` is positive, `0` if `x` is `0`.
         """
         return 0 if self.x == 0 else (1 if self.x > 0 else -1)
+
     @sign.setter
     def sign(self, value:int):
         value = max(min(value, 1), -1)

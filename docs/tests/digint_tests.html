@@ -51,20 +51,20 @@ not have a method with the specified name.</p></div>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class DigintPreset(unittest.TestCase):
+<pre><code class="python">class DigintPreset(TestCase):
     &#34;&#34;&#34;
     `DigintPreset`
-    
+
     Tests the `digint` class and it&#39;s capabilities using a contant collection of preset examples.
     &#34;&#34;&#34;
-    #formated as (source_int, source_base) : (popped_value, popping_index, remaining_int)
+    # formated as (source_int, source_base) : (popped_value, popping_index, remaining_int)
     CONSTS = {
-        (987654321, 10) : (2, 1, 98765431),
-        (987654321, 10) : (9, -1, 87654321),
-        (987654321, 10) : (6, 5, 98754321),
+        (54321, 10) : (2, 1, 5431),
+        (87654321, 10) : (8, -1, 7654321),
+        (7654321, 10) : (6, 5, 754321),
         (987654321, 10) : ([4,5,6], slice(3,6), 987321),
         (0xABCDEF, 16) : (0xC, 3, 0xABDEF),
-        (0xABCDEF, 16) : (0xA, -1, 0xBCDEF),
+        (0xABCDE, 16) : (0xA, -1, 0xBCDE),
         (&#34;ABCDEF&#34;, 23) : (int(&#34;A&#34;, 23), -1, int(&#34;BCDEF&#34;, 23)),
         (&#34;ABCDEF&#34;, 36) : (int(&#34;B&#34;, 36), 4, int(&#34;ACDEF&#34;, 36))
     }
@@ -72,7 +72,7 @@ not have a method with the specified name.</p></div>
     def test_get(self):
         &#34;&#34;&#34;
         `test_get`
-        
+
         Tests that the `digint` class&#39;s `__getitem__` behaves as expected
         using the tests case&#39;s contant examples.
         &#34;&#34;&#34;
@@ -82,7 +82,7 @@ not have a method with the specified name.</p></div>
     def test_set(self):
         &#34;&#34;&#34;
         `test_set`
-        
+
         Tests that the `digint` class&#39;s `__setitem__` behaves as expected
         using the tests case&#39;s contant examples.
         &#34;&#34;&#34;
@@ -95,7 +95,7 @@ not have a method with the specified name.</p></div>
     def test_del(self):
         &#34;&#34;&#34;
         `test_del`
-        
+
         Tests that the `digint` class&#39;s `__delitem__` behaves as expected
         using the tests case&#39;s contant examples.
         &#34;&#34;&#34;
@@ -107,7 +107,7 @@ not have a method with the specified name.</p></div>
     def test_mask(self):
         &#34;&#34;&#34;
         `test_mask`
-        
+
         Tests that the `digint` class&#39;s `mask` behaves as expected
         using the tests case&#39;s contant examples.
         &#34;&#34;&#34;
@@ -179,56 +179,86 @@ not have a method with the specified name.</p></div>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class DigintRandom(unittest.TestCase):
+<pre><code class="python">class DigintRandom(TestCase):
     &#34;&#34;&#34;
     `DigintRandom`
-    
+
     Tests the `digint` class and it&#39;s capabilities using randomly generated example values.
     &#34;&#34;&#34;
     def test_digit_length_decimal(self):
         &#34;&#34;&#34;
         `test_digit_length_decimal`
-        
+
         Tests that the `digint` class&#39;s `digit_length` behaves as expected
         with random values in base 10.
         &#34;&#34;&#34;
         for _ in range(5000):
             val = randrange(-1000000, 1000000)
-            self.assertEqual(digitint(val, 10).digit_length(), len(str(abs(val))))
+            diglen = digitint(val, 10).digit_length()
+            if val == 0:
+                self.assertEqual(diglen, 0)
+            else:
+                self.assertEqual(diglen, len(str(abs(val))))
 
     def test_digit_length_hex(self):
         &#34;&#34;&#34;
         `test_digit_length_hex`
-        
+
         Tests that the `digint` class&#39;s `digit_length` behaves as expected
         with random values in base 16.
         &#34;&#34;&#34;
         for _ in range(5000):
             val = randrange(-1000000, 1000000)
-            self.assertEqual(digitint(val, 16).digit_length(), len(hex(abs(val)).lstrip(&#34;0x&#34;)))
+            diglen = digitint(val, 16).digit_length()
+            if val == 0:
+                self.assertEqual(diglen, 0)
+            else:
+                self.assertEqual(diglen, len(hex(abs(val)).lstrip(&#34;0x&#34;)))
 
     def test_digit_length_bin(self):
         &#34;&#34;&#34;
         `test_digit_length_bin`
-        
+
         Tests that the `digint` class&#39;s `digit_length` behaves as expected
         with random values in base 2.
         &#34;&#34;&#34;
         for _ in range(5000):
             val = randrange(-1000000, 1000000)
-            self.assertEqual(digitint(val, 2).digit_length(), val.bit_length())
-            self.assertEqual(digitint(val, 2).digit_length(), len(bin(abs(val)).lstrip(&#34;0b&#34;)))
+            diglen = digitint(val, 2).digit_length()
+            self.assertEqual(diglen, val.bit_length())
+            if val == 0:
+                self.assertEqual(diglen, 0)
+            else:
+                self.assertEqual(diglen, len(bin(abs(val)).lstrip(&#34;0b&#34;)))
 
     def test_digit_length_oct(self):
         &#34;&#34;&#34;
         `test_digit_length_oct`
-        
+
         Tests that the `digint` class&#39;s `digit_length` behaves as expected
         with random values in base 8.
         &#34;&#34;&#34;
         for _ in range(5000):
             val = randrange(-1000000, 1000000)
-            self.assertEqual(digitint(val, 8).digit_length(), len(oct(abs(val)).lstrip(&#34;0o&#34;)))</code></pre>
+            diglen = digitint(val, 8).digit_length()
+            if val == 0:
+                self.assertEqual(diglen, 0)
+            else:
+                self.assertEqual(diglen, len(oct(abs(val)).lstrip(&#34;0o&#34;)))
+
+    def test_digit_length_unary(self):
+        &#34;&#34;&#34;
+        `test_digit_length_unary`
+
+        Tests that the `digint` class&#39;s `digit_length` behaves as expected
+        with random values in base 1.
+        &#34;&#34;&#34;
+        for _ in range(5000):
+            val = randrange(-1000000, 1000000)
+            diglen = digitint(val, 1).digit_length()
+            self.assertEqual(diglen, abs(val))
+            if val == 0:
+                self.assertEqual(diglen, 0)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -268,6 +298,14 @@ with random values in base 16.</p></div>
 <p>Tests that the <code><a title="digint" href="../index.html">digint</a></code> class's <code>digit_length</code> behaves as expected
 with random values in base 8.</p></div>
 </dd>
+<dt id="digint.tests.digint_tests.DigintRandom.test_digit_length_unary"><code class="name flex">
+<span>def <span class="ident">test_digit_length_unary</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>test_digit_length_unary</code></p>
+<p>Tests that the <code><a title="digint" href="../index.html">digint</a></code> class's <code>digit_length</code> behaves as expected
+with random values in base 1.</p></div>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -301,6 +339,7 @@ with random values in base 8.</p></div>
 <li><code><a title="digint.tests.digint_tests.DigintRandom.test_digit_length_decimal" href="#digint.tests.digint_tests.DigintRandom.test_digit_length_decimal">test_digit_length_decimal</a></code></li>
 <li><code><a title="digint.tests.digint_tests.DigintRandom.test_digit_length_hex" href="#digint.tests.digint_tests.DigintRandom.test_digit_length_hex">test_digit_length_hex</a></code></li>
 <li><code><a title="digint.tests.digint_tests.DigintRandom.test_digit_length_oct" href="#digint.tests.digint_tests.DigintRandom.test_digit_length_oct">test_digit_length_oct</a></code></li>
+<li><code><a title="digint.tests.digint_tests.DigintRandom.test_digit_length_unary" href="#digint.tests.digint_tests.DigintRandom.test_digit_length_unary">test_digit_length_unary</a></code></li>
 </ul>
 </li>
 </ul>

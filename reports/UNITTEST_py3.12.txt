@@ -6,6 +6,10 @@ test_random_range (digint.tests.tools_tests.AbsIndexTests.test_random_range)
 `test_random_range` ... ok
 test_random_range_drifting (digint.tests.tools_tests.AbsIndexTests.test_random_range_drifting)
 `test_random_range_drifting` ... ok
+test_sized_negative_index (digint.tests.tools_tests.AbsIndexTests.test_sized_negative_index)
+`test_sized_negative_index` ... ok
+test_sized_positive_index (digint.tests.tools_tests.AbsIndexTests.test_sized_positive_index)
+`test_sized_positive_index` ... ok
 test_del (digint.tests.digint_tests.DigintPreset.test_del)
 `test_del` ... ok
 test_get (digint.tests.digint_tests.DigintPreset.test_get)
@@ -22,14 +26,16 @@ test_digit_length_hex (digint.tests.digint_tests.DigintRandom.test_digit_length_
 `test_digit_length_hex` ... ok
 test_digit_length_oct (digint.tests.digint_tests.DigintRandom.test_digit_length_oct)
 `test_digit_length_oct` ... ok
-test_opperator_int (digint.tests.user_int_tests.ExtendedUserIntTests.test_opperator_int)
-`test_opperator_int` ... ok
+test_digit_length_unary (digint.tests.digint_tests.DigintRandom.test_digit_length_unary)
+`test_digit_length_unary` ... ok
 test_sign (digint.tests.user_int_tests.ExtendedUserIntTests.test_sign)
 `test_sign` ... ok
-test_x (digint.tests.user_int_tests.ExtendedUserIntTests.test_x)
+test_opperator_int (digint.tests.user_int_tests.UserIntTests.test_opperator_int)
+`test_opperator_int` ... ok
+test_x (digint.tests.user_int_tests.UserIntTests.test_x)
 `test_x` ... ok
 
 ----------------------------------------------------------------------
-Ran 15 tests in 0.703s
+Ran 18 tests in 0.919s
 
 OK

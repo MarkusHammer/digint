@@ -39,31 +39,51 @@ hljs.highlightAll();
 <dl>
 <dt id="digint.digint.ExtendedBasedIntiger"><code class="flex name class">
 <span>class <span class="ident">ExtendedBasedIntiger</span></span>
-<span>(</span><span>value: Union[int, str] = 0, base: int = 10, *, notation_format: Optional[<a title="digint.notation_format.NotationFormat" href="notation_format.html#digint.notation_format.NotationFormat">NotationFormat</a>] = NotationFormat(value_symbols=('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'), undefined_symbol='?', positive_symbol='+', negative_symbol='-', radix_point_symbol='.', implicit_positive=True, implicit_negative=False))</span>
+<span>(</span><span>value: Union[int, str] = 0, base: int = 10, *, notation_format: Optional[<a title="digint.notation_format.NotationFormat" href="notation_format.html#digint.notation_format.NotationFormat">NotationFormat</a>] = NotationFormat(value_symbols=('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'), undefined_symbol='?', positive_symbol='+', negative_symbol='-', radix_point_symbol='.', group_split_symbol=None, group_split_count=0, implicit_positive=True, implicit_negative=False))</span>
 </code></dt>
 <dd>
 <div class="desc"><p><code><a title="digint.digint.ExtendedBasedIntiger" href="#digint.digint.ExtendedBasedIntiger">ExtendedBasedIntiger</a></code></p>
 <p>A mutable sequence type of intiger that has a explicitly set base,
 allowing for specific digit values to be get and set.</p>
-<p>Supports any initger base starting at base 0.
-These bases are presumed to be in the traditional place value format of
+<p>Supports any initger base starting at (and including) base 1.
+The base is presumed to be in the traditional place value format of
 <code>value == d[x] * (base ** x)</code> where <code>value</code> is the value the digit holds in the intiger,
 <code>d</code> is a single digit value form a sequence of digits,
 <code>base</code> is the base,
-and <code>x</code> is the specific index in question of the intiger.
-This extends to bases 1 and 0 as best as possible.
-Base 1 acts as a tally system, with digits of only a single possible value,
-with that value being 0.
-This means that the base 1, while expected to have only one active digit,
-still uses antoher digit (naught) in order to display digits that do not hold value.
-Base 0 acts as a base that can only possibly hold a value of 0, and nothing else.
-This specific base stretches the conventional notion of positional notation
-as defined for use in this library.
-Due to the stretching and occasional breaking of these rules,
-these bases are only included in this 'extended' class.</p>
-<p>Supports many operators and methods that built in integers suport,
-casting the type back into a default intiger type when possible.</p>
-<p>Also supports customizable notation formats with the optional <code>notation_format</code> attribute.</p></div>
+and <code>x</code> is the specific index in question of the intiger.</p>
+<p>However, base 1 produces inconsistencies with this specific format.
+Using this logic, one would also presume that the only digit in base 1 is <code>0</code>
+(or whatever relevant "naught" character would be used).
+This is why the extention of base 1 functionality is done in a child class of
+<code><a title="digint.digint.PositionalBasedIntiger" href="#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code>.</p>
+<p>Base 1, as implemented here, uses both the "naught" (with a value of <code>0</code>)
+and "unity" (with a value of '1') digits, but in a tally system.
+This also means that the value of any given index of a digit means very
+little without the context of the rest of the defined digits as well.
+It is also implemented in such a way that the set digits will always be grouped together,
+ie. all "unity" digits will be grouped together,
+starting at the first digit and remaining completely set
+all the way to the digits index that matches the value of the number represented.</p>
+<p>For these reason base 1 will have not functionality for functions that set or unset digits,
+as setting and unsetting digits are not relevant in unary.
+Attempting to do so will raise either a <code>BaseInvalidOpperationError</code> or a <code>BaseValueError</code>.
+Deleting digits are still possible, however.</p>
+<p>Unary numbers are also fully compatible with negative values.</p>
+<p>ex.</p>
+<pre><code>    1111111111 (base 1) == 10 (base 10)
+    11111 (base 1) == 5 (base 10)
+    111111 (base 1) == 11 (base 2)
+    1101101 (base 1) == IMPOSSIBLE (the are unset digits in between the set digits)
+      ^  ^
+    000111000 (base 1) == IMPOSSIBLE (the first set digit is not the first digit in the number)
+          ^^^
+</code></pre>
+<p>Effectively: base 1 (uniary) notation treates the value of the number as a
+sequence of a single type of digit that when counted add up to the value of the number.</p>
+<p>NOTE: No functionality of any higher base is nor will modified in this class,
+making this class a superset of all proper positional based intiger notation formats and uniary.</p>
+<p>Also supports customizable notation formats with the optional <code>notation_format</code> attribute,
+including unary.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -71,38 +91,65 @@ casting the type back into a default intiger type when possible.</p>
 <pre><code class="python">class ExtendedBasedIntiger(PositionalBasedIntiger):
     &#34;&#34;&#34;
     `ExtendedBasedIntiger`
-    
+
     A mutable sequence type of intiger that has a explicitly set base,
     allowing for specific digit values to be get and set.
-    
-    Supports any initger base starting at base 0.
-    These bases are presumed to be in the traditional place value format of
+
+    Supports any initger base starting at (and including) base 1.
+    The base is presumed to be in the traditional place value format of
     `value == d[x] * (base ** x)` where `value` is the value the digit holds in the intiger,
     `d` is a single digit value form a sequence of digits,
     `base` is the base,
     and `x` is the specific index in question of the intiger.
-    This extends to bases 1 and 0 as best as possible.
-    Base 1 acts as a tally system, with digits of only a single possible value,
-    with that value being 0.
-    This means that the base 1, while expected to have only one active digit,
-    still uses antoher digit (naught) in order to display digits that do not hold value.
-    Base 0 acts as a base that can only possibly hold a value of 0, and nothing else.
-    This specific base stretches the conventional notion of positional notation
-    as defined for use in this library.
-    Due to the stretching and occasional breaking of these rules,
-    these bases are only included in this &#39;extended&#39; class.
-    
-    Supports many operators and methods that built in integers suport,
-    casting the type back into a default intiger type when possible.
-    
-    Also supports customizable notation formats with the optional `notation_format` attribute.
+
+    However, base 1 produces inconsistencies with this specific format.
+    Using this logic, one would also presume that the only digit in base 1 is `0`
+    (or whatever relevant &#34;naught&#34; character would be used).
+    This is why the extention of base 1 functionality is done in a child class of
+    `PositionalBasedIntiger`.
+
+    Base 1, as implemented here, uses both the &#34;naught&#34; (with a value of `0`)
+    and &#34;unity&#34; (with a value of &#39;1&#39;) digits, but in a tally system.
+    This also means that the value of any given index of a digit means very
+    little without the context of the rest of the defined digits as well.
+    It is also implemented in such a way that the set digits will always be grouped together,
+    ie. all &#34;unity&#34; digits will be grouped together,
+    starting at the first digit and remaining completely set
+    all the way to the digits index that matches the value of the number represented.
+
+    For these reason base 1 will have not functionality for functions that set or unset digits,
+    as setting and unsetting digits are not relevant in unary.
+    Attempting to do so will raise either a `BaseInvalidOpperationError` or a `BaseValueError`.
+    Deleting digits are still possible, however.
+
+    Unary numbers are also fully compatible with negative values.
+
+    ex.
+    ```
+        1111111111 (base 1) == 10 (base 10)
+        11111 (base 1) == 5 (base 10)
+        111111 (base 1) == 11 (base 2)
+        1101101 (base 1) == IMPOSSIBLE (the are unset digits in between the set digits)
+          ^  ^
+        000111000 (base 1) == IMPOSSIBLE (the first set digit is not the first digit in the number)
+              ^^^
+    ```
+
+    Effectively: base 1 (uniary) notation treates the value of the number as a
+    sequence of a single type of digit that when counted add up to the value of the number.
+
+    NOTE: No functionality of any higher base is nor will modified in this class,
+    making this class a superset of all proper positional based intiger notation formats and uniary.
+
+    Also supports customizable notation formats with the optional `notation_format` attribute,
+    including unary.
     &#34;&#34;&#34;
     def __init__(self,
                  value:Union[int, str] = 0,
                  base:int = 10,
                  *,
                  notation_format:Optional[NotationFormat] = DEFAULT_FORMAT
-                ):
+                 ):
 
         self.__base:int = 2
         super().__init__(value, base, notation_format=notation_format)
@@ -112,10 +159,10 @@ casting the type back into a default intiger type when possible.</p>
              value:Optional[Union[int, str]] = None,
              base:Optional[int] = None,
              notation_format_override:Optional[NotationFormat] = None
-            ) -&gt; &#39;ExtendedBasedIntiger&#39;:
+             ) -&gt; &#39;ExtendedBasedIntiger&#39;:
         &#34;&#34;&#34;
         `copy`
-        
+
         Creates a shallow copy of this object.
 
         Keyword Arguments:
@@ -130,118 +177,59 @@ casting the type back into a default intiger type when possible.</p>
         if notation_format_override is not None:
             notation_format_override = self.notation_format
         return ExtendedBasedIntiger(value if value is not None else self.x,
-                                      base if base is not None else self.base,
-                                      notation_format = notation_format_override
-                                     )
+                                    base if base is not None else self.base,
+                                    notation_format = notation_format_override
+                                    )
     __copy__ = copy
+
     @override
     def __deepcopy__(self, _ = None) -&gt; &#39;ExtendedBasedIntiger&#39;:
         return self.copy(None,
                          None,
                          None if self.notation_format is None else self.notation_format.copy()
-                        )
-
-    @property
-    @override
-    def x(self) -&gt; int:
-        &#34;&#34;&#34;
-        `x`
-
-        The explicit value of the intiger.
-        &#34;&#34;&#34;
-        return self.__x
-    @x.setter
-    @override
-    def x(self, value:int):
-        if value == 0 and self.base == 1:
-            raise BaseValueError(&#34;0 can not be represented in base 1&#34;)
-        elif value != 0 and self.base == 0:
-            raise BaseValueError(&#34;No value other than 0 can be represented in base 0&#34;)
-        self.__x = value
+                         )
 
     @property
     def base(self) -&gt; int:
         &#34;&#34;&#34;
         `base`
 
-        The base of this number. Must be greater than or equal to 0.
-        Base 0 and 1 are handled particularly differently than other bases.
+        The base of this number. Must be greater than 0.
+        Base 1 is handled particularly differently than other bases.
         &#34;&#34;&#34;
         return self.__base
+
     @base.setter
     def base(self, value:int):
-        if self.x == 0 and value == 1:
-            raise BaseValueError(&#34;0 can not be represented in base 1&#34;)
-        elif self.x != 0 and value == 0:
-            raise BaseValueError(&#34;No value other than 0 can be represented in base 0&#34;)
-        elif value &lt; 0:
-            raise ValueError(&#34;Invalid base&#34;, value)
+        if value &lt;= 0:
+            raise BaseValueError()
         self.__base = value
 
     @override
     def _get_single_digit(self, index:int) -&gt; int:
-        if self.base == 0:
-            return 0
-        elif self.base == 1:
+        if self.base == 1:
+            index = absindex(index, self.digit_length())
             return 1 if index &lt; abs(self.x) else 0
         else:
             return super()._get_single_digit(index)
 
     @override
     def _pop_first(self) -&gt; int:
-        if self.base == 0:
-            return 0
-        elif self.base == 1:
+        if self.base == 1:
             self.x -= 1
             return 1
         else:
             return super()._pop_first()
-
-    #this pushes a value into the units place
-    #effectively shifts right while appending a new value to the units
-    #slightly faster than the arbitrary insert method
-    @override
-    def _prepend(self, value:Union[int,str]):
-        if self.base == 0:
-            raise BaseInvalidOpperationError(&#34;Base 0 digits cannot be pushed&#34;)
-
-        super()._prepend(value)
 
     @override
     def _mask_value_continuous(self, dindex: int, count: int = 1) -&gt; int:
         if count &lt;= 0:
             raise IndexError(&#34;The length of a continuous mask must be at least 1&#34;)
 
-        if self.base == 0:
-            return 0
-        elif self.base == 1:
+        if self.base == 1:
             return min(abs(self.x) - dindex, count)
         else:
             return super()._mask_value_continuous(dindex, count)
-
-    @override
-    def iter_digits(self, at_least:int = 0) -&gt; Iterator[int]:
-        if self.base == 0 or self.base == 1:
-            raise BaseInvalidOpperationError(f&#34;Base {self.base} digits cannot be iterated&#34;)
-        return super().iter_digits(at_least)
-
-    @override
-    def reversed_iter_digits(self, at_least:int = 0) -&gt; Iterator[int]:
-        if self.base == 0 or self.base == 1:
-            raise BaseInvalidOpperationError(f&#34;Base {self.base} digits cannot be iterated&#34;)
-        return super().reversed_iter_digits(at_least)
-
-    @override
-    def iter_symbols(self, at_least:int = 1) -&gt; Iterator[str]:
-        if self.base == 0 or self.base == 1:
-            raise BaseInvalidOpperationError(f&#34;Base {self.base} digits cannot be iterated&#34;)
-        return super().iter_symbols(at_least)
-
-    @override
-    def reversed_iter_symbols(self, at_least:int = 1) -&gt; Iterator[str]:
-        if self.base == 0 or self.base == 1:
-            raise BaseInvalidOpperationError(f&#34;Base {self.base} digits cannot be iterated&#34;)
-        return super().reversed_iter_symbols(at_least)
 
     @override
     def notate(self, notation_format:Optional[NotationFormat] = None) -&gt; str:
@@ -266,16 +254,9 @@ casting the type back into a default intiger type when possible.</p>
             else:
                 relevant_sign = notation_format.positive_symbol
 
-        if self.base &lt; 0:
-            raise BaseValueError()
-        elif self.base == 0:
-            raise BaseInvalidOpperationError(&#34;Base 0 cannot be notated&#34;)
-        elif self.base == 1:
-            if notation_format.unity is None:
-                raise NotationError(&#34;Cannot notate base 1 without a digit for unity&#34;)
-            return relevant_sign + ((notation_format.unity) * self.x)
-        else:
-            raise BaseInvalidOpperationError()
+        if notation_format.unity is None:
+            raise NotationError(&#34;Cannot notate base 1 without a digit for unity&#34;)
+        return relevant_sign + ((notation_format.unity) * self.x)
 
     @overload
     @override
@@ -283,94 +264,61 @@ casting the type back into a default intiger type when possible.</p>
     @overload
     @override
     def set_digit(self, index:Union[slice,range,Iterable[int]], value:Iterable[Union[int,str]]): ...
-    @override
+    @override # noqa:301
     def set_digit(self,
                   index:Union[int,slice,range,Iterable[int]],
                   value:Union[int,str,Iterable[Union[int,str]]]
-                 ):
-        if self.base == 0 or self.base == 1:
-            raise BaseInvalidOpperationError(f&#34;Digits cannot be set in base {self.base}&#34;)
-
-        super().set_digit(index, value) #type: ignore
+                  ):
+        if self.base == 1:
+            raise BaseInvalidOpperationError(&#34;Digits cannot be set in base 1&#34;)
+        super().set_digit(index, value) # type:ignore[reportCallIssue]
 
     @override
     def unset_digit(self, index:Union[int,slice,range,Iterable[int]]):
-        if self.base &lt; 2:
-            raise BaseInvalidOpperationError(f&#34;Cannot unset digits in base {self.base}&#34;)
-
+        if self.base == 1:
+            raise BaseInvalidOpperationError(&#34;Cannot unset digits in base 1&#34;)
         return super().unset_digit(index)
 
-    #NOTE: just like python handles it in bit_length, a value of 0 will always have no digits
+    # NOTE: just like python handles it in bit_length, a value of 0 will always have no digits
     @override
     def digit_length(self) -&gt; int:
-        if self.x == 0:
-            return 0
-
-        if self.base == 0:
-            return 0
         if self.base == 1:
             return abs(self.x)
-        else:
-            return super().digit_length()
-
+        return super().digit_length()
 
     @override
     def insert(self, index:int, value:Union[int,str,Iterable[Union[int,str]]]):
-        if self.base == 0 or self.base == 1:
+        if self.base == 1:
             raise BaseInvalidOpperationError(f&#34;Cannot insert digits into a base {self.base} number&#34;)
-
         super().insert(index, value)
 
     @override
     def pop(self, index:int = -1) -&gt; int:
-        if self.base == 0:
-            raise BaseInvalidOpperationError(&#34;Cannot pop digits form a base 0 number&#34;)
-        elif self.base == 1:
+        if self.base == 1:
             index = absindex(index, self.digit_length())
             self.x -= 1
             return 1
         else:
             return super().pop(index)
 
-    #returns the count of non-zero (non-unset) digits
+    # returns the count of non-zero (non-unset) digits
     @override
     def digit_count(self) -&gt; int:
-        if self.base &lt; 2:
-            raise BaseInvalidOpperationError(f&#34;Cannot count digits in a base {self.base} number&#34;)
-        else:
-            return super().digit_count()
+        if self.base == 1:
+            return abs(self.x)
+        return super().digit_count()
 
     @override
     def digit_shift_left(self, amount:int):
-        if self.base == 0:
-            raise BaseInvalidOpperationError(&#34;This base cannot be shifted&#34;)
-
-        if amount &lt; 0:
-            self.digit_shift_right(-amount)
-            return
-
         if self.base == 1:
-            if self.sign == -1:
-                amount *= -1
-            self.x += amount
-        else:
-            super().digit_shift_left(amount)
+            raise BaseInvalidOpperationError(&#34;This base cannot be shifted&#34;)
+        super().digit_shift_left(amount)
 
     @override
     def digit_shift_right(self, amount:int):
-        if self.base == 0:
-            raise BaseInvalidOpperationError(&#34;This base cannot be shifted&#34;)
-
-        if amount &lt;= 0:
-            self.digit_shift_left(-amount)
-            return
-
         if self.base == 1:
-            if self.sign == -1:
-                amount *= -1
-            self.x -= amount
-        else:
-            super().digit_shift_right(amount)</code></pre>
+            raise BaseInvalidOpperationError(&#34;This base cannot be shifted&#34;)
+        super().digit_shift_right(amount)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -393,14 +341,15 @@ casting the type back into a default intiger type when possible.</p>
 <li>typing.SupportsBytes</li>
 <li>typing.Protocol</li>
 <li>typing.Generic</li>
+<li>collections.abc.Hashable</li>
 </ul>
 <h3>Instance variables</h3>
 <dl>
 <dt id="digint.digint.ExtendedBasedIntiger.base"><code class="name">prop <span class="ident">base</span> : int</code></dt>
 <dd>
 <div class="desc"><p><code>base</code></p>
-<p>The base of this number. Must be greater than or equal to 0.
-Base 0 and 1 are handled particularly differently than other bases.</p></div>
+<p>The base of this number. Must be greater than 0.
+Base 1 is handled particularly differently than other bases.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -410,29 +359,10 @@ def base(self) -&gt; int:
     &#34;&#34;&#34;
     `base`
 
-    The base of this number. Must be greater than or equal to 0.
-    Base 0 and 1 are handled particularly differently than other bases.
+    The base of this number. Must be greater than 0.
+    Base 1 is handled particularly differently than other bases.
     &#34;&#34;&#34;
     return self.__base</code></pre>
-</details>
-</dd>
-<dt id="digint.digint.ExtendedBasedIntiger.x"><code class="name">prop <span class="ident">x</span> : int</code></dt>
-<dd>
-<div class="desc"><p><code>x</code></p>
-<p>The explicit value of the intiger.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-@override
-def x(self) -&gt; int:
-    &#34;&#34;&#34;
-    `x`
-
-    The explicit value of the intiger.
-    &#34;&#34;&#34;
-    return self.__x</code></pre>
 </details>
 </dd>
 </dl>
@@ -501,44 +431,13 @@ When given multiple values, each value will be inserted before the given index i
 <p><code>index</code> &ndash; The index (or indexes) to be inserted before.
 <code>value</code> &ndash; The value (or values) to insert.</p></div>
 </dd>
-<dt id="digint.digint.ExtendedBasedIntiger.iter_digits"><code class="name flex">
-<span>def <span class="ident">iter_digits</span></span>(<span>self, at_least: int = 0) ‑> Iterator[int]</span>
-</code></dt>
-<dd>
-<div class="desc"><p><code>iter_digits</code>
-Returns an iterable that iterates through the digit values of the integer,
-starting at the units spot.
-Will iterate 0 when all other digits are already iterated.</p>
-<p>Keyword Arguments:
-<code>at_least</code> &ndash; Ensures that at least the given amount of digits are iterated, if above 1.</p>
-<h2 id="returns">Returns</h2>
-<p>An iterator that returns the digit values, starting at the units spot.</p>
-<h2 id="yields">Yields</h2>
-<p>The digits of the intiger, starting at the units spot.</p></div>
-</dd>
-<dt id="digint.digint.ExtendedBasedIntiger.iter_symbols"><code class="name flex">
-<span>def <span class="ident">iter_symbols</span></span>(<span>self, at_least: int = 1) ‑> Iterator[str]</span>
-</code></dt>
-<dd>
-<div class="desc"><p><code>iter_symbols</code></p>
-<p>Iterate the digit symbols starting at the units spot.
-When intending to use iteration for notation,
-it's suggested to use <code>reversed_iter_symbols</code> to avoid odering errors.</p>
-<p>Keyword Arguments:
-<code>at_least</code> &ndash; ensures that at least the given amount of symbols are returned.
-Defaults to 1.</p>
-<h2 id="returns">Returns</h2>
-<p>An iterator of symbols.</p>
-<h2 id="yields">Yields</h2>
-<p>Digit symdols, starting at the units spot.</p></div>
-</dd>
 <dt id="digint.digint.ExtendedBasedIntiger.notate"><code class="name flex">
 <span>def <span class="ident">notate</span></span>(<span>self, notation_format: Optional[<a title="digint.notation_format.NotationFormat" href="notation_format.html#digint.notation_format.NotationFormat">NotationFormat</a>] = None) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p><code>notate</code>
 Notates the intiger, using the given notation format if possible,
-or the <code>notation_format</code> set in the object's attributes if the paramater is not set. </p>
+or the <code>notation_format</code> set in the object's attributes if the paramater is not set.</p>
 <p>Keyword Arguments:
 notation_format &ndash; A notation format to use
 over the one set in <code>self.notation_format</code>, if not <code>None</code>.</p>
@@ -561,36 +460,6 @@ or when other errors are raised during notation.</dd>
 index &ndash; The target index to pop. Defaults to -1.</p>
 <h2 id="returns">Returns</h2>
 <p>The value at the given index before removal.</p></div>
-</dd>
-<dt id="digint.digint.ExtendedBasedIntiger.reversed_iter_digits"><code class="name flex">
-<span>def <span class="ident">reversed_iter_digits</span></span>(<span>self, at_least: int = 0) ‑> Iterator[int]</span>
-</code></dt>
-<dd>
-<div class="desc"><p><code>reversed_iter_digits</code>
-Returns an iterable that iterates through the digit values of the integer,
-ending at the units spot.
-Will iterate 0 when all other digits are already iterated.</p>
-<p>Keyword Arguments:
-<code>at_least</code> &ndash; Ensures that at least the given amount of digits are iterated, if above 1.</p>
-<h2 id="returns">Returns</h2>
-<p>An iterator that returns the digit values, ending at the units spot.</p>
-<h2 id="yields">Yields</h2>
-<p>The digits of the intiger, ending at the units spot.</p></div>
-</dd>
-<dt id="digint.digint.ExtendedBasedIntiger.reversed_iter_symbols"><code class="name flex">
-<span>def <span class="ident">reversed_iter_symbols</span></span>(<span>self, at_least: int = 1) ‑> Iterator[str]</span>
-</code></dt>
-<dd>
-<div class="desc"><p><code>reversed_iter_symbols</code></p>
-<p>Iterate the digit symbols ending at the units spot.
-Intending to be used for notation purposes, as the ordering for string notation is correct.</p>
-<p>Keyword Arguments:
-<code>at_least</code> &ndash; ensures that at least the given amount of symbols are returned.
-Defaults to 1.</p>
-<h2 id="returns">Returns</h2>
-<p>An iterator of symbols.</p>
-<h2 id="yields">Yields</h2>
-<p>Digit symdols, ending at the units spot.</p></div>
 </dd>
 <dt id="digint.digint.ExtendedBasedIntiger.set_digit"><code class="name flex">
 <span>def <span class="ident">set_digit</span></span>(<span>self, index: Union[int, slice, range, Iterable[int]], value: Union[int, str, Iterable[Union[int, str]]])</span>
@@ -619,31 +488,51 @@ there must be a matching quantity of values to set at those indexes.</p>
 </dd>
 <dt id="digint.digint.ExtendedBasedIntiger"><code class="flex name class">
 <span>class <span class="ident">digitint</span></span>
-<span>(</span><span>value: Union[int, str] = 0, base: int = 10, *, notation_format: Optional[<a title="digint.notation_format.NotationFormat" href="notation_format.html#digint.notation_format.NotationFormat">NotationFormat</a>] = NotationFormat(value_symbols=('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'), undefined_symbol='?', positive_symbol='+', negative_symbol='-', radix_point_symbol='.', implicit_positive=True, implicit_negative=False))</span>
+<span>(</span><span>value: Union[int, str] = 0, base: int = 10, *, notation_format: Optional[<a title="digint.notation_format.NotationFormat" href="notation_format.html#digint.notation_format.NotationFormat">NotationFormat</a>] = NotationFormat(value_symbols=('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'), undefined_symbol='?', positive_symbol='+', negative_symbol='-', radix_point_symbol='.', group_split_symbol=None, group_split_count=0, implicit_positive=True, implicit_negative=False))</span>
 </code></dt>
 <dd>
 <div class="desc"><p><code><a title="digint.digint.ExtendedBasedIntiger" href="#digint.digint.ExtendedBasedIntiger">ExtendedBasedIntiger</a></code></p>
 <p>A mutable sequence type of intiger that has a explicitly set base,
 allowing for specific digit values to be get and set.</p>
-<p>Supports any initger base starting at base 0.
-These bases are presumed to be in the traditional place value format of
+<p>Supports any initger base starting at (and including) base 1.
+The base is presumed to be in the traditional place value format of
 <code>value == d[x] * (base ** x)</code> where <code>value</code> is the value the digit holds in the intiger,
 <code>d</code> is a single digit value form a sequence of digits,
 <code>base</code> is the base,
-and <code>x</code> is the specific index in question of the intiger.
-This extends to bases 1 and 0 as best as possible.
-Base 1 acts as a tally system, with digits of only a single possible value,
-with that value being 0.
-This means that the base 1, while expected to have only one active digit,
-still uses antoher digit (naught) in order to display digits that do not hold value.
-Base 0 acts as a base that can only possibly hold a value of 0, and nothing else.
-This specific base stretches the conventional notion of positional notation
-as defined for use in this library.
-Due to the stretching and occasional breaking of these rules,
-these bases are only included in this 'extended' class.</p>
-<p>Supports many operators and methods that built in integers suport,
-casting the type back into a default intiger type when possible.</p>
-<p>Also supports customizable notation formats with the optional <code>notation_format</code> attribute.</p></div>
+and <code>x</code> is the specific index in question of the intiger.</p>
+<p>However, base 1 produces inconsistencies with this specific format.
+Using this logic, one would also presume that the only digit in base 1 is <code>0</code>
+(or whatever relevant "naught" character would be used).
+This is why the extention of base 1 functionality is done in a child class of
+<code><a title="digint.digint.PositionalBasedIntiger" href="#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code>.</p>
+<p>Base 1, as implemented here, uses both the "naught" (with a value of <code>0</code>)
+and "unity" (with a value of '1') digits, but in a tally system.
+This also means that the value of any given index of a digit means very
+little without the context of the rest of the defined digits as well.
+It is also implemented in such a way that the set digits will always be grouped together,
+ie. all "unity" digits will be grouped together,
+starting at the first digit and remaining completely set
+all the way to the digits index that matches the value of the number represented.</p>
+<p>For these reason base 1 will have not functionality for functions that set or unset digits,
+as setting and unsetting digits are not relevant in unary.
+Attempting to do so will raise either a <code>BaseInvalidOpperationError</code> or a <code>BaseValueError</code>.
+Deleting digits are still possible, however.</p>
+<p>Unary numbers are also fully compatible with negative values.</p>
+<p>ex.</p>
+<pre><code>    1111111111 (base 1) == 10 (base 10)
+    11111 (base 1) == 5 (base 10)
+    111111 (base 1) == 11 (base 2)
+    1101101 (base 1) == IMPOSSIBLE (the are unset digits in between the set digits)
+      ^  ^
+    000111000 (base 1) == IMPOSSIBLE (the first set digit is not the first digit in the number)
+          ^^^
+</code></pre>
+<p>Effectively: base 1 (uniary) notation treates the value of the number as a
+sequence of a single type of digit that when counted add up to the value of the number.</p>
+<p>NOTE: No functionality of any higher base is nor will modified in this class,
+making this class a superset of all proper positional based intiger notation formats and uniary.</p>
+<p>Also supports customizable notation formats with the optional <code>notation_format</code> attribute,
+including unary.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -651,38 +540,65 @@ casting the type back into a default intiger type when possible.</p>
 <pre><code class="python">class ExtendedBasedIntiger(PositionalBasedIntiger):
     &#34;&#34;&#34;
     `ExtendedBasedIntiger`
-    
+
     A mutable sequence type of intiger that has a explicitly set base,
     allowing for specific digit values to be get and set.
-    
-    Supports any initger base starting at base 0.
-    These bases are presumed to be in the traditional place value format of
+
+    Supports any initger base starting at (and including) base 1.
+    The base is presumed to be in the traditional place value format of
     `value == d[x] * (base ** x)` where `value` is the value the digit holds in the intiger,
     `d` is a single digit value form a sequence of digits,
     `base` is the base,
     and `x` is the specific index in question of the intiger.
-    This extends to bases 1 and 0 as best as possible.
-    Base 1 acts as a tally system, with digits of only a single possible value,
-    with that value being 0.
-    This means that the base 1, while expected to have only one active digit,
-    still uses antoher digit (naught) in order to display digits that do not hold value.
-    Base 0 acts as a base that can only possibly hold a value of 0, and nothing else.
-    This specific base stretches the conventional notion of positional notation
-    as defined for use in this library.
-    Due to the stretching and occasional breaking of these rules,
-    these bases are only included in this &#39;extended&#39; class.
-    
-    Supports many operators and methods that built in integers suport,
-    casting the type back into a default intiger type when possible.
-    
-    Also supports customizable notation formats with the optional `notation_format` attribute.
+
+    However, base 1 produces inconsistencies with this specific format.
+    Using this logic, one would also presume that the only digit in base 1 is `0`
+    (or whatever relevant &#34;naught&#34; character would be used).
+    This is why the extention of base 1 functionality is done in a child class of
+    `PositionalBasedIntiger`.
+
+    Base 1, as implemented here, uses both the &#34;naught&#34; (with a value of `0`)
+    and &#34;unity&#34; (with a value of &#39;1&#39;) digits, but in a tally system.
+    This also means that the value of any given index of a digit means very
+    little without the context of the rest of the defined digits as well.
+    It is also implemented in such a way that the set digits will always be grouped together,
+    ie. all &#34;unity&#34; digits will be grouped together,
+    starting at the first digit and remaining completely set
+    all the way to the digits index that matches the value of the number represented.
+
+    For these reason base 1 will have not functionality for functions that set or unset digits,
+    as setting and unsetting digits are not relevant in unary.
+    Attempting to do so will raise either a `BaseInvalidOpperationError` or a `BaseValueError`.
+    Deleting digits are still possible, however.
+
+    Unary numbers are also fully compatible with negative values.
+
+    ex.
+    ```
+        1111111111 (base 1) == 10 (base 10)
+        11111 (base 1) == 5 (base 10)
+        111111 (base 1) == 11 (base 2)
+        1101101 (base 1) == IMPOSSIBLE (the are unset digits in between the set digits)
+          ^  ^
+        000111000 (base 1) == IMPOSSIBLE (the first set digit is not the first digit in the number)
+              ^^^
+    ```
+
+    Effectively: base 1 (uniary) notation treates the value of the number as a
+    sequence of a single type of digit that when counted add up to the value of the number.
+
+    NOTE: No functionality of any higher base is nor will modified in this class,
+    making this class a superset of all proper positional based intiger notation formats and uniary.
+
+    Also supports customizable notation formats with the optional `notation_format` attribute,
+    including unary.
     &#34;&#34;&#34;
     def __init__(self,
                  value:Union[int, str] = 0,
                  base:int = 10,
                  *,
                  notation_format:Optional[NotationFormat] = DEFAULT_FORMAT
-                ):
+                 ):
 
         self.__base:int = 2
         super().__init__(value, base, notation_format=notation_format)
@@ -692,10 +608,10 @@ casting the type back into a default intiger type when possible.</p>
              value:Optional[Union[int, str]] = None,
              base:Optional[int] = None,
              notation_format_override:Optional[NotationFormat] = None
-            ) -&gt; &#39;ExtendedBasedIntiger&#39;:
+             ) -&gt; &#39;ExtendedBasedIntiger&#39;:
         &#34;&#34;&#34;
         `copy`
-        
+
         Creates a shallow copy of this object.
 
         Keyword Arguments:
@@ -710,118 +626,59 @@ casting the type back into a default intiger type when possible.</p>
         if notation_format_override is not None:
             notation_format_override = self.notation_format
         return ExtendedBasedIntiger(value if value is not None else self.x,
-                                      base if base is not None else self.base,
-                                      notation_format = notation_format_override
-                                     )
+                                    base if base is not None else self.base,
+                                    notation_format = notation_format_override
+                                    )
     __copy__ = copy
+
     @override
     def __deepcopy__(self, _ = None) -&gt; &#39;ExtendedBasedIntiger&#39;:
         return self.copy(None,
                          None,
                          None if self.notation_format is None else self.notation_format.copy()
-                        )
-
-    @property
-    @override
-    def x(self) -&gt; int:
-        &#34;&#34;&#34;
-        `x`
-
-        The explicit value of the intiger.
-        &#34;&#34;&#34;
-        return self.__x
-    @x.setter
-    @override
-    def x(self, value:int):
-        if value == 0 and self.base == 1:
-            raise BaseValueError(&#34;0 can not be represented in base 1&#34;)
-        elif value != 0 and self.base == 0:
-            raise BaseValueError(&#34;No value other than 0 can be represented in base 0&#34;)
-        self.__x = value
+                         )
 
     @property
     def base(self) -&gt; int:
         &#34;&#34;&#34;
         `base`
 
-        The base of this number. Must be greater than or equal to 0.
-        Base 0 and 1 are handled particularly differently than other bases.
+        The base of this number. Must be greater than 0.
+        Base 1 is handled particularly differently than other bases.
         &#34;&#34;&#34;
         return self.__base
+
     @base.setter
     def base(self, value:int):
-        if self.x == 0 and value == 1:
-            raise BaseValueError(&#34;0 can not be represented in base 1&#34;)
-        elif self.x != 0 and value == 0:
-            raise BaseValueError(&#34;No value other than 0 can be represented in base 0&#34;)
-        elif value &lt; 0:
-            raise ValueError(&#34;Invalid base&#34;, value)
+        if value &lt;= 0:
+            raise BaseValueError()
         self.__base = value
 
     @override
     def _get_single_digit(self, index:int) -&gt; int:
-        if self.base == 0:
-            return 0
-        elif self.base == 1:
+        if self.base == 1:
+            index = absindex(index, self.digit_length())
             return 1 if index &lt; abs(self.x) else 0
         else:
             return super()._get_single_digit(index)
 
     @override
     def _pop_first(self) -&gt; int:
-        if self.base == 0:
-            return 0
-        elif self.base == 1:
+        if self.base == 1:
             self.x -= 1
             return 1
         else:
             return super()._pop_first()
-
-    #this pushes a value into the units place
-    #effectively shifts right while appending a new value to the units
-    #slightly faster than the arbitrary insert method
-    @override
-    def _prepend(self, value:Union[int,str]):
-        if self.base == 0:
-            raise BaseInvalidOpperationError(&#34;Base 0 digits cannot be pushed&#34;)
-
-        super()._prepend(value)
 
     @override
     def _mask_value_continuous(self, dindex: int, count: int = 1) -&gt; int:
         if count &lt;= 0:
             raise IndexError(&#34;The length of a continuous mask must be at least 1&#34;)
 
-        if self.base == 0:
-            return 0
-        elif self.base == 1:
+        if self.base == 1:
             return min(abs(self.x) - dindex, count)
         else:
             return super()._mask_value_continuous(dindex, count)
-
-    @override
-    def iter_digits(self, at_least:int = 0) -&gt; Iterator[int]:
-        if self.base == 0 or self.base == 1:
-            raise BaseInvalidOpperationError(f&#34;Base {self.base} digits cannot be iterated&#34;)
-        return super().iter_digits(at_least)
-
-    @override
-    def reversed_iter_digits(self, at_least:int = 0) -&gt; Iterator[int]:
-        if self.base == 0 or self.base == 1:
-            raise BaseInvalidOpperationError(f&#34;Base {self.base} digits cannot be iterated&#34;)
-        return super().reversed_iter_digits(at_least)
-
-    @override
-    def iter_symbols(self, at_least:int = 1) -&gt; Iterator[str]:
-        if self.base == 0 or self.base == 1:
-            raise BaseInvalidOpperationError(f&#34;Base {self.base} digits cannot be iterated&#34;)
-        return super().iter_symbols(at_least)
-
-    @override
-    def reversed_iter_symbols(self, at_least:int = 1) -&gt; Iterator[str]:
-        if self.base == 0 or self.base == 1:
-            raise BaseInvalidOpperationError(f&#34;Base {self.base} digits cannot be iterated&#34;)
-        return super().reversed_iter_symbols(at_least)
 
     @override
     def notate(self, notation_format:Optional[NotationFormat] = None) -&gt; str:
@@ -846,16 +703,9 @@ casting the type back into a default intiger type when possible.</p>
             else:
                 relevant_sign = notation_format.positive_symbol
 
-        if self.base &lt; 0:
-            raise BaseValueError()
-        elif self.base == 0:
-            raise BaseInvalidOpperationError(&#34;Base 0 cannot be notated&#34;)
-        elif self.base == 1:
-            if notation_format.unity is None:
-                raise NotationError(&#34;Cannot notate base 1 without a digit for unity&#34;)
-            return relevant_sign + ((notation_format.unity) * self.x)
-        else:
-            raise BaseInvalidOpperationError()
+        if notation_format.unity is None:
+            raise NotationError(&#34;Cannot notate base 1 without a digit for unity&#34;)
+        return relevant_sign + ((notation_format.unity) * self.x)
 
     @overload
     @override
@@ -863,94 +713,61 @@ casting the type back into a default intiger type when possible.</p>
     @overload
     @override
     def set_digit(self, index:Union[slice,range,Iterable[int]], value:Iterable[Union[int,str]]): ...
-    @override
+    @override # noqa:301
     def set_digit(self,
                   index:Union[int,slice,range,Iterable[int]],
                   value:Union[int,str,Iterable[Union[int,str]]]
-                 ):
-        if self.base == 0 or self.base == 1:
-            raise BaseInvalidOpperationError(f&#34;Digits cannot be set in base {self.base}&#34;)
-
-        super().set_digit(index, value) #type: ignore
+                  ):
+        if self.base == 1:
+            raise BaseInvalidOpperationError(&#34;Digits cannot be set in base 1&#34;)
+        super().set_digit(index, value) # type:ignore[reportCallIssue]
 
     @override
     def unset_digit(self, index:Union[int,slice,range,Iterable[int]]):
-        if self.base &lt; 2:
-            raise BaseInvalidOpperationError(f&#34;Cannot unset digits in base {self.base}&#34;)
-
+        if self.base == 1:
+            raise BaseInvalidOpperationError(&#34;Cannot unset digits in base 1&#34;)
         return super().unset_digit(index)
 
-    #NOTE: just like python handles it in bit_length, a value of 0 will always have no digits
+    # NOTE: just like python handles it in bit_length, a value of 0 will always have no digits
     @override
     def digit_length(self) -&gt; int:
-        if self.x == 0:
-            return 0
-
-        if self.base == 0:
-            return 0
         if self.base == 1:
             return abs(self.x)
-        else:
-            return super().digit_length()
-
+        return super().digit_length()
 
     @override
     def insert(self, index:int, value:Union[int,str,Iterable[Union[int,str]]]):
-        if self.base == 0 or self.base == 1:
+        if self.base == 1:
             raise BaseInvalidOpperationError(f&#34;Cannot insert digits into a base {self.base} number&#34;)
-
         super().insert(index, value)
 
     @override
     def pop(self, index:int = -1) -&gt; int:
-        if self.base == 0:
-            raise BaseInvalidOpperationError(&#34;Cannot pop digits form a base 0 number&#34;)
-        elif self.base == 1:
+        if self.base == 1:
             index = absindex(index, self.digit_length())
             self.x -= 1
             return 1
         else:
             return super().pop(index)
 
-    #returns the count of non-zero (non-unset) digits
+    # returns the count of non-zero (non-unset) digits
     @override
     def digit_count(self) -&gt; int:
-        if self.base &lt; 2:
-            raise BaseInvalidOpperationError(f&#34;Cannot count digits in a base {self.base} number&#34;)
-        else:
-            return super().digit_count()
+        if self.base == 1:
+            return abs(self.x)
+        return super().digit_count()
 
     @override
     def digit_shift_left(self, amount:int):
-        if self.base == 0:
-            raise BaseInvalidOpperationError(&#34;This base cannot be shifted&#34;)
-
-        if amount &lt; 0:
-            self.digit_shift_right(-amount)
-            return
-
         if self.base == 1:
-            if self.sign == -1:
-                amount *= -1
-            self.x += amount
-        else:
-            super().digit_shift_left(amount)
+            raise BaseInvalidOpperationError(&#34;This base cannot be shifted&#34;)
+        super().digit_shift_left(amount)
 
     @override
     def digit_shift_right(self, amount:int):
-        if self.base == 0:
-            raise BaseInvalidOpperationError(&#34;This base cannot be shifted&#34;)
-
-        if amount &lt;= 0:
-            self.digit_shift_left(-amount)
-            return
-
         if self.base == 1:
-            if self.sign == -1:
-                amount *= -1
-            self.x -= amount
-        else:
-            super().digit_shift_right(amount)</code></pre>
+            raise BaseInvalidOpperationError(&#34;This base cannot be shifted&#34;)
+        super().digit_shift_right(amount)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -973,14 +790,15 @@ casting the type back into a default intiger type when possible.</p>
 <li>typing.SupportsBytes</li>
 <li>typing.Protocol</li>
 <li>typing.Generic</li>
+<li>collections.abc.Hashable</li>
 </ul>
 <h3>Instance variables</h3>
 <dl>
 <dt id="digint.digint.ExtendedBasedIntiger.base"><code class="name">prop <span class="ident">base</span> : int</code></dt>
 <dd>
 <div class="desc"><p><code>base</code></p>
-<p>The base of this number. Must be greater than or equal to 0.
-Base 0 and 1 are handled particularly differently than other bases.</p></div>
+<p>The base of this number. Must be greater than 0.
+Base 1 is handled particularly differently than other bases.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -990,11 +808,35 @@ def base(self) -&gt; int:
     &#34;&#34;&#34;
     `base`
 
-    The base of this number. Must be greater than or equal to 0.
-    Base 0 and 1 are handled particularly differently than other bases.
+    The base of this number. Must be greater than 0.
+    Base 1 is handled particularly differently than other bases.
     &#34;&#34;&#34;
     return self.__base</code></pre>
 </details>
+</dd>
+<dt id="digint.digint.ExtendedBasedIntiger.limit_high"><code class="name">prop <span class="ident">limit_high</span> : Optional[int]</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.digint.PositionalBasedIntiger" href="#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code>.<code><a title="digint.digint.PositionalBasedIntiger.limit_high" href="userint.html#digint.digint.PositionalBasedIntiger.limit_high">limit_high</a></code>
+</p>
+<div class="desc inherited"><p>limit_high …</p></div>
+</dd>
+<dt id="digint.digint.ExtendedBasedIntiger.limit_low"><code class="name">prop <span class="ident">limit_low</span> : Optional[int]</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.digint.PositionalBasedIntiger" href="#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code>.<code><a title="digint.digint.PositionalBasedIntiger.limit_low" href="userint.html#digint.digint.PositionalBasedIntiger.limit_low">limit_low</a></code>
+</p>
+<div class="desc inherited"><p>limit_low …</p></div>
+</dd>
+<dt id="digint.digint.ExtendedBasedIntiger.on_changed"><code class="name">var <span class="ident">on_changed</span></code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.digint.PositionalBasedIntiger" href="#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code>.<code><a title="digint.digint.PositionalBasedIntiger.on_changed" href="userint.html#digint.digint.PositionalBasedIntiger.on_changed">on_changed</a></code>
+</p>
+<div class="desc inherited"><p><code>on_changed</code> …</p></div>
 </dd>
 <dt id="digint.digint.ExtendedBasedIntiger.radix"><code class="name">prop <span class="ident">radix</span> : int</code></dt>
 <dd>
@@ -1019,20 +861,6 @@ def base(self) -&gt; int:
 <code><a title="digint.digint.PositionalBasedIntiger" href="#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code>.<code><a title="digint.digint.PositionalBasedIntiger.x" href="userint.html#digint.digint.PositionalBasedIntiger.x">x</a></code>
 </p>
 <div class="desc inherited"><p><code>x</code> …</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-@override
-def x(self) -&gt; int:
-    &#34;&#34;&#34;
-    `x`
-
-    The explicit value of the intiger.
-    &#34;&#34;&#34;
-    return self.__x</code></pre>
-</details>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -1243,7 +1071,7 @@ Will iterate 0 when all …</p></div>
 </dd>
 <dt id="digint.digint.PositionalBasedIntiger"><code class="flex name class">
 <span>class <span class="ident">PositionalBasedIntiger</span></span>
-<span>(</span><span>value: Union[int, str] = 0, base: int = 10, *, notation_format: Optional[<a title="digint.notation_format.NotationFormat" href="notation_format.html#digint.notation_format.NotationFormat">NotationFormat</a>] = NotationFormat(value_symbols=('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'), undefined_symbol='?', positive_symbol='+', negative_symbol='-', radix_point_symbol='.', implicit_positive=True, implicit_negative=False))</span>
+<span>(</span><span>value: Union[int, str] = 0, base: int = 10, *, notation_format: Optional[<a title="digint.notation_format.NotationFormat" href="notation_format.html#digint.notation_format.NotationFormat">NotationFormat</a>] = NotationFormat(value_symbols=('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'), undefined_symbol='?', positive_symbol='+', negative_symbol='-', radix_point_symbol='.', group_split_symbol=None, group_split_count=0, implicit_positive=True, implicit_negative=False))</span>
 </code></dt>
 <dd>
 <div class="desc"><p><code><a title="digint.digint.PositionalBasedIntiger" href="#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code></p>
@@ -1265,20 +1093,20 @@ casting the type back into a default intiger type when possible.</p>
 <pre><code class="python">class PositionalBasedIntiger(*tuple(__POSITIONAL_BASED_INT_BASES)):
     &#34;&#34;&#34;
     `PositionalBasedIntiger`
-    
+
     A mutable sequence type of intiger that has a explicitly set base,
     allowing for specific digit values to be get and set.
-    
+
     Supports any initger base starting at binary (base 2).
     These bases are presumed to be in the traditional place value format of
     `value == d[x] * (base ** x)` where `value` is the value the digit holds in the intiger,
     `d` is a single digit value form a sequence of digits,
     `base` is the base,
     and `x` is the specific index in question of the intiger.
-    
+
     Supports many operators and methods that built in integers suport,
     casting the type back into a default intiger type when possible.
-    
+
     Also supports customizable notation formats with the optional `notation_format` attribute.
     &#34;&#34;&#34;
 
@@ -1287,7 +1115,7 @@ casting the type back into a default intiger type when possible.</p>
                  base:int = 10,
                  *,
                  notation_format:Optional[NotationFormat] = DEFAULT_FORMAT
-                ):
+                 ):
 
         super().__init__(0)
         self.__base:int = 2
@@ -1300,10 +1128,10 @@ casting the type back into a default intiger type when possible.</p>
              value:Optional[Union[int, str]] = None,
              base:Optional[int] = None,
              notation_format_override:Optional[NotationFormat] = None
-            ) -&gt; &#39;PositionalBasedIntiger&#39;:
+             ) -&gt; &#39;PositionalBasedIntiger&#39;:
         &#34;&#34;&#34;
         `copy`
-        
+
         Creates a shallow copy of this object.
 
         Keyword Arguments:
@@ -1320,23 +1148,25 @@ casting the type back into a default intiger type when possible.</p>
         return PositionalBasedIntiger(value if value is not None else self.x,
                                       base if base is not None else self.base,
                                       notation_format = notation_format_override
-                                     )
+                                      )
     __copy__ = copy
+
     def __deepcopy__(self, _ = None) -&gt; &#39;PositionalBasedIntiger&#39;:
         return self.copy(None,
                          None,
                          None if self.notation_format is None else self.notation_format.copy()
-                        )
+                         )
 
     @property
     def base(self) -&gt; int:
         &#34;&#34;&#34;
         `base`
-        
+
         The base of the intiger.
         Must be at or above 2, as this class does not support any non-standard bases.
         &#34;&#34;&#34;
         return self.__base
+
     @base.setter
     def base(self, value:int):
         if value &lt; 2:
@@ -1384,17 +1214,17 @@ casting the type back into a default intiger type when possible.</p>
         else:
             return (abs(self.x) // (self.base ** index)) % self.base
 
-    #this pops the digit in the units spot,
-    #effectively shifts left once while returning units shifted out
-    #slightly faster than the arbitrary pop method
+    # this pops the digit in the units spot,
+    # effectively shifts left once while returning units shifted out
+    # slightly faster than the arbitrary pop method
     def _pop_first(self) -&gt; int:
         dm = divmod(self.x, self.base)
         self.x = dm[0]
         return dm[1]
 
-    #this pushes a value into the units place
-    #effectively shifts right while appending a new value to the units
-    #slightly faster than the arbitrary insert method
+    # this pushes a value into the units place
+    # effectively shifts right while appending a new value to the units
+    # slightly faster than the arbitrary insert method
     def _prepend(self, value:Union[int,str]):
         value = self._ensure_unnotated(value)
 
@@ -1407,7 +1237,7 @@ casting the type back into a default intiger type when possible.</p>
         if self.sign == -1:
             value *= -1
 
-        self.x = (self.x*self.base) + value
+        self.x = (self.x * self.base) + value
 
     # effectively, this returns a continuous sequence
     # form the intiger with its place value still intact
@@ -1417,7 +1247,7 @@ casting the type back into a default intiger type when possible.</p>
 
         dindex = absindex(dindex, self.digit_length())
 
-        if self.base == 2: #binary optimisable
+        if self.base == 2: # binary optimisable
             return abs(self.x) &amp; (((0b1 &lt;&lt; (count - 1)) - 1) &lt;&lt; dindex)
         else:
             pv1 = self.base ** dindex
@@ -1470,7 +1300,7 @@ casting the type back into a default intiger type when possible.</p>
     def iter_symbols(self, at_least:int = 1) -&gt; Iterator[str]:
         &#34;&#34;&#34;
         `iter_symbols`
-        
+
         Iterate the digit symbols starting at the units spot.
         When intending to use iteration for notation,
         it&#39;s suggested to use `reversed_iter_symbols` to avoid odering errors.
@@ -1490,7 +1320,7 @@ casting the type back into a default intiger type when possible.</p>
     def reversed_iter_symbols(self, at_least:int = 1) -&gt; Iterator[str]:
         &#34;&#34;&#34;
         `reversed_iter_symbols`
-        
+
         Iterate the digit symbols ending at the units spot.
         Intending to be used for notation purposes, as the ordering for string notation is correct.
 
@@ -1510,7 +1340,7 @@ casting the type back into a default intiger type when possible.</p>
         &#34;&#34;&#34;
         `notate`
         Notates the intiger, using the given notation format if possible,
-        or the `notation_format` set in the object&#39;s attributes if the paramater is not set. 
+        or the `notation_format` set in the object&#39;s attributes if the paramater is not set.
 
         Keyword Arguments:
             notation_format -- A notation format to use
@@ -1541,7 +1371,20 @@ casting the type back into a default intiger type when possible.</p>
             else:
                 relevant_sign = notation_format.positive_symbol
 
-        return relevant_sign + &#34;&#34;.join(self.reversed_iter_symbols())
+        group_joint = &#34;&#34;
+        if notation_format.group_split_symbol is not None:
+            group_joint = notation_format.group_split_symbol
+        group_count = notation_format.group_split_count
+
+        if group_joint != &#34;&#34; and group_count &gt; 0:
+            groups = list(self.iter_symbols())
+            group_indexes = range(0, self.digit_length(), group_count)
+            groups = [&#39;&#39;.join(groups[i:i+group_count])[::-1] for i in group_indexes]
+            groups = groups[::-1]
+        else:
+            groups = self.reversed_iter_symbols()
+
+        return relevant_sign + group_joint.join(groups)
     __str__ = notate
     __repr__ = notate
 
@@ -1549,10 +1392,12 @@ casting the type back into a default intiger type when possible.</p>
     def get_digit(self, index:int) -&gt; int: ...
     @overload
     def get_digit(self, index:Union[slice,range,Iterable[int]]) -&gt; List[int]: ...
-    def get_digit(self, index:Union[int,slice,range,Iterable[int]]) -&gt; Union[int,List[int]]:
+    def get_digit(self, # noqa:301
+                  index:Union[int,slice,range,Iterable[int]]
+                  ) -&gt; Union[int,List[int]]:
         &#34;&#34;&#34;
         `get_digit`
-        
+
         Gets the specific digit&#39;s (or digits&#39;s) value at the specific index (or indexes).
 
         Arguments:
@@ -1574,10 +1419,10 @@ casting the type back into a default intiger type when possible.</p>
     def set_digit(self, index:int, value:Union[int,str]): ...
     @overload
     def set_digit(self, index:Union[slice,range,Iterable[int]], value:Iterable[Union[int,str]]): ...
-    def set_digit(self,
+    def set_digit(self, # noqa:301
                   index:Union[int,slice,range,Iterable[int]],
                   value:Union[int,str,Iterable[Union[int,str]]]
-                 ):
+                  ):
         &#34;&#34;&#34;
         `set_digit`
 
@@ -1614,7 +1459,7 @@ casting the type back into a default intiger type when possible.</p>
             if v &lt; 0 or v &gt;= self.base:
                 raise ValueError(&#34;Digit value out of bounds of base&#34;)
             i = absindex(i, self.digit_length())
-            if self.base == 2: #binary optimisable
+            if self.base == 2: # binary optimisable
                 if v == 1:
                     self.x |= (0b1 &lt;&lt; i)
                 else:
@@ -1631,7 +1476,7 @@ casting the type back into a default intiger type when possible.</p>
     def delete_digit(self, index:Union[int,slice,range,Iterable[int]]):
         &#34;&#34;&#34;
         `delete_digit`
-        
+
         Removes the value at the given index (or indexes).
 
         Arguments:
@@ -1651,7 +1496,7 @@ casting the type back into a default intiger type when possible.</p>
     def unset_digit(self, index:Union[int,slice,range,Iterable[int]]):
         &#34;&#34;&#34;
         `unset_digit`
-        
+
         Unsets (set to 0) the value at the given index (or indexes).
 
         Arguments:
@@ -1666,7 +1511,7 @@ casting the type back into a default intiger type when possible.</p>
         sign = self.sign
         self.x = abs(self.x)
 
-        if self.base == 2: #binary optimization
+        if self.base == 2: # binary optimization
             for i in index:
                 i = absindex(i, self.digit_length())
                 self.x = (self.x &gt;&gt; 1) &lt;&lt; 1
@@ -1678,11 +1523,11 @@ casting the type back into a default intiger type when possible.</p>
         if sign != 0:
             self.x *= sign
 
-    #NOTE: just like python handles it in bit_length, a value of 0 will always have no digits
+    # NOTE: just like python handles it in bit_length, a value of 0 will always have no digits
     def digit_length(self) -&gt; int:
         &#34;&#34;&#34;
         `digit_length`
-        
+
         Similar to `bit_length`, but relitive to the current `base`.
         Not to be confused with `digit_count`.
 
@@ -1706,7 +1551,7 @@ casting the type back into a default intiger type when possible.</p>
     def insert(self, index:int, value:Union[int,str,Iterable[Union[int,str]]]):
         &#34;&#34;&#34;
         `insert`
-        
+
         Inserts the given value (or values) before the given index.
         When given multiple values, each value will be inserted before the given index in order.
 
@@ -1782,7 +1627,7 @@ casting the type back into a default intiger type when possible.</p>
     def digit_count(self) -&gt; int:
         &#34;&#34;&#34;
         `digit_count`
-        
+
         Similar to `bit_count`, but relitive to the current `base`.
         Not to be confused with `digit_length`.
 
@@ -1803,8 +1648,8 @@ casting the type back into a default intiger type when possible.</p>
                 v //= self.base
             return c
 
-    #gets the specified digits with their place value as an int
-    #a higher level implementation of the concept of bit masking done with binary numbers
+    # gets the specified digits with their place value as an int
+    # a higher level implementation of the concept of bit masking done with binary numbers
     def mask(self, index:Union[int,slice,range,Iterable[int]]) -&gt; int:
         &#34;&#34;&#34;
         `mask`
@@ -1888,6 +1733,7 @@ casting the type back into a default intiger type when possible.</p>
 <li>typing.SupportsBytes</li>
 <li>typing.Protocol</li>
 <li>typing.Generic</li>
+<li>collections.abc.Hashable</li>
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
@@ -1908,12 +1754,36 @@ Must be at or above 2, as this class does not support any non-standard bases.</p
 def base(self) -&gt; int:
     &#34;&#34;&#34;
     `base`
-    
+
     The base of the intiger.
     Must be at or above 2, as this class does not support any non-standard bases.
     &#34;&#34;&#34;
     return self.__base</code></pre>
 </details>
+</dd>
+<dt id="digint.digint.PositionalBasedIntiger.limit_high"><code class="name">prop <span class="ident">limit_high</span> : Optional[int]</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.userint.ExtendedUserInt" href="userint.html#digint.userint.ExtendedUserInt">ExtendedUserInt</a></code>.<code><a title="digint.userint.ExtendedUserInt.limit_high" href="userint.html#digint.userint.ExtendedUserInt.limit_high">limit_high</a></code>
+</p>
+<div class="desc inherited"><p>limit_high …</p></div>
+</dd>
+<dt id="digint.digint.PositionalBasedIntiger.limit_low"><code class="name">prop <span class="ident">limit_low</span> : Optional[int]</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.userint.ExtendedUserInt" href="userint.html#digint.userint.ExtendedUserInt">ExtendedUserInt</a></code>.<code><a title="digint.userint.ExtendedUserInt.limit_low" href="userint.html#digint.userint.ExtendedUserInt.limit_low">limit_low</a></code>
+</p>
+<div class="desc inherited"><p>limit_low …</p></div>
+</dd>
+<dt id="digint.digint.PositionalBasedIntiger.on_changed"><code class="name">var <span class="ident">on_changed</span></code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.userint.ExtendedUserInt" href="userint.html#digint.userint.ExtendedUserInt">ExtendedUserInt</a></code>.<code><a title="digint.userint.ExtendedUserInt.on_changed" href="userint.html#digint.userint.ExtendedUserInt.on_changed">on_changed</a></code>
+</p>
+<div class="desc inherited"><p><code>on_changed</code> …</p></div>
 </dd>
 <dt id="digint.digint.PositionalBasedIntiger.radix"><code class="name">prop <span class="ident">radix</span> : int</code></dt>
 <dd>
@@ -2106,7 +1976,7 @@ Returns a value with all digits unset except for the given index (or indexes).</
 <dd>
 <div class="desc"><p><code>notate</code>
 Notates the intiger, using the given notation format if possible,
-or the <code>notation_format</code> set in the object's attributes if the paramater is not set. </p>
+or the <code>notation_format</code> set in the object's attributes if the paramater is not set.</p>
 <p>Keyword Arguments:
 notation_format &ndash; A notation format to use
 over the one set in <code>self.notation_format</code>, if not <code>None</code>.</p>
@@ -2202,19 +2072,15 @@ there must be a matching quantity of values to set at those indexes.</p>
 <ul>
 <li>
 <h4><code><a title="digint.digint.ExtendedBasedIntiger" href="#digint.digint.ExtendedBasedIntiger">ExtendedBasedIntiger</a></code></h4>
-<ul class="">
+<ul class="two-column">
 <li><code><a title="digint.digint.ExtendedBasedIntiger.copy" href="#digint.digint.ExtendedBasedIntiger.copy">copy</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.digit_count" href="#digint.digint.ExtendedBasedIntiger.digit_count">digit_count</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.digit_length" href="#digint.digint.ExtendedBasedIntiger.digit_length">digit_length</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.digit_shift_left" href="#digint.digint.ExtendedBasedIntiger.digit_shift_left">digit_shift_left</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.digit_shift_right" href="#digint.digint.ExtendedBasedIntiger.digit_shift_right">digit_shift_right</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.insert" href="#digint.digint.ExtendedBasedIntiger.insert">insert</a></code></li>
-<li><code><a title="digint.digint.ExtendedBasedIntiger.iter_digits" href="#digint.digint.ExtendedBasedIntiger.iter_digits">iter_digits</a></code></li>
-<li><code><a title="digint.digint.ExtendedBasedIntiger.iter_symbols" href="#digint.digint.ExtendedBasedIntiger.iter_symbols">iter_symbols</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.notate" href="#digint.digint.ExtendedBasedIntiger.notate">notate</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.pop" href="#digint.digint.ExtendedBasedIntiger.pop">pop</a></code></li>
-<li><code><a title="digint.digint.ExtendedBasedIntiger.reversed_iter_digits" href="#digint.digint.ExtendedBasedIntiger.reversed_iter_digits">reversed_iter_digits</a></code></li>
-<li><code><a title="digint.digint.ExtendedBasedIntiger.reversed_iter_symbols" href="#digint.digint.ExtendedBasedIntiger.reversed_iter_symbols">reversed_iter_symbols</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.set_digit" href="#digint.digint.ExtendedBasedIntiger.set_digit">set_digit</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.unset_digit" href="#digint.digint.ExtendedBasedIntiger.unset_digit">unset_digit</a></code></li>
 </ul>

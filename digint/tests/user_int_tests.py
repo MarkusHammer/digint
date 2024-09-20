@@ -5,44 +5,33 @@ Holds test cases that specifically test the `UserInt` and `ExtendedUserInt` clas
 """
 
 from math import trunc, floor, ceil
-import unittest
+from unittest import TestCase, main
 from random import randrange
-from ..userint import ExtendedUserInt
+from ..userint import UserInt, ExtendedUserInt
 
-class ExtendedUserIntTests(unittest.TestCase):
+
+class UserIntTests(TestCase):
     """
-    `ExtendedUserIntTests`
+    `UserIntTests`
 
-    Tests for the `ExtendedUserInt` class.
+    Tests for the `UserInt` class.
     """
 
     def test_x(self):
         """
         `test_x`
-        
+
         Tests that the `x` property of `ExtendedUserInt`
         holds and maintains it's value properly with random values.
         """
         for _ in range(5000):
             v = randrange(-1000000000, 1000000000)
-            self.assertEqual(ExtendedUserInt(v).x, v)
-
-    def test_sign(self):
-        """
-        `test_sign`
-        
-        Tests that the `sign` property of `ExtendedUserInt`
-        behaves as expected with random values.
-        """
-        for _ in range(5000):
-            v = randrange(-1000000000, 1000000000)
-            vsign = 0 if v == 0 else (-1 if v < 0 else 1)
-            self.assertEqual(ExtendedUserInt(v).sign, vsign)
+            self.assertEqual(UserInt(v).x, v)
 
     def test_opperator_int(self):
         """
         `test_opperator_int`
-        
+
         Tests that all the non-inline opperators of `ExtendedUserInt`
         behaves as expected with random values.
         """
@@ -50,6 +39,8 @@ class ExtendedUserIntTests(unittest.TestCase):
             v1 = randrange(-1000000000, 1000000000)
             v2 = randrange(-1000000000, 1000000000)
             xintobj1 = ExtendedUserInt(v1)
+
+            self.assertEqual(hash(xintobj1), v1)
 
             self.assertTrue(xintobj1 == v1)
             self.assertFalse(xintobj1 != v1)
@@ -130,5 +121,26 @@ class ExtendedUserIntTests(unittest.TestCase):
             self.assertEqual(complex(xintobj1), complex(v1))
             self.assertIsInstance(complex(xintobj1), complex)
 
+
+class ExtendedUserIntTests(TestCase):
+    """
+    `ExtendedUserIntTests`
+
+    Tests for the `ExtendedUserInt` class.
+    """
+
+    def test_sign(self):
+        """
+        `test_sign`
+
+        Tests that the `sign` property of `ExtendedUserInt`
+        behaves as expected with random values.
+        """
+        for _ in range(5000):
+            v = randrange(-1000000000, 1000000000)
+            vsign = 0 if v == 0 else (-1 if v < 0 else 1)
+            self.assertEqual(ExtendedUserInt(v).sign, vsign)
+
+
 if __name__ == '__main__':
-    unittest.main()
+    main()

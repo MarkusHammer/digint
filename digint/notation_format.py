@@ -1,4 +1,4 @@
-""" 
+"""
 notation_format
 
 Defines the `NotationFromat` type, a dataclass that holds key information about notating numbers.
@@ -7,7 +7,8 @@ Also provides a pre defined `DEFAULT_FORMAT`, a common notation formating.
 
 from dataclasses import FrozenInstanceError, dataclass, asdict
 from string import digits, ascii_uppercase, ascii_lowercase
-from .typings import * #pylint:disable=unused-wildcard-import, wildcard-import
+from .typings import * # pylint:disable=unused-wildcard-import, wildcard-import
+
 
 @dataclass(init=False)
 class NotationFormat(SequenceABC, HashableABC):
@@ -22,6 +23,8 @@ class NotationFormat(SequenceABC, HashableABC):
     positive_symbol:Optional[str] = None
     negative_symbol:Optional[str] = None
     radix_point_symbol:Optional[str] = None
+    group_split_symbol:Optional[str] = None
+    group_split_count:int = 3
     implicit_positive:bool = False
     implicit_negative:bool = False
 
@@ -31,9 +34,11 @@ class NotationFormat(SequenceABC, HashableABC):
                  positive_symbol:Optional[str] = None,
                  negative_symbol:Optional[str] = None,
                  radix_point_symbol:Optional[str] = None,
+                 group_split_symbol:Optional[str] = None,
+                 group_split_count:int = 0,
                  implicit_positive:bool = False,
                  implicit_negative:bool = False
-                ):
+                 ):
         self.__frozen:bool = False
 
         self.value_symbols:Tuple[str, ...] = value_symbols
@@ -41,6 +46,8 @@ class NotationFormat(SequenceABC, HashableABC):
         self.negative_symbol:Optional[str] = negative_symbol
         self.positive_symbol:Optional[str] = positive_symbol
         self.radix_point_symbol:Optional[str] = radix_point_symbol
+        self.group_split_symbol:Optional[str] = group_split_symbol
+        self.group_split_count:int = group_split_count
         self.implicit_positive:bool = implicit_positive
         self.implicit_negative:bool = implicit_negative
 
@@ -92,7 +99,7 @@ class NotationFormat(SequenceABC, HashableABC):
     def __getitem__(self, index:int) -> str: ...
     @overload
     def __getitem__(self, index:slice) -> Tuple[str, ...]: ...
-    def __getitem__(self, index:Union[int, slice]) -> Union[str, Tuple[str, ...]]:
+    def __getitem__(self, index:Union[int, slice]) -> Union[str, Tuple[str, ...]]: # noqa:301
         return self.value_symbols[index]
 
     def get_digit(self, index:int) -> Optional[str]:
@@ -130,25 +137,27 @@ class NotationFormat(SequenceABC, HashableABC):
         """
 
         return NotationFormat(*self.value_symbols,
-                                        undefined_symbol = self.undefined_symbol,
-                                        positive_symbol = self.positive_symbol,
-                                        negative_symbol = self.negative_symbol,
-                                        radix_point_symbol = self.radix_point_symbol,
-                                        implicit_positive = self.implicit_positive,
-                                        implicit_negative = self.implicit_negative
-                                       )
+                              undefined_symbol = self.undefined_symbol,
+                              positive_symbol = self.positive_symbol,
+                              negative_symbol = self.negative_symbol,
+                              radix_point_symbol = self.radix_point_symbol,
+                              group_split_symbol = self.group_split_symbol,
+                              group_split_count = self.group_split_count,
+                              implicit_positive = self.implicit_positive,
+                              implicit_negative = self.implicit_negative
+                              )
     __copy__ = copy
     __deepcopy__ = copy
 
     def __hash__(self) -> int:
         return hash(asdict(self))
 
+
 DEFAULT_DIGIT_SYMBOLS:LiteralString = digits + ascii_uppercase + ascii_lowercase
-DEFAULT_FORMAT:NotationFormat = NotationFormat(
-                                                                   *tuple(DEFAULT_DIGIT_SYMBOLS),
-                                                                   undefined_symbol = "?",
-                                                                   negative_symbol = "-",
-                                                                   positive_symbol = "+",
-                                                                   radix_point_symbol = ".",
-                                                                   implicit_positive = True
-                                                                  )
+DEFAULT_FORMAT:NotationFormat = NotationFormat(*tuple(DEFAULT_DIGIT_SYMBOLS),
+                                               undefined_symbol = "?",
+                                               negative_symbol = "-",
+                                               positive_symbol = "+",
+                                               radix_point_symbol = ".",
+                                               implicit_positive = True
+                                               )

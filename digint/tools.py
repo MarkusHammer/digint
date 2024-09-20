@@ -4,8 +4,12 @@ tools
 Holds common tool functions and classes used in the `dint` module.
 """
 
-from .typings import * #pylint:disable=unused-wildcard-import, wildcard-import
+from functools import lru_cache
 
+from .typings import * # pylint:disable=unused-wildcard-import, wildcard-import
+
+
+@lru_cache(maxsize=255, typed=True)
 def absindex(index:int, reference_length:Union[Sized, int]) -> int:
     """
     `absindex`
@@ -36,14 +40,15 @@ def absindex(index:int, reference_length:Union[Sized, int]) -> int:
     if length < 0:
         raise ValueError(length)
     if index + length < 0:
-        raise IndexError(index)
+        raise IndexError(index, length)
 
     return index if index >= 0 else length + index
+
 
 def slice_to_range(sl:slice, reference_length:Union[Sized, int]) -> range:
     """
     `slice_to_range`
-    
+
     Used to convert a `slice` object into a `range` object.
 
     Arguments:
@@ -61,7 +66,7 @@ def slice_to_range(sl:slice, reference_length:Union[Sized, int]) -> range:
         length = len(reference_length)
 
     if length < 0:
-        raise IndexError("The reference length was negative")
+        raise ValueError("The reference length was negative")
 
     start = (absindex(sl.start, length) if (sl.start is not None) else 0)
     stop = (absindex(sl.stop, length) if (sl.stop is not None) else length)
@@ -69,7 +74,7 @@ def slice_to_range(sl:slice, reference_length:Union[Sized, int]) -> range:
 
     return range(start, stop, step)
 
-# only makes slices of step 1, intentional
+
 def iter_to_slices(i:Iterable[int], reference_length:Union[Sized, int]) -> Tuple[slice, ...]:
     """
     `iter_to_slices`

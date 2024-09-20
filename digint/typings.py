@@ -1,4 +1,4 @@
-""" 
+"""
 `typings`
 
 Hold the imported types used for type checking and inheriting
@@ -46,12 +46,12 @@ except ImportError:
     from typing_extensions import Callable
 
 try:
-    from typing import override #type:ignore
+    from typing import override # type:ignore[reportMissingImports]
 except ImportError:
     try:
-        from typing_extensions import override #type:ignore
+        from typing_extensions import override # type:ignore[reportMissingImports]
     except ImportError:
-        def override(func:Callable) -> Callable: #pylint:disable=missing-function-docstring
+        def override(func:Callable) -> Callable: # pylint:disable=missing-function-docstring
             return func
 
 try:
@@ -70,9 +70,20 @@ except ImportError:
     from typing_extensions import overload
 
 try:
-    from typing import LiteralString
+    from typing import LiteralString # type:ignore[reportMissingImports]
 except ImportError:
-    from typing_extensions import LiteralString
+    try:
+        from typing_extensions import LiteralString # type:ignore[reportMissingImports]
+    except ImportError:
+        try:
+            from typing import TypeAlias # type:ignore[reportMissingImports]
+            LiteralString:TypeAlias = str # type:ignore[reportRedeclaration]
+        except ImportError:
+            try:
+                from typing_extensions import TypeAlias
+                LiteralString:TypeAlias = str # type:ignore[reportRedeclaration]
+            except ImportError:
+                LiteralString = str # type:ignore[reportRedeclaration]
 
 try:
     from typing import Union

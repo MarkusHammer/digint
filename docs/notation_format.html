@@ -40,7 +40,7 @@ Also provides a pre defined <code>DEFAULT_FORMAT</code>, a common notation forma
 <dl>
 <dt id="digint.notation_format.NotationFormat"><code class="flex name class">
 <span>class <span class="ident">NotationFormat</span></span>
-<span>(</span><span>*value_symbols: str, undefined_symbol: Optional[str] = None, positive_symbol: Optional[str] = None, negative_symbol: Optional[str] = None, radix_point_symbol: Optional[str] = None, implicit_positive: bool = False, implicit_negative: bool = False)</span>
+<span>(</span><span>*value_symbols: str, undefined_symbol: Optional[str] = None, positive_symbol: Optional[str] = None, negative_symbol: Optional[str] = None, radix_point_symbol: Optional[str] = None, group_split_symbol: Optional[str] = None, group_split_count: int = 0, implicit_positive: bool = False, implicit_negative: bool = False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p><code><a title="digint.notation_format.NotationFormat" href="#digint.notation_format.NotationFormat">NotationFormat</a></code></p>
@@ -62,6 +62,8 @@ class NotationFormat(SequenceABC, HashableABC):
     positive_symbol:Optional[str] = None
     negative_symbol:Optional[str] = None
     radix_point_symbol:Optional[str] = None
+    group_split_symbol:Optional[str] = None
+    group_split_count:int = 3
     implicit_positive:bool = False
     implicit_negative:bool = False
 
@@ -71,9 +73,11 @@ class NotationFormat(SequenceABC, HashableABC):
                  positive_symbol:Optional[str] = None,
                  negative_symbol:Optional[str] = None,
                  radix_point_symbol:Optional[str] = None,
+                 group_split_symbol:Optional[str] = None,
+                 group_split_count:int = 0,
                  implicit_positive:bool = False,
                  implicit_negative:bool = False
-                ):
+                 ):
         self.__frozen:bool = False
 
         self.value_symbols:Tuple[str, ...] = value_symbols
@@ -81,6 +85,8 @@ class NotationFormat(SequenceABC, HashableABC):
         self.negative_symbol:Optional[str] = negative_symbol
         self.positive_symbol:Optional[str] = positive_symbol
         self.radix_point_symbol:Optional[str] = radix_point_symbol
+        self.group_split_symbol:Optional[str] = group_split_symbol
+        self.group_split_count:int = group_split_count
         self.implicit_positive:bool = implicit_positive
         self.implicit_negative:bool = implicit_negative
 
@@ -132,7 +138,7 @@ class NotationFormat(SequenceABC, HashableABC):
     def __getitem__(self, index:int) -&gt; str: ...
     @overload
     def __getitem__(self, index:slice) -&gt; Tuple[str, ...]: ...
-    def __getitem__(self, index:Union[int, slice]) -&gt; Union[str, Tuple[str, ...]]:
+    def __getitem__(self, index:Union[int, slice]) -&gt; Union[str, Tuple[str, ...]]: # noqa:301
         return self.value_symbols[index]
 
     def get_digit(self, index:int) -&gt; Optional[str]:
@@ -170,13 +176,15 @@ class NotationFormat(SequenceABC, HashableABC):
         &#34;&#34;&#34;
 
         return NotationFormat(*self.value_symbols,
-                                        undefined_symbol = self.undefined_symbol,
-                                        positive_symbol = self.positive_symbol,
-                                        negative_symbol = self.negative_symbol,
-                                        radix_point_symbol = self.radix_point_symbol,
-                                        implicit_positive = self.implicit_positive,
-                                        implicit_negative = self.implicit_negative
-                                       )
+                              undefined_symbol = self.undefined_symbol,
+                              positive_symbol = self.positive_symbol,
+                              negative_symbol = self.negative_symbol,
+                              radix_point_symbol = self.radix_point_symbol,
+                              group_split_symbol = self.group_split_symbol,
+                              group_split_count = self.group_split_count,
+                              implicit_positive = self.implicit_positive,
+                              implicit_negative = self.implicit_negative
+                              )
     __copy__ = copy
     __deepcopy__ = copy
 
@@ -195,6 +203,14 @@ class NotationFormat(SequenceABC, HashableABC):
 </ul>
 <h3>Class variables</h3>
 <dl>
+<dt id="digint.notation_format.NotationFormat.group_split_count"><code class="name">var <span class="ident">group_split_count</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="digint.notation_format.NotationFormat.group_split_symbol"><code class="name">var <span class="ident">group_split_symbol</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="digint.notation_format.NotationFormat.implicit_negative"><code class="name">var <span class="ident">implicit_negative</span> : bool</code></dt>
 <dd>
 <div class="desc"></div>

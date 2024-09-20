@@ -51,7 +51,7 @@ not have a method with the specified name.</p></div>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class AbsIndexTests(unittest.TestCase):
+<pre><code class="python">class AbsIndexTests(TestCase):
     &#34;&#34;&#34;
     `AbsIndexTests`
 
@@ -61,14 +61,14 @@ not have a method with the specified name.</p></div>
     def test_random_range(self):
         &#34;&#34;&#34;
         `test_random_range`
-        
+
         Tests that `absindex` return roughly sane values with random inputs.
         &#34;&#34;&#34;
 
         for _ in range(5000):
             length = randrange(1, 1000000)
 
-            index = randrange(-(length + 1), length)
+            index = randrange(-(length - 1), length)
             absind = absindex(index, length)
             self.assertGreaterEqual(absind, 0)
             self.assertLess(absind, length)
@@ -76,14 +76,14 @@ not have a method with the specified name.</p></div>
     def test_random_range_drifting(self):
         &#34;&#34;&#34;
         `test_random_range_drifting`
-        
+
         Similar to `test_random_range`, but repeatedly tests that a random value,
         when fed back into `absindex` returns the same index.
         &#34;&#34;&#34;
 
-        for _ in range(500):
+        for _ in range(5000):
             length = randrange(1, 1000000)
-            index = randrange(-(length + 1), length)
+            index = randrange(-(length - 1), length)
             absind = absindex(index, length)
             for _ in range(randrange(5, 10)):
                 temp_absind = absindex(absind, length)
@@ -93,28 +93,63 @@ not have a method with the specified name.</p></div>
     def test_positive_index(self):
         &#34;&#34;&#34;
         `test_positive_index`
-        
+
         Ensures that positive indexes are properly preserved
         when inputted.
         &#34;&#34;&#34;
+
         for _ in range(5000):
             length = randrange(1, 1000000)
             index = randrange(0, length)
             absind = absindex(index, length)
             self.assertEqual(absind, index)
 
+    def test_sized_positive_index(self):
+        &#34;&#34;&#34;
+        `test_sized_positive_index`
+
+        Same as `test_positive_index`, but using a reference
+        to a `Sized` object instead of a `int` length.
+        &#34;&#34;&#34;
+
+        for _ in range(5000):
+            length = randrange(1, 255)
+            index = randrange(0, length)
+            absind = absindex(index, tuple(range(length)))
+            self.assertEqual(absind, index)
+
     def test_negative_index(self):
         &#34;&#34;&#34;
         `test_negative_index`
-        
+
         Ensures that negative indexes are properly converted
         to their positive counterpart with `absindex` by using random values.
         &#34;&#34;&#34;
 
         for _ in range(5000):
             length = randrange(1, 1000000)
-            index = randrange(-length, -1)
+            if length &gt; 1:
+                index = randrange(min(-(length-1), -2), -1)
+            else:
+                index = -1
             absind = absindex(index, length)
+            self.assertEqual(absind, length + index)
+
+    def test_sized_negative_index(self):
+        &#34;&#34;&#34;
+        `test_sized_negative_index`
+
+        Same as `test_negative_index`, but using a reference
+        to a `Sized` object instead of a `int` length.
+        &#34;&#34;&#34;
+
+        for _ in range(5000):
+            length = randrange(1, 255)
+            if length &gt; 1:
+                index = randrange(min(-(length-1), -2), -1)
+            else:
+                index = -1
+            absind = absindex(index, tuple(range(length)))
             self.assertEqual(absind, length + index)</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -154,6 +189,22 @@ when inputted.</p></div>
 <p>Similar to <code>test_random_range</code>, but repeatedly tests that a random value,
 when fed back into <code>absindex</code> returns the same index.</p></div>
 </dd>
+<dt id="digint.tests.tools_tests.AbsIndexTests.test_sized_negative_index"><code class="name flex">
+<span>def <span class="ident">test_sized_negative_index</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>test_sized_negative_index</code></p>
+<p>Same as <code>test_negative_index</code>, but using a reference
+to a <code>Sized</code> object instead of a <code>int</code> length.</p></div>
+</dd>
+<dt id="digint.tests.tools_tests.AbsIndexTests.test_sized_positive_index"><code class="name flex">
+<span>def <span class="ident">test_sized_positive_index</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>test_sized_positive_index</code></p>
+<p>Same as <code>test_positive_index</code>, but using a reference
+to a <code>Sized</code> object instead of a <code>int</code> length.</p></div>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -178,6 +229,8 @@ when fed back into <code>absindex</code> returns the same index.</p></div>
 <li><code><a title="digint.tests.tools_tests.AbsIndexTests.test_positive_index" href="#digint.tests.tools_tests.AbsIndexTests.test_positive_index">test_positive_index</a></code></li>
 <li><code><a title="digint.tests.tools_tests.AbsIndexTests.test_random_range" href="#digint.tests.tools_tests.AbsIndexTests.test_random_range">test_random_range</a></code></li>
 <li><code><a title="digint.tests.tools_tests.AbsIndexTests.test_random_range_drifting" href="#digint.tests.tools_tests.AbsIndexTests.test_random_range_drifting">test_random_range_drifting</a></code></li>
+<li><code><a title="digint.tests.tools_tests.AbsIndexTests.test_sized_negative_index" href="#digint.tests.tools_tests.AbsIndexTests.test_sized_negative_index">test_sized_negative_index</a></code></li>
+<li><code><a title="digint.tests.tools_tests.AbsIndexTests.test_sized_positive_index" href="#digint.tests.tools_tests.AbsIndexTests.test_sized_positive_index">test_sized_positive_index</a></code></li>
 </ul>
 </li>
 </ul>

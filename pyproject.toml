@@ -1,14 +1,14 @@
-#pyproject.toml for the digint Python module
+#pyproject.toml for the digint python module
 #THX https://packaging.python.org/en/latest/specifications/declaring-project-metadata/#entry-points
 #THX https://pypi.org/project/validate-pyproject/
 
 [project]
     dynamic = ["readme", "version"]
     name = "digint"
-    description = "A Python module for manipulating positional integers across any numerical base, providing advanced digit-level control."
+    description = "A python module for manipulating positional integers across any numerical base, providing advanced digit-level control."
     authors = [{ name = "Markus Hammer", email = "107761433+MarkusHammer@users.noreply.github.com" }]
     license = { file = "LICENSE" }
-    dependencies = ["typing_extensions<=3.10"]
+    dependencies = ["typing_extensions;python_version<='3.10'"]
     requires-python = ">=3.7"
     classifiers = [
         "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
@@ -46,7 +46,18 @@
         "notation"
     ]
     [project.optional-dependencies]
-        dev = ["setuptools>=64.0.0", "pip-tools", "validate-pyproject[all]", "build", "twine", "coverage", "pdoc3", "pyright", "pylint"]
+        dev = [
+            "setuptools>=64.0.0",
+            "pipreqs",
+            "validate-pyproject[all]",
+            "build",
+            "twine",
+            "coverage",
+            "pdoc3",
+            "pyright",
+            "pylint",
+            "flake8"
+        ]
     [project.urls]
         Homepage = "https://github.com/MarkusHammer/digint"
         Documentation = "https://MarkusHammer.github.io/digint"
@@ -75,7 +86,7 @@
 [tool.coverage.report]
     ignore_errors = true
     skip_empty = true
-    precision = 4
+    precision = 5
     omit=["**/tests/**"]
     exclude_lines = [
         "^\\s*continue\\b",
@@ -90,4 +101,4 @@
     disable="no-else-return,too-many-arguments,too-many-branches,too-many-return-statements,too-many-instance-attributes,too-few-public-methods"
 
 [tool.pyright]
-    typeCheckingMode="standard"
+    verboseOutput = true
