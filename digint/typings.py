@@ -86,6 +86,11 @@ except ImportError:
                 LiteralString = str # type:ignore[reportRedeclaration]
 
 try:
+    from typing import Literal
+except ImportError:
+    from typing_extensions import Literal
+
+try:
     from typing import Union
 except ImportError:
     from typing_extensions import Union

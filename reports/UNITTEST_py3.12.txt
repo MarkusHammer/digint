@@ -10,32 +10,44 @@ test_sized_negative_index (digint.tests.tools_tests.AbsIndexTests.test_sized_neg
 `test_sized_negative_index` ... ok
 test_sized_positive_index (digint.tests.tools_tests.AbsIndexTests.test_sized_positive_index)
 `test_sized_positive_index` ... ok
-test_del (digint.tests.digint_tests.DigintPreset.test_del)
+test_del (digint.tests.digint_tests.DigitintPreset.test_del)
 `test_del` ... ok
-test_get (digint.tests.digint_tests.DigintPreset.test_get)
+test_get (digint.tests.digint_tests.DigitintPreset.test_get)
 `test_get` ... ok
-test_mask (digint.tests.digint_tests.DigintPreset.test_mask)
+test_insert (digint.tests.digint_tests.DigitintPreset.test_insert)
+`test_insert` ... ok
+test_mask (digint.tests.digint_tests.DigitintPreset.test_mask)
 `test_mask` ... ok
-test_set (digint.tests.digint_tests.DigintPreset.test_set)
+test_set (digint.tests.digint_tests.DigitintPreset.test_set)
 `test_set` ... ok
-test_digit_length_bin (digint.tests.digint_tests.DigintRandom.test_digit_length_bin)
+test_digit_length_bin (digint.tests.digint_tests.DigitintRandom.test_digit_length_bin)
 `test_digit_length_bin` ... ok
-test_digit_length_decimal (digint.tests.digint_tests.DigintRandom.test_digit_length_decimal)
+test_digit_length_decimal (digint.tests.digint_tests.DigitintRandom.test_digit_length_decimal)
 `test_digit_length_decimal` ... ok
-test_digit_length_hex (digint.tests.digint_tests.DigintRandom.test_digit_length_hex)
+test_digit_length_hex (digint.tests.digint_tests.DigitintRandom.test_digit_length_hex)
 `test_digit_length_hex` ... ok
-test_digit_length_oct (digint.tests.digint_tests.DigintRandom.test_digit_length_oct)
+test_digit_length_oct (digint.tests.digint_tests.DigitintRandom.test_digit_length_oct)
 `test_digit_length_oct` ... ok
-test_digit_length_unary (digint.tests.digint_tests.DigintRandom.test_digit_length_unary)
+test_digit_length_unary (digint.tests.digint_tests.DigitintRandom.test_digit_length_unary)
 `test_digit_length_unary` ... ok
 test_sign (digint.tests.user_int_tests.ExtendedUserIntTests.test_sign)
 `test_sign` ... ok
-test_opperator_int (digint.tests.user_int_tests.UserIntTests.test_opperator_int)
-`test_opperator_int` ... ok
+test_arithmetic_opperators_int (digint.tests.user_int_tests.UserIntTests.test_arithmetic_opperators_int)
+`test_arithmetic_opperators_int` ... ok
+test_binary_opperators_int (digint.tests.user_int_tests.UserIntTests.test_binary_opperators_int)
+`test_binary_opperators_int` ... ok
+test_compairson_opperators_int (digint.tests.user_int_tests.UserIntTests.test_compairson_opperators_int)
+`test_compairson_opperators_int` ... ok
+test_conversion_opperators_int (digint.tests.user_int_tests.UserIntTests.test_conversion_opperators_int)
+`test_conversion_opperators_int` ... ok
+test_hashing_opperators_int (digint.tests.user_int_tests.UserIntTests.test_hashing_opperators_int)
+`test_hashing_opperators_int` ... ok
+test_rounding_opperators_int (digint.tests.user_int_tests.UserIntTests.test_rounding_opperators_int)
+`test_rounding_opperators_int` ... ok
 test_x (digint.tests.user_int_tests.UserIntTests.test_x)
 `test_x` ... ok
 
 ----------------------------------------------------------------------
-Ran 18 tests in 0.919s
+Ran 24 tests in 2.103s
 
 OK

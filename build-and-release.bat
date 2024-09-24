@@ -4,7 +4,7 @@ SET ERROR=""
 SET modulename=digint
 SET targetpyver=3.12
 
-REM NOTE THIS MUST BE BUILT USING A VERSION OF PYTHON >= 3.10, 3.9.1 and 3.8.7 #THX https://github.com/pypa/build/issues/255#issuecomment-794560752
+REM NOTE THIS MUST BE BUILT USING A VERSION OF PYTHON > 3.7 and >= 3.10, 3.9.1 and 3.8.7 #THX https://github.com/pypa/build/issues/255#issuecomment-794560752
 REM below are the commands used on windows, feel free to use the most up to date version of python when possible
 
 ECHO The following expects that the current directory is the root of this repository, and that the git repo is already initialised
@@ -45,7 +45,7 @@ echo _____PIPREQS_____
 py -%targetpyver% -c "from pipreqs.pipreqs import main; main()" --mode gt --debug --force || GOTO :error
 
 echo _____PDOC_____
-py -%targetpyver% -m pdoc --html -f -c show_inherited_members=True -c list_class_variables_in_index=False -c show_type_annotations=True -c show_source_code=True -o tempdocs %modulename% || GOTO :error
+py -%targetpyver% -m pdoc --html -f -c show_inherited_members=True -c list_class_variables_in_index=False -c show_type_annotations=True -c show_source_code=True -o tempdocs %modulename% >> "./reports/PDOC.txt" || GOTO :error
 IF EXIST "./docs" RMDIR "./docs" /q /s || GOTO :error
 REN "./tempdocs/%modulename%" docs || GOTO :error
 MOVE "./tempdocs/docs" . || GOTO :error

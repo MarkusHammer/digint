@@ -37,13 +37,13 @@ hljs.highlightAll();
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="digint.tests.digint_tests.DigintPreset"><code class="flex name class">
-<span>class <span class="ident">DigintPreset</span></span>
+<dt id="digint.tests.digint_tests.DigitintPreset"><code class="flex name class">
+<span>class <span class="ident">DigitintPreset</span></span>
 <span>(</span><span>methodName='runTest')</span>
 </code></dt>
 <dd>
-<div class="desc"><p><code><a title="digint.tests.digint_tests.DigintPreset" href="#digint.tests.digint_tests.DigintPreset">DigintPreset</a></code></p>
-<p>Tests the <code><a title="digint" href="../index.html">digint</a></code> class and it's capabilities using a contant collection of preset examples.</p>
+<div class="desc"><p><code><a title="digint.tests.digint_tests.DigitintPreset" href="#digint.tests.digint_tests.DigitintPreset">DigitintPreset</a></code></p>
+<p>Tests the <code>digitint</code> class and it's capabilities using a contant collection of preset examples.</p>
 <p>Create an instance of the class that will use the named test
 method when executed. Raises a ValueError if the instance does
 not have a method with the specified name.</p></div>
@@ -51,43 +51,105 @@ not have a method with the specified name.</p></div>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class DigintPreset(TestCase):
+<pre><code class="python">class DigitintPreset(TestCase):
     &#34;&#34;&#34;
-    `DigintPreset`
+    `DigitintPreset`
 
-    Tests the `digint` class and it&#39;s capabilities using a contant collection of preset examples.
+    Tests the `digitint` class and it&#39;s capabilities using a contant collection of preset examples.
     &#34;&#34;&#34;
-    # formated as (source_int, source_base) : (popped_value, popping_index, remaining_int)
-    CONSTS = {
-        (54321, 10) : (2, 1, 5431),
-        (87654321, 10) : (8, -1, 7654321),
-        (7654321, 10) : (6, 5, 754321),
-        (987654321, 10) : ([4,5,6], slice(3,6), 987321),
-        (0xABCDEF, 16) : (0xC, 3, 0xABDEF),
-        (0xABCDE, 16) : (0xA, -1, 0xBCDE),
-        (&#34;ABCDEF&#34;, 23) : (int(&#34;A&#34;, 23), -1, int(&#34;BCDEF&#34;, 23)),
-        (&#34;ABCDEF&#34;, 36) : (int(&#34;B&#34;, 36), 4, int(&#34;ACDEF&#34;, 36))
-    }
+    CONSTS = (
+        {
+            &#34;whole&#34; : 54321,
+            &#34;base&#34; : 10,
+            &#34;index&#34; : 1,
+            &#34;popped&#34; : 2,
+            &#34;remainder&#34; : 5431
+        },
+        {
+            &#34;whole&#34; : 87654321,
+            &#34;base&#34; : 10,
+            &#34;index&#34; : -1,
+            &#34;popped&#34; : 8,
+            &#34;remainder&#34; : 7654321
+        },
+        {
+            &#34;whole&#34; : 7654321,
+            &#34;base&#34; : 10,
+            &#34;index&#34; : 5,
+            &#34;popped&#34; : 6,
+            &#34;remainder&#34; : 754321
+        },
+        {
+            &#34;whole&#34; : 987654321,
+            &#34;base&#34; : 10,
+            &#34;index&#34; : slice(3,6),
+            &#34;popped&#34; : [4,5,6],
+            &#34;remainder&#34; : 987321
+        },
+        {
+            &#34;whole&#34; : 0xABCDEF,
+            &#34;base&#34; : 16,
+            &#34;index&#34; : 3,
+            &#34;popped&#34; : 0xC,
+            &#34;remainder&#34; : 0xABDEF
+        },
+        {
+            &#34;whole&#34; : 0xABCDEF,
+            &#34;base&#34; : 16,
+            &#34;index&#34; : -1,
+            &#34;popped&#34; : 0xA,
+            &#34;remainder&#34; : 0xBCDEF
+        },
+        {
+            &#34;whole&#34; : &#34;ABCDEF&#34;,
+            &#34;base&#34; : 23,
+            &#34;index&#34; : -1,
+            &#34;popped&#34; : int(&#34;A&#34;, 23),
+            &#34;remainder&#34; : int(&#34;BCDEF&#34;, 23)
+        },
+        {
+            &#34;whole&#34; : &#34;ABCDEF&#34;,
+            &#34;base&#34; : 36,
+            &#34;index&#34; : 4,
+            &#34;popped&#34; : int(&#34;B&#34;, 36),
+            &#34;remainder&#34; : int(&#34;ACDEF&#34;, 36)
+        },
+        {
+            &#34;whole&#34; : [&#34;5&#34;,4,3,&#34;2&#34;,1],
+            &#34;base&#34; : 10,
+            &#34;index&#34; : 1,
+            &#34;popped&#34; : 2,
+            &#34;remainder&#34; : 5431
+        },
+        {
+            &#34;whole&#34; : bytes([5,4,3,2,1]),
+            &#34;base&#34; : 10,
+            &#34;index&#34; : 1,
+            &#34;popped&#34; : 2,
+            &#34;remainder&#34; : 5431
+        }
+    )
 
     def test_get(self):
         &#34;&#34;&#34;
         `test_get`
 
-        Tests that the `digint` class&#39;s `__getitem__` behaves as expected
+        Tests that the `digitint` class&#39;s `__getitem__` behaves as expected
         using the tests case&#39;s contant examples.
         &#34;&#34;&#34;
-        for inv, outv in self.CONSTS.items():
-            self.assertEqual(digitint(*inv).get_digit(outv[1]), outv[0])
+        for test_set in self.CONSTS:
+            gotten = digitint(test_set[&#34;whole&#34;], test_set[&#34;base&#34;]).get_digit(test_set[&#34;index&#34;])
+            self.assertEqual(gotten, test_set[&#34;popped&#34;])
 
     def test_set(self):
         &#34;&#34;&#34;
         `test_set`
 
-        Tests that the `digint` class&#39;s `__setitem__` behaves as expected
+        Tests that the `digitint` class&#39;s `__setitem__` behaves as expected
         using the tests case&#39;s contant examples.
         &#34;&#34;&#34;
-        for inv in self.CONSTS:
-            dintobj = digitint(*inv)
+        for test_set in self.CONSTS:
+            dintobj = digitint(test_set[&#34;whole&#34;], test_set[&#34;base&#34;])
             newval = randrange(0, dintobj.base - 1)
             dintobj[2] = newval
             self.assertEqual(dintobj[2], newval)
@@ -96,27 +158,45 @@ not have a method with the specified name.</p></div>
         &#34;&#34;&#34;
         `test_del`
 
-        Tests that the `digint` class&#39;s `__delitem__` behaves as expected
+        Tests that the `digitint` class&#39;s `__delitem__` behaves as expected
         using the tests case&#39;s contant examples.
         &#34;&#34;&#34;
-        for inv, outv in self.CONSTS.items():
-            o = digitint(*inv)
-            del o[outv[1]]
-            self.assertEqual(int(o), outv[2])
+        for test_set in self.CONSTS:
+            o = digitint(test_set[&#34;whole&#34;], test_set[&#34;base&#34;])
+            del o[test_set[&#34;index&#34;]]
+            self.assertEqual(int(o), test_set[&#34;remainder&#34;])
 
     def test_mask(self):
         &#34;&#34;&#34;
         `test_mask`
 
-        Tests that the `digint` class&#39;s `mask` behaves as expected
+        Tests that the `digitint` class&#39;s `mask` behaves as expected
         using the tests case&#39;s contant examples.
         &#34;&#34;&#34;
-        for inv, outv in self.CONSTS.items():
-            if not isinstance(outv[1], int):
+        for test_set in self.CONSTS:
+            if not isinstance(test_set[&#34;index&#34;], int):
                 continue
-            dintobj = digitint(*inv)
-            expected_mask = outv[0] * (dintobj.base ** absindex(outv[1], dintobj.digit_length()))
-            self.assertEqual(dintobj.mask(outv[1]), expected_mask)</code></pre>
+            dintobj = digitint(test_set[&#34;whole&#34;], test_set[&#34;base&#34;])
+            expected_mask = test_set[&#34;popped&#34;]
+            expected_mask *= (dintobj.base ** absindex(test_set[&#34;index&#34;], dintobj.digit_length()))
+            self.assertEqual(dintobj.mask(test_set[&#34;index&#34;]), expected_mask)
+
+    def test_insert(self):
+        &#34;&#34;&#34;
+        `test_insert`
+
+        Tests that the `digitint` class&#39;s `insert` behaves as expected
+        using the tests case&#39;s contant examples.
+        &#34;&#34;&#34;
+
+        for test_set in self.CONSTS:
+            if not isinstance(test_set[&#34;index&#34;], int):
+                continue
+
+            expected_result = digitint(test_set[&#34;whole&#34;], test_set[&#34;base&#34;])
+            inserted = digitint(test_set[&#34;remainder&#34;], test_set[&#34;base&#34;])
+            inserted.insert(test_set[&#34;index&#34;], test_set[&#34;popped&#34;])
+            self.assertEqual(expected_result, inserted)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -124,54 +204,62 @@ not have a method with the specified name.</p></div>
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="digint.tests.digint_tests.DigintPreset.CONSTS"><code class="name">var <span class="ident">CONSTS</span></code></dt>
+<dt id="digint.tests.digint_tests.DigitintPreset.CONSTS"><code class="name">var <span class="ident">CONSTS</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
 </dl>
 <h3>Methods</h3>
 <dl>
-<dt id="digint.tests.digint_tests.DigintPreset.test_del"><code class="name flex">
+<dt id="digint.tests.digint_tests.DigitintPreset.test_del"><code class="name flex">
 <span>def <span class="ident">test_del</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <div class="desc"><p><code>test_del</code></p>
-<p>Tests that the <code><a title="digint" href="../index.html">digint</a></code> class's <code>__delitem__</code> behaves as expected
+<p>Tests that the <code>digitint</code> class's <code>__delitem__</code> behaves as expected
 using the tests case's contant examples.</p></div>
 </dd>
-<dt id="digint.tests.digint_tests.DigintPreset.test_get"><code class="name flex">
+<dt id="digint.tests.digint_tests.DigitintPreset.test_get"><code class="name flex">
 <span>def <span class="ident">test_get</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <div class="desc"><p><code>test_get</code></p>
-<p>Tests that the <code><a title="digint" href="../index.html">digint</a></code> class's <code>__getitem__</code> behaves as expected
+<p>Tests that the <code>digitint</code> class's <code>__getitem__</code> behaves as expected
 using the tests case's contant examples.</p></div>
 </dd>
-<dt id="digint.tests.digint_tests.DigintPreset.test_mask"><code class="name flex">
+<dt id="digint.tests.digint_tests.DigitintPreset.test_insert"><code class="name flex">
+<span>def <span class="ident">test_insert</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>test_insert</code></p>
+<p>Tests that the <code>digitint</code> class's <code>insert</code> behaves as expected
+using the tests case's contant examples.</p></div>
+</dd>
+<dt id="digint.tests.digint_tests.DigitintPreset.test_mask"><code class="name flex">
 <span>def <span class="ident">test_mask</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <div class="desc"><p><code>test_mask</code></p>
-<p>Tests that the <code><a title="digint" href="../index.html">digint</a></code> class's <code>mask</code> behaves as expected
+<p>Tests that the <code>digitint</code> class's <code>mask</code> behaves as expected
 using the tests case's contant examples.</p></div>
 </dd>
-<dt id="digint.tests.digint_tests.DigintPreset.test_set"><code class="name flex">
+<dt id="digint.tests.digint_tests.DigitintPreset.test_set"><code class="name flex">
 <span>def <span class="ident">test_set</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <div class="desc"><p><code>test_set</code></p>
-<p>Tests that the <code><a title="digint" href="../index.html">digint</a></code> class's <code>__setitem__</code> behaves as expected
+<p>Tests that the <code>digitint</code> class's <code>__setitem__</code> behaves as expected
 using the tests case's contant examples.</p></div>
 </dd>
 </dl>
 </dd>
-<dt id="digint.tests.digint_tests.DigintRandom"><code class="flex name class">
-<span>class <span class="ident">DigintRandom</span></span>
+<dt id="digint.tests.digint_tests.DigitintRandom"><code class="flex name class">
+<span>class <span class="ident">DigitintRandom</span></span>
 <span>(</span><span>methodName='runTest')</span>
 </code></dt>
 <dd>
-<div class="desc"><p><code><a title="digint.tests.digint_tests.DigintRandom" href="#digint.tests.digint_tests.DigintRandom">DigintRandom</a></code></p>
-<p>Tests the <code><a title="digint" href="../index.html">digint</a></code> class and it's capabilities using randomly generated example values.</p>
+<div class="desc"><p><code><a title="digint.tests.digint_tests.DigitintRandom" href="#digint.tests.digint_tests.DigitintRandom">DigitintRandom</a></code></p>
+<p>Tests the <code>digitint</code> class and it's capabilities using randomly generated example values.</p>
 <p>Create an instance of the class that will use the named test
 method when executed. Raises a ValueError if the instance does
 not have a method with the specified name.</p></div>
@@ -179,20 +267,20 @@ not have a method with the specified name.</p></div>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class DigintRandom(TestCase):
+<pre><code class="python">class DigitintRandom(TestCase):
     &#34;&#34;&#34;
-    `DigintRandom`
+    `DigitintRandom`
 
-    Tests the `digint` class and it&#39;s capabilities using randomly generated example values.
+    Tests the `digitint` class and it&#39;s capabilities using randomly generated example values.
     &#34;&#34;&#34;
     def test_digit_length_decimal(self):
         &#34;&#34;&#34;
         `test_digit_length_decimal`
 
-        Tests that the `digint` class&#39;s `digit_length` behaves as expected
+        Tests that the `digitint` class&#39;s `digit_length` behaves as expected
         with random values in base 10.
         &#34;&#34;&#34;
-        for _ in range(5000):
+        for _ in range(50000):
             val = randrange(-1000000, 1000000)
             diglen = digitint(val, 10).digit_length()
             if val == 0:
@@ -204,10 +292,10 @@ not have a method with the specified name.</p></div>
         &#34;&#34;&#34;
         `test_digit_length_hex`
 
-        Tests that the `digint` class&#39;s `digit_length` behaves as expected
+        Tests that the `digitint` class&#39;s `digit_length` behaves as expected
         with random values in base 16.
         &#34;&#34;&#34;
-        for _ in range(5000):
+        for _ in range(50000):
             val = randrange(-1000000, 1000000)
             diglen = digitint(val, 16).digit_length()
             if val == 0:
@@ -219,10 +307,10 @@ not have a method with the specified name.</p></div>
         &#34;&#34;&#34;
         `test_digit_length_bin`
 
-        Tests that the `digint` class&#39;s `digit_length` behaves as expected
+        Tests that the `digitint` class&#39;s `digit_length` behaves as expected
         with random values in base 2.
         &#34;&#34;&#34;
-        for _ in range(5000):
+        for _ in range(50000):
             val = randrange(-1000000, 1000000)
             diglen = digitint(val, 2).digit_length()
             self.assertEqual(diglen, val.bit_length())
@@ -235,10 +323,10 @@ not have a method with the specified name.</p></div>
         &#34;&#34;&#34;
         `test_digit_length_oct`
 
-        Tests that the `digint` class&#39;s `digit_length` behaves as expected
+        Tests that the `digitint` class&#39;s `digit_length` behaves as expected
         with random values in base 8.
         &#34;&#34;&#34;
-        for _ in range(5000):
+        for _ in range(50000):
             val = randrange(-1000000, 1000000)
             diglen = digitint(val, 8).digit_length()
             if val == 0:
@@ -250,10 +338,10 @@ not have a method with the specified name.</p></div>
         &#34;&#34;&#34;
         `test_digit_length_unary`
 
-        Tests that the `digint` class&#39;s `digit_length` behaves as expected
+        Tests that the `digitint` class&#39;s `digit_length` behaves as expected
         with random values in base 1.
         &#34;&#34;&#34;
-        for _ in range(5000):
+        for _ in range(50000):
             val = randrange(-1000000, 1000000)
             diglen = digitint(val, 1).digit_length()
             self.assertEqual(diglen, abs(val))
@@ -266,44 +354,44 @@ not have a method with the specified name.</p></div>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="digint.tests.digint_tests.DigintRandom.test_digit_length_bin"><code class="name flex">
+<dt id="digint.tests.digint_tests.DigitintRandom.test_digit_length_bin"><code class="name flex">
 <span>def <span class="ident">test_digit_length_bin</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <div class="desc"><p><code>test_digit_length_bin</code></p>
-<p>Tests that the <code><a title="digint" href="../index.html">digint</a></code> class's <code>digit_length</code> behaves as expected
+<p>Tests that the <code>digitint</code> class's <code>digit_length</code> behaves as expected
 with random values in base 2.</p></div>
 </dd>
-<dt id="digint.tests.digint_tests.DigintRandom.test_digit_length_decimal"><code class="name flex">
+<dt id="digint.tests.digint_tests.DigitintRandom.test_digit_length_decimal"><code class="name flex">
 <span>def <span class="ident">test_digit_length_decimal</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <div class="desc"><p><code>test_digit_length_decimal</code></p>
-<p>Tests that the <code><a title="digint" href="../index.html">digint</a></code> class's <code>digit_length</code> behaves as expected
+<p>Tests that the <code>digitint</code> class's <code>digit_length</code> behaves as expected
 with random values in base 10.</p></div>
 </dd>
-<dt id="digint.tests.digint_tests.DigintRandom.test_digit_length_hex"><code class="name flex">
+<dt id="digint.tests.digint_tests.DigitintRandom.test_digit_length_hex"><code class="name flex">
 <span>def <span class="ident">test_digit_length_hex</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <div class="desc"><p><code>test_digit_length_hex</code></p>
-<p>Tests that the <code><a title="digint" href="../index.html">digint</a></code> class's <code>digit_length</code> behaves as expected
+<p>Tests that the <code>digitint</code> class's <code>digit_length</code> behaves as expected
 with random values in base 16.</p></div>
 </dd>
-<dt id="digint.tests.digint_tests.DigintRandom.test_digit_length_oct"><code class="name flex">
+<dt id="digint.tests.digint_tests.DigitintRandom.test_digit_length_oct"><code class="name flex">
 <span>def <span class="ident">test_digit_length_oct</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <div class="desc"><p><code>test_digit_length_oct</code></p>
-<p>Tests that the <code><a title="digint" href="../index.html">digint</a></code> class's <code>digit_length</code> behaves as expected
+<p>Tests that the <code>digitint</code> class's <code>digit_length</code> behaves as expected
 with random values in base 8.</p></div>
 </dd>
-<dt id="digint.tests.digint_tests.DigintRandom.test_digit_length_unary"><code class="name flex">
+<dt id="digint.tests.digint_tests.DigitintRandom.test_digit_length_unary"><code class="name flex">
 <span>def <span class="ident">test_digit_length_unary</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <div class="desc"><p><code>test_digit_length_unary</code></p>
-<p>Tests that the <code><a title="digint" href="../index.html">digint</a></code> class's <code>digit_length</code> behaves as expected
+<p>Tests that the <code>digitint</code> class's <code>digit_length</code> behaves as expected
 with random values in base 1.</p></div>
 </dd>
 </dl>
@@ -324,22 +412,23 @@ with random values in base 1.</p></div>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="digint.tests.digint_tests.DigintPreset" href="#digint.tests.digint_tests.DigintPreset">DigintPreset</a></code></h4>
+<h4><code><a title="digint.tests.digint_tests.DigitintPreset" href="#digint.tests.digint_tests.DigitintPreset">DigitintPreset</a></code></h4>
 <ul class="">
-<li><code><a title="digint.tests.digint_tests.DigintPreset.test_del" href="#digint.tests.digint_tests.DigintPreset.test_del">test_del</a></code></li>
-<li><code><a title="digint.tests.digint_tests.DigintPreset.test_get" href="#digint.tests.digint_tests.DigintPreset.test_get">test_get</a></code></li>
-<li><code><a title="digint.tests.digint_tests.DigintPreset.test_mask" href="#digint.tests.digint_tests.DigintPreset.test_mask">test_mask</a></code></li>
-<li><code><a title="digint.tests.digint_tests.DigintPreset.test_set" href="#digint.tests.digint_tests.DigintPreset.test_set">test_set</a></code></li>
+<li><code><a title="digint.tests.digint_tests.DigitintPreset.test_del" href="#digint.tests.digint_tests.DigitintPreset.test_del">test_del</a></code></li>
+<li><code><a title="digint.tests.digint_tests.DigitintPreset.test_get" href="#digint.tests.digint_tests.DigitintPreset.test_get">test_get</a></code></li>
+<li><code><a title="digint.tests.digint_tests.DigitintPreset.test_insert" href="#digint.tests.digint_tests.DigitintPreset.test_insert">test_insert</a></code></li>
+<li><code><a title="digint.tests.digint_tests.DigitintPreset.test_mask" href="#digint.tests.digint_tests.DigitintPreset.test_mask">test_mask</a></code></li>
+<li><code><a title="digint.tests.digint_tests.DigitintPreset.test_set" href="#digint.tests.digint_tests.DigitintPreset.test_set">test_set</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="digint.tests.digint_tests.DigintRandom" href="#digint.tests.digint_tests.DigintRandom">DigintRandom</a></code></h4>
+<h4><code><a title="digint.tests.digint_tests.DigitintRandom" href="#digint.tests.digint_tests.DigitintRandom">DigitintRandom</a></code></h4>
 <ul class="">
-<li><code><a title="digint.tests.digint_tests.DigintRandom.test_digit_length_bin" href="#digint.tests.digint_tests.DigintRandom.test_digit_length_bin">test_digit_length_bin</a></code></li>
-<li><code><a title="digint.tests.digint_tests.DigintRandom.test_digit_length_decimal" href="#digint.tests.digint_tests.DigintRandom.test_digit_length_decimal">test_digit_length_decimal</a></code></li>
-<li><code><a title="digint.tests.digint_tests.DigintRandom.test_digit_length_hex" href="#digint.tests.digint_tests.DigintRandom.test_digit_length_hex">test_digit_length_hex</a></code></li>
-<li><code><a title="digint.tests.digint_tests.DigintRandom.test_digit_length_oct" href="#digint.tests.digint_tests.DigintRandom.test_digit_length_oct">test_digit_length_oct</a></code></li>
-<li><code><a title="digint.tests.digint_tests.DigintRandom.test_digit_length_unary" href="#digint.tests.digint_tests.DigintRandom.test_digit_length_unary">test_digit_length_unary</a></code></li>
+<li><code><a title="digint.tests.digint_tests.DigitintRandom.test_digit_length_bin" href="#digint.tests.digint_tests.DigitintRandom.test_digit_length_bin">test_digit_length_bin</a></code></li>
+<li><code><a title="digint.tests.digint_tests.DigitintRandom.test_digit_length_decimal" href="#digint.tests.digint_tests.DigitintRandom.test_digit_length_decimal">test_digit_length_decimal</a></code></li>
+<li><code><a title="digint.tests.digint_tests.DigitintRandom.test_digit_length_hex" href="#digint.tests.digint_tests.DigitintRandom.test_digit_length_hex">test_digit_length_hex</a></code></li>
+<li><code><a title="digint.tests.digint_tests.DigitintRandom.test_digit_length_oct" href="#digint.tests.digint_tests.DigitintRandom.test_digit_length_oct">test_digit_length_oct</a></code></li>
+<li><code><a title="digint.tests.digint_tests.DigitintRandom.test_digit_length_unary" href="#digint.tests.digint_tests.DigitintRandom.test_digit_length_unary">test_digit_length_unary</a></code></li>
 </ul>
 </li>
 </ul>

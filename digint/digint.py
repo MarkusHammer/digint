@@ -15,7 +15,6 @@ from .errors import NotationError, BaseInvalidOpperationError, BaseValueError
 __POSITIONAL_BASED_INT_BASES:List[Type] = [ExtendedUserInt]
 if version_info.major >= 3 and version_info.minor >= 10:
     __POSITIONAL_BASED_INT_BASES.append(MutableSequenceABC)
-    __POSITIONAL_BASED_INT_BASES.append(SupportsBytes)
 
 
 class PositionalBasedIntiger(*tuple(__POSITIONAL_BASED_INT_BASES)):
@@ -39,7 +38,7 @@ class PositionalBasedIntiger(*tuple(__POSITIONAL_BASED_INT_BASES)):
     """
 
     def __init__(self,
-                 value:Union[int, str] = 0,
+                 value:Union[int, str, Iterable[Union[int, str]], bytes, bytearray, memoryview] = 0,
                  base:int = 10,
                  *,
                  notation_format:Optional[NotationFormat] = DEFAULT_FORMAT
@@ -48,9 +47,19 @@ class PositionalBasedIntiger(*tuple(__POSITIONAL_BASED_INT_BASES)):
         super().__init__(0)
         self.__base:int = 2
 
-        self.x = int(value, base) if isinstance(value, str) else value
+        self.x = 0
         self.base = base
         self.notation_format:Optional[NotationFormat] = notation_format
+        if isinstance(value, int):
+            self.x = value
+        elif isinstance(value, str):
+            self.x = int(value, base)
+        else:
+            for digit_value in value:
+                digit_value = self._ensure_unnotated(digit_value)
+                if digit_value >= base:
+                    raise ValueError(f"Digit of value {digit_value} isn't possible in base {base}")
+                self.x = (self.x * base) + digit_value
 
     def copy(self,
              value:Optional[Union[int, str]] = None,
@@ -107,7 +116,9 @@ class PositionalBasedIntiger(*tuple(__POSITIONAL_BASED_INT_BASES)):
         radix
 
         Returns:
-            _description_
+            The absolute value of the base.
+            Will always return `base` when used in a `PositionalBasedIntiger`,
+            but may differ when using with a extended type.
         """
         return abs(self.base)
 
@@ -155,9 +166,6 @@ class PositionalBasedIntiger(*tuple(__POSITIONAL_BASED_INT_BASES)):
     # slightly faster than the arbitrary insert method
     def _prepend(self, value:Union[int,str]):
         value = self._ensure_unnotated(value)
-
-        if self.base == 0:
-            raise BaseInvalidOpperationError("Base 0 digits cannot be pushed")
 
         if value < 0 or value >= self.base:
             raise ValueError("Digit value out of bounds of base")
@@ -480,7 +488,8 @@ class PositionalBasedIntiger(*tuple(__POSITIONAL_BASED_INT_BASES)):
         """
         `insert`
 
-        Inserts the given value (or values) before the given index.
+        Inserts the given value (or values, following the order in which they are supplied)
+        before the given index.
         When given multiple values, each value will be inserted before the given index in order.
 
         Arguments:
@@ -488,7 +497,8 @@ class PositionalBasedIntiger(*tuple(__POSITIONAL_BASED_INT_BASES)):
             `value` -- The value (or values) to insert.
         """
 
-        index = absindex(index, self.digit_length())
+        # not the current length, but the length this will have after the insert
+        index = absindex(index, self.digit_length() + 1)
 
         if isinstance(value, Iterable):
             value = (self._ensure_unnotated(v) for v in value)
@@ -510,7 +520,7 @@ class PositionalBasedIntiger(*tuple(__POSITIONAL_BASED_INT_BASES)):
                 continue
 
             high = self.copy()
-            high.unset_digit(slice(0, index+1))
+            high.unset_digit(slice(0, index))
 
             if high.x != 0:
                 self.x -= high.x
@@ -518,7 +528,7 @@ class PositionalBasedIntiger(*tuple(__POSITIONAL_BASED_INT_BASES)):
                 self.x += high.x
 
             v = self.copy(v)
-            v.x *= (v.base ** (index+1))
+            v.x *= (v.base ** (index))
             self.x += v.x
 
             self.x *= restore_sign
@@ -605,7 +615,7 @@ class PositionalBasedIntiger(*tuple(__POSITIONAL_BASED_INT_BASES)):
 
         return sum(self._mask_value_continuous(s.start, s.stop - s.start) for s in slices)
 
-    def digit_shift_left(self, amount:int):
+    def digit_shift_left(self, amount:int = 1):
         """
         `digit_shift_left`
 
@@ -623,7 +633,7 @@ class PositionalBasedIntiger(*tuple(__POSITIONAL_BASED_INT_BASES)):
         else:
             self.x *= (self.base**amount)
 
-    def digit_shift_right(self, amount:int):
+    def digit_shift_right(self, amount:int = 1):
         """
         `digit_shift_right`
 
@@ -640,6 +650,46 @@ class PositionalBasedIntiger(*tuple(__POSITIONAL_BASED_INT_BASES)):
             self.x = (abs(self.x) >> amount) * self.sign
         else:
             self.x //= (self.base**amount)
+
+    def digit_rotate_left(self, amount:int = 1):
+        """
+        `digit_rotate_left`
+
+        Similar to a binary rotate left, rotates the value left according to the set base.
+        This will pop the digit at the largest signifiant place value and inserts
+        it at the smallest place value spot.
+
+        Arguments:
+            amount -- The amount to rotate left. Will rotate right when negative.
+        """
+
+        if amount < 0:
+            self.digit_rotate_right(-amount)
+
+        for _ in range(amount):
+            popped = self.pop(-1)
+            self.digit_shift_left(1)
+            self.x += popped
+
+    def digit_rotate_right(self, amount:int = 1):
+        """
+        `digit_rotate_right`
+
+        Similar to a binary rotate right, rotates the value right according to the set base.
+        This will pop the digit at the smallest signifiant place value and inserts
+        it at the largest place value spot.
+
+        Arguments:
+            amount -- The amount to rotate right. Will rotate left when negative.
+        """
+
+        if amount < 0:
+            self.digit_rotate_left(-amount)
+
+        for _ in range(amount):
+            popped = self.pop(0)
+            self.digit_shift_right(1)
+            self.append(popped)
 
 
 class ExtendedBasedIntiger(PositionalBasedIntiger):
@@ -698,15 +748,26 @@ class ExtendedBasedIntiger(PositionalBasedIntiger):
     Also supports customizable notation formats with the optional `notation_format` attribute,
     including unary.
     """
+    @override
     def __init__(self,
-                 value:Union[int, str] = 0,
+                 value:Union[int, str, Iterable[Union[int, str]]] = 0,
                  base:int = 10,
                  *,
                  notation_format:Optional[NotationFormat] = DEFAULT_FORMAT
                  ):
 
         self.__base:int = 2
-        super().__init__(value, base, notation_format=notation_format)
+        super().__init__(0 if base == 1 else value, base, notation_format=notation_format)
+
+        if base == 1:
+            self.base = 1
+            if isinstance(value, int):
+                self.x = value
+            elif isinstance(value, str):
+                value = value.lstrip("0")
+                if not all(c == "1" for c in value):
+                    raise BaseValueError(f"{value} cannot be represented in base 1")
+                self.x = len(value)
 
     @override
     def copy(self,
@@ -744,6 +805,7 @@ class ExtendedBasedIntiger(PositionalBasedIntiger):
                          )
 
     @property
+    @override
     def base(self) -> int:
         """
         `base`
@@ -754,6 +816,7 @@ class ExtendedBasedIntiger(PositionalBasedIntiger):
         return self.__base
 
     @base.setter
+    @override
     def base(self, value:int):
         if value <= 0:
             raise BaseValueError()
@@ -863,13 +926,13 @@ class ExtendedBasedIntiger(PositionalBasedIntiger):
         return super().digit_count()
 
     @override
-    def digit_shift_left(self, amount:int):
+    def digit_shift_left(self, amount:int = 1):
         if self.base == 1:
             raise BaseInvalidOpperationError("This base cannot be shifted")
         super().digit_shift_left(amount)
 
     @override
-    def digit_shift_right(self, amount:int):
+    def digit_shift_right(self, amount:int = 1):
         if self.base == 1:
             raise BaseInvalidOpperationError("This base cannot be shifted")
         super().digit_shift_right(amount)
@@ -877,3 +940,4 @@ class ExtendedBasedIntiger(PositionalBasedIntiger):
 
 # give it a more common name
 digitint = ExtendedBasedIntiger # pylint:disable=invalid-name
+""" @private """

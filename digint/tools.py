@@ -4,12 +4,9 @@ tools
 Holds common tool functions and classes used in the `dint` module.
 """
 
-from functools import lru_cache
-
 from .typings import * # pylint:disable=unused-wildcard-import, wildcard-import
 
 
-@lru_cache(maxsize=255, typed=True)
 def absindex(index:int, reference_length:Union[Sized, int]) -> int:
     """
     `absindex`

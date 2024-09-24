@@ -2,7 +2,7 @@
 
 > Base-Agnostic Integer Manipulation
 
-`digint` is a module focused on easy high-level integer manipulation across any numerical base. Works with binary, decimal, or any other base. `digint` seeks to make complex digit-level and notation operations easy.
+`digint` is a module focused on easy high-level integer manipulation across any numerical base. Works with binary, decimal, or any other base. `digint` seeks to make complex digit-level and notation operations easy, just like they were `Collection`s.
 
 [Documentation](https://MarkusHammer.github.io/digint)
 

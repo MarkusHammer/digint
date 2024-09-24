@@ -285,6 +285,26 @@ def x(self) -&gt; int:
 </p>
 <div class="desc inherited"><p><code>bit_count</code> …</p></div>
 </dd>
+<dt id="digint.userint.ExtendedUserInt.is_integer"><code class="name flex">
+<span>def <span class="ident">is_integer</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.userint.UserInt" href="#digint.userint.UserInt">UserInt</a></code>.<code><a title="digint.userint.UserInt.is_integer" href="#digint.userint.UserInt.is_integer">is_integer</a></code>
+</p>
+<div class="desc inherited"><p><code>is_integer</code> …</p></div>
+</dd>
+<dt id="digint.userint.ExtendedUserInt.to_bytes"><code class="name flex">
+<span>def <span class="ident">to_bytes</span></span>(<span>self, length: <class 'SupportsIndex'>, byteorder: Literal['little', 'big'], *, signed: bool = False) ‑> bytes</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.userint.UserInt" href="#digint.userint.UserInt">UserInt</a></code>.<code><a title="digint.userint.UserInt.to_bytes" href="#digint.userint.UserInt.to_bytes">to_bytes</a></code>
+</p>
+<div class="desc inherited"><p><code>to_bytes</code> …</p></div>
+</dd>
 </dl>
 </dd>
 <dt id="digint.userint.UserInt"><code class="flex name class">
@@ -294,7 +314,9 @@ def x(self) -&gt; int:
 <dd>
 <div class="desc"><p><code><a title="digint.userint.UserInt" href="#digint.userint.UserInt">UserInt</a></code></p>
 <p>A class making a extendable intiger type, using the x attribute.
-Based off of the intent of objects like <code>UserList</code>, for the <code>int</code> type.</p></div>
+Based off of the intent of objects like <code>UserList</code>, for the <code>int</code> type.</p>
+<p>(Source: Some of the following docstring descriptions are derived form the official python docs:
+<a href="https://docs.python.org/3/library/stdtypes.html">https://docs.python.org/3/library/stdtypes.html</a>)</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -313,6 +335,9 @@ class UserInt(*tuple(__USERINT_ABCS)):
 
     A class making a extendable intiger type, using the x attribute.
     Based off of the intent of objects like `UserList`, for the `int` type.
+
+    (Source: Some of the following docstring descriptions are derived form the official python docs:
+    https://docs.python.org/3/library/stdtypes.html)
     &#34;&#34;&#34;
     def __init__(self, x:int):
         self.__x:int = x
@@ -342,9 +367,6 @@ class UserInt(*tuple(__USERINT_ABCS)):
 
     def __bool__(self):
         return bool(self.x)
-
-    def __bytes__(self):
-        return bytes(self.x)
 
     def __float__(self):
         return float(self.x)
@@ -381,6 +403,45 @@ class UserInt(*tuple(__USERINT_ABCS)):
         Number of bits necessary to represent self in binary.
         &#34;&#34;&#34;
         return self.x.bit_length()
+
+    def to_bytes(self,
+                 length:SupportsIndex,
+                 byteorder:Literal[&#39;little&#39;, &#39;big&#39;],
+                 *,
+                 signed:bool = False
+                 ) -&gt; bytes:
+        &#34;&#34;&#34;
+        `to_bytes`
+
+        Arguments:
+        Convert the &#39;int&#39; into an array of &#39;bytes&#39; representing the intiger.
+        Wraps `int.to_bytes()`
+
+        Arguments:
+            `length` -- Length of bytes object to use.
+            An `OverflowError` is raised if the integer is not
+            representable with the given number of bytes.
+
+            `byteorder` -- The byte order used to represent the integer. If `byteorder` is `&#39;big&#39;`,
+            the most significant byte is at the beginning of the byte array. If
+            `byteorder` is `&#39;little&#39;`, the most significant byte is at the end of the
+            byte array. To request the native byte order of the host system, use
+            `sys.byteorder` as the byte order value.
+
+            `signed` -- Determines whether two&#39;s complement is used to represent the integer.
+            If signed is `False` and a negative integer is given, an `OverflowError`
+            is raised.
+
+        &#34;&#34;&#34;
+        return self.x.to_bytes(length, byteorder, signed=signed)
+
+    def is_integer(self) -&gt; bool:
+        &#34;&#34;&#34;
+        `is_integer`
+
+        Always returns True. Exists for duck type compatibility with `float.is_integer()`.
+        &#34;&#34;&#34;
+        return True
 
     # these are all handled by the decorators, but type checkers miss that sometimes
     def __abs__(self): ...
@@ -441,6 +502,34 @@ def x(self) -&gt; int:
 <dd>
 <div class="desc"><p><code>bit_count</code></p>
 <p>Number of bits necessary to represent self in binary.</p></div>
+</dd>
+<dt id="digint.userint.UserInt.is_integer"><code class="name flex">
+<span>def <span class="ident">is_integer</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>is_integer</code></p>
+<p>Always returns True. Exists for duck type compatibility with <code>float.is_integer()</code>.</p></div>
+</dd>
+<dt id="digint.userint.UserInt.to_bytes"><code class="name flex">
+<span>def <span class="ident">to_bytes</span></span>(<span>self, length: <class 'SupportsIndex'>, byteorder: Literal['little', 'big'], *, signed: bool = False) ‑> bytes</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>to_bytes</code></p>
+<p>Arguments:
+Convert the 'int' into an array of 'bytes' representing the intiger.
+Wraps <code>int.to_bytes()</code></p>
+<h2 id="arguments">Arguments</h2>
+<p><code>length</code> &ndash; Length of bytes object to use.
+An <code>OverflowError</code> is raised if the integer is not
+representable with the given number of bytes.</p>
+<p><code>byteorder</code> &ndash; The byte order used to represent the integer. If <code>byteorder</code> is <code>'big'</code>,
+the most significant byte is at the beginning of the byte array. If
+<code>byteorder</code> is <code>'little'</code>, the most significant byte is at the end of the
+byte array. To request the native byte order of the host system, use
+<code>sys.byteorder</code> as the byte order value.</p>
+<p><code>signed</code> &ndash; Determines whether two's complement is used to represent the integer.
+If signed is <code>False</code> and a negative integer is given, an <code>OverflowError</code>
+is raised.</p></div>
 </dd>
 </dl>
 </dd>
@@ -704,6 +793,8 @@ as the operators of it's containing class as well.</p></div>
 <ul class="">
 <li><code><a title="digint.userint.ExtendedUserInt.bit_count" href="#digint.userint.ExtendedUserInt.bit_count">bit_count</a></code></li>
 <li><code><a title="digint.userint.ExtendedUserInt.bit_length" href="#digint.userint.ExtendedUserInt.bit_length">bit_length</a></code></li>
+<li><code><a title="digint.userint.ExtendedUserInt.is_integer" href="#digint.userint.ExtendedUserInt.is_integer">is_integer</a></code></li>
+<li><code><a title="digint.userint.ExtendedUserInt.to_bytes" href="#digint.userint.ExtendedUserInt.to_bytes">to_bytes</a></code></li>
 </ul>
 </li>
 <li>
@@ -711,6 +802,8 @@ as the operators of it's containing class as well.</p></div>
 <ul class="">
 <li><code><a title="digint.userint.UserInt.bit_count" href="#digint.userint.UserInt.bit_count">bit_count</a></code></li>
 <li><code><a title="digint.userint.UserInt.bit_length" href="#digint.userint.UserInt.bit_length">bit_length</a></code></li>
+<li><code><a title="digint.userint.UserInt.is_integer" href="#digint.userint.UserInt.is_integer">is_integer</a></code></li>
+<li><code><a title="digint.userint.UserInt.to_bytes" href="#digint.userint.UserInt.to_bytes">to_bytes</a></code></li>
 </ul>
 </li>
 <li>

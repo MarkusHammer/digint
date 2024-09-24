@@ -202,6 +202,9 @@ class UserInt(*tuple(__USERINT_ABCS)):
 
     A class making a extendable intiger type, using the x attribute.
     Based off of the intent of objects like `UserList`, for the `int` type.
+
+    (Source: Some of the following docstring descriptions are derived form the official python docs:
+    https://docs.python.org/3/library/stdtypes.html)
     """
     def __init__(self, x:int):
         self.__x:int = x
@@ -231,9 +234,6 @@ class UserInt(*tuple(__USERINT_ABCS)):
 
     def __bool__(self):
         return bool(self.x)
-
-    def __bytes__(self):
-        return bytes(self.x)
 
     def __float__(self):
         return float(self.x)
@@ -270,6 +270,45 @@ class UserInt(*tuple(__USERINT_ABCS)):
         Number of bits necessary to represent self in binary.
         """
         return self.x.bit_length()
+
+    def to_bytes(self,
+                 length:SupportsIndex,
+                 byteorder:Literal['little', 'big'],
+                 *,
+                 signed:bool = False
+                 ) -> bytes:
+        """
+        `to_bytes`
+
+        Arguments:
+        Convert the 'int' into an array of 'bytes' representing the intiger.
+        Wraps `int.to_bytes()`
+
+        Arguments:
+            `length` -- Length of bytes object to use.
+            An `OverflowError` is raised if the integer is not
+            representable with the given number of bytes.
+
+            `byteorder` -- The byte order used to represent the integer. If `byteorder` is `'big'`,
+            the most significant byte is at the beginning of the byte array. If
+            `byteorder` is `'little'`, the most significant byte is at the end of the
+            byte array. To request the native byte order of the host system, use
+            `sys.byteorder` as the byte order value.
+
+            `signed` -- Determines whether two's complement is used to represent the integer.
+            If signed is `False` and a negative integer is given, an `OverflowError`
+            is raised.
+
+        """
+        return self.x.to_bytes(length, byteorder, signed=signed)
+
+    def is_integer(self) -> bool:
+        """
+        `is_integer`
+
+        Always returns True. Exists for duck type compatibility with `float.is_integer()`.
+        """
+        return True
 
     # these are all handled by the decorators, but type checkers miss that sometimes
     def __abs__(self): ...

@@ -25,9 +25,72 @@ hljs.highlightAll();
 <h1 class="title">Package <code>digint</code></h1>
 </header>
 <section id="section-intro">
-<p><code><a title="digint.digint" href="digint.html">digint.digint</a></code></p>
-<p>A module focused on providing classes that allow for easy digitwise manipulation
-of integers of any base, just like they were <code>Collection</code>s.</p>
+<h1 id="digintdigint"><code><a title="digint.digint" href="digint.html">digint.digint</a></code></h1>
+<blockquote>
+<p>Base-Agnostic Integer Manipulation</p>
+</blockquote>
+<p><code><a title="digint.digint" href="digint.html">digint.digint</a></code> is a module focused on easy high-level integer manipulation across any numerical base. Works with binary, decimal, or any other base. <code><a title="digint.digint" href="digint.html">digint.digint</a></code> seeks to make complex digit-level and notation operations easy, just like they were <code>Collection</code>s.</p>
+<p><a href="https://MarkusHammer.github.io/digint">Documentation</a></p>
+<h2 id="setup">Setup</h2>
+<p>This module can be installed using:</p>
+<pre><code class="language-bash">pip install digint
+</code></pre>
+<h2 id="usage">Usage</h2>
+<p>This module is intended to be used only as a module, and can be imported after installing using the traditional process:</p>
+<pre><code class="language-python">from digint import digitint
+</code></pre>
+<h3 id="create-an-integer-in-any-base">Create an integer in any base</h3>
+<pre><code class="language-python"># input integers as you would with `int()`,
+# if the intiger is already in the base you wish to use
+n1 = digitint(1234, base=10)
+n2 = digitint(&quot;BASE36&quot;, base=36)
+n3 = digitint(0xABCDEF, base=16)
+
+# convert bases on initialization, if the input is a intiger type
+n4 = digitint(255, base=2) # == 0b11111111
+n5 = digitint(int(&quot;BASE36&quot;, 36), base=10) # == 683248722
+n6 = digitint(0xABCDEF, base=10) # == 11259375
+</code></pre>
+<h3 id="access-and-modify-digits-like-a-collection">Access and modify digits like a collection</h3>
+<pre><code class="language-python"># get the digit at index 2
+print(n1.get_digit(2)) # outputs &quot;3&quot;
+num.set_digit(2, 5)
+print(n1.get_digit(2)) # outputs &quot;5&quot;
+</code></pre>
+<h3 id="easy-notation">Easy notation</h3>
+<pre><code class="language-python">print(str(n2)) # output &quot;BASE36&quot;
+print(str(n3)) # output &quot;ABCDEF&quot;
+print(str(n5)) # output &quot;683248722&quot;, as the base is set to 10
+</code></pre>
+<h3 id="full-mutable-collection-implementation-on-integers">Full mutable collection implementation on integers</h3>
+<pre><code class="language-python">print(n2.pop(-1)) #outputs &quot;6&quot;
+print(n2.pop(-1)) #outputs &quot;3&quot;
+n2.append(int(&quot;D&quot;, 36))
+print(n2) #outputs &quot;BASED&quot;
+
+# The sum of all digits
+print(sum(n2)) #outputs &quot;76&quot;
+
+# The average of all digits
+print(sum(n2)/len(n2)) #outputs &quot;15.2&quot;
+</code></pre>
+<h3 id="customizable-notation">Customizable Notation</h3>
+<pre><code class="language-python"># same as str(n3) 
+print(n3.notate()) # outputs &quot;ABCDEF&quot;
+
+from digint import NotationFormat
+fmt = NotationFormat(*tuple(&quot;0123456789ZYXWVU&quot;))
+print(n3.notate(fmt)) # outputs &quot;ZYXWVU&quot;
+</code></pre>
+<h3 id="and-more">And More</h3>
+<p>There are a handfull of other ease of use features that this module provides, feel free to reference the <a href="https://MarkusHammer.github.io/digint">documentation</a> for more information.</p>
+<h2 id="licence">Licence</h2>
+<p>This is licensed under the Mozilla Public License 2.0 (MPL 2.0) Licence. See the Licence file in this repository for more information.</p>
+<h2 id="contribute">Contribute</h2>
+<p>Contributions are always welcome!
+Use the <a href="https://github.com/MarkusHammer/digint">github repository</a> to report issues and contribute to this project.</p>
+<h2 id="credits">Credits</h2>
+<p>While not required, feel free to credit "Markus Hammer" (or just "Markus") if you find this code or script useful for whatever you may be doing with it.</p>
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
@@ -71,7 +134,7 @@ of integers of any base, just like they were <code>Collection</code>s.</p>
 <dl>
 <dt id="digint.ExtendedBasedIntiger"><code class="flex name class">
 <span>class <span class="ident">ExtendedBasedIntiger</span></span>
-<span>(</span><span>value: Union[int, str] = 0, base: int = 10, *, notation_format: Optional[<a title="digint.notation_format.NotationFormat" href="notation_format.html#digint.notation_format.NotationFormat">NotationFormat</a>] = NotationFormat(value_symbols=('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'), undefined_symbol='?', positive_symbol='+', negative_symbol='-', radix_point_symbol='.', group_split_symbol=None, group_split_count=0, implicit_positive=True, implicit_negative=False))</span>
+<span>(</span><span>value: Union[int, str, Iterable[Union[int, str]]] = 0, base: int = 10, *, notation_format: Optional[<a title="digint.notation_format.NotationFormat" href="notation_format.html#digint.notation_format.NotationFormat">NotationFormat</a>] = NotationFormat(value_symbols=('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'), undefined_symbol='?', positive_symbol='+', negative_symbol='-', radix_point_symbol='.', group_split_symbol=None, group_split_count=0, implicit_positive=True, implicit_negative=False))</span>
 </code></dt>
 <dd>
 <div class="desc"><p><code><a title="digint.ExtendedBasedIntiger" href="#digint.ExtendedBasedIntiger">ExtendedBasedIntiger</a></code></p>
@@ -176,15 +239,26 @@ including unary.</p></div>
     Also supports customizable notation formats with the optional `notation_format` attribute,
     including unary.
     &#34;&#34;&#34;
+    @override
     def __init__(self,
-                 value:Union[int, str] = 0,
+                 value:Union[int, str, Iterable[Union[int, str]]] = 0,
                  base:int = 10,
                  *,
                  notation_format:Optional[NotationFormat] = DEFAULT_FORMAT
                  ):
 
         self.__base:int = 2
-        super().__init__(value, base, notation_format=notation_format)
+        super().__init__(0 if base == 1 else value, base, notation_format=notation_format)
+
+        if base == 1:
+            self.base = 1
+            if isinstance(value, int):
+                self.x = value
+            elif isinstance(value, str):
+                value = value.lstrip(&#34;0&#34;)
+                if not all(c == &#34;1&#34; for c in value):
+                    raise BaseValueError(f&#34;{value} cannot be represented in base 1&#34;)
+                self.x = len(value)
 
     @override
     def copy(self,
@@ -222,6 +296,7 @@ including unary.</p></div>
                          )
 
     @property
+    @override
     def base(self) -&gt; int:
         &#34;&#34;&#34;
         `base`
@@ -232,6 +307,7 @@ including unary.</p></div>
         return self.__base
 
     @base.setter
+    @override
     def base(self, value:int):
         if value &lt;= 0:
             raise BaseValueError()
@@ -341,13 +417,13 @@ including unary.</p></div>
         return super().digit_count()
 
     @override
-    def digit_shift_left(self, amount:int):
+    def digit_shift_left(self, amount:int = 1):
         if self.base == 1:
             raise BaseInvalidOpperationError(&#34;This base cannot be shifted&#34;)
         super().digit_shift_left(amount)
 
     @override
-    def digit_shift_right(self, amount:int):
+    def digit_shift_right(self, amount:int = 1):
         if self.base == 1:
             raise BaseInvalidOpperationError(&#34;This base cannot be shifted&#34;)
         super().digit_shift_right(amount)</code></pre>
@@ -363,6 +439,9 @@ including unary.</p></div>
 <li>typing.SupportsComplex</li>
 <li>typing.SupportsRound</li>
 <li>typing.SupportsIndex</li>
+<li>typing.Protocol</li>
+<li>typing.Generic</li>
+<li>collections.abc.Hashable</li>
 <li>collections.abc.MutableSequence</li>
 <li>collections.abc.Sequence</li>
 <li>collections.abc.Reversible</li>
@@ -370,10 +449,6 @@ including unary.</p></div>
 <li>collections.abc.Sized</li>
 <li>collections.abc.Iterable</li>
 <li>collections.abc.Container</li>
-<li>typing.SupportsBytes</li>
-<li>typing.Protocol</li>
-<li>typing.Generic</li>
-<li>collections.abc.Hashable</li>
 </ul>
 <h3>Instance variables</h3>
 <dl>
@@ -387,6 +462,7 @@ Base 1 is handled particularly differently than other bases.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
+@override
 def base(self) -&gt; int:
     &#34;&#34;&#34;
     `base`
@@ -435,7 +511,7 @@ Not to be confused with <code>digit_count</code>.</p>
 <p>The minimum necessary about of digits needed to display the number in full.</p></div>
 </dd>
 <dt id="digint.ExtendedBasedIntiger.digit_shift_left"><code class="name flex">
-<span>def <span class="ident">digit_shift_left</span></span>(<span>self, amount: int)</span>
+<span>def <span class="ident">digit_shift_left</span></span>(<span>self, amount: int = 1)</span>
 </code></dt>
 <dd>
 <div class="desc"><p><code>digit_shift_left</code></p>
@@ -444,7 +520,7 @@ Not to be confused with <code>digit_count</code>.</p>
 <p>amount &ndash; The amount to shift left. Will shift right when negative.</p></div>
 </dd>
 <dt id="digint.ExtendedBasedIntiger.digit_shift_right"><code class="name flex">
-<span>def <span class="ident">digit_shift_right</span></span>(<span>self, amount: int)</span>
+<span>def <span class="ident">digit_shift_right</span></span>(<span>self, amount: int = 1)</span>
 </code></dt>
 <dd>
 <div class="desc"><p><code>digit_shift_right</code></p>
@@ -457,7 +533,8 @@ Not to be confused with <code>digit_count</code>.</p>
 </code></dt>
 <dd>
 <div class="desc"><p><code>insert</code></p>
-<p>Inserts the given value (or values) before the given index.
+<p>Inserts the given value (or values, following the order in which they are supplied)
+before the given index.
 When given multiple values, each value will be inserted before the given index in order.</p>
 <h2 id="arguments">Arguments</h2>
 <p><code>index</code> &ndash; The index (or indexes) to be inserted before.
@@ -520,7 +597,7 @@ there must be a matching quantity of values to set at those indexes.</p>
 </dd>
 <dt id="digint.ExtendedBasedIntiger"><code class="flex name class">
 <span>class <span class="ident">digitint</span></span>
-<span>(</span><span>value: Union[int, str] = 0, base: int = 10, *, notation_format: Optional[<a title="digint.notation_format.NotationFormat" href="notation_format.html#digint.notation_format.NotationFormat">NotationFormat</a>] = NotationFormat(value_symbols=('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'), undefined_symbol='?', positive_symbol='+', negative_symbol='-', radix_point_symbol='.', group_split_symbol=None, group_split_count=0, implicit_positive=True, implicit_negative=False))</span>
+<span>(</span><span>value: Union[int, str, Iterable[Union[int, str]]] = 0, base: int = 10, *, notation_format: Optional[<a title="digint.notation_format.NotationFormat" href="notation_format.html#digint.notation_format.NotationFormat">NotationFormat</a>] = NotationFormat(value_symbols=('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'), undefined_symbol='?', positive_symbol='+', negative_symbol='-', radix_point_symbol='.', group_split_symbol=None, group_split_count=0, implicit_positive=True, implicit_negative=False))</span>
 </code></dt>
 <dd>
 <div class="desc"><p><code><a title="digint.ExtendedBasedIntiger" href="#digint.ExtendedBasedIntiger">ExtendedBasedIntiger</a></code></p>
@@ -625,15 +702,26 @@ including unary.</p></div>
     Also supports customizable notation formats with the optional `notation_format` attribute,
     including unary.
     &#34;&#34;&#34;
+    @override
     def __init__(self,
-                 value:Union[int, str] = 0,
+                 value:Union[int, str, Iterable[Union[int, str]]] = 0,
                  base:int = 10,
                  *,
                  notation_format:Optional[NotationFormat] = DEFAULT_FORMAT
                  ):
 
         self.__base:int = 2
-        super().__init__(value, base, notation_format=notation_format)
+        super().__init__(0 if base == 1 else value, base, notation_format=notation_format)
+
+        if base == 1:
+            self.base = 1
+            if isinstance(value, int):
+                self.x = value
+            elif isinstance(value, str):
+                value = value.lstrip(&#34;0&#34;)
+                if not all(c == &#34;1&#34; for c in value):
+                    raise BaseValueError(f&#34;{value} cannot be represented in base 1&#34;)
+                self.x = len(value)
 
     @override
     def copy(self,
@@ -671,6 +759,7 @@ including unary.</p></div>
                          )
 
     @property
+    @override
     def base(self) -&gt; int:
         &#34;&#34;&#34;
         `base`
@@ -681,6 +770,7 @@ including unary.</p></div>
         return self.__base
 
     @base.setter
+    @override
     def base(self, value:int):
         if value &lt;= 0:
             raise BaseValueError()
@@ -790,13 +880,13 @@ including unary.</p></div>
         return super().digit_count()
 
     @override
-    def digit_shift_left(self, amount:int):
+    def digit_shift_left(self, amount:int = 1):
         if self.base == 1:
             raise BaseInvalidOpperationError(&#34;This base cannot be shifted&#34;)
         super().digit_shift_left(amount)
 
     @override
-    def digit_shift_right(self, amount:int):
+    def digit_shift_right(self, amount:int = 1):
         if self.base == 1:
             raise BaseInvalidOpperationError(&#34;This base cannot be shifted&#34;)
         super().digit_shift_right(amount)</code></pre>
@@ -812,6 +902,9 @@ including unary.</p></div>
 <li>typing.SupportsComplex</li>
 <li>typing.SupportsRound</li>
 <li>typing.SupportsIndex</li>
+<li>typing.Protocol</li>
+<li>typing.Generic</li>
+<li>collections.abc.Hashable</li>
 <li>collections.abc.MutableSequence</li>
 <li>collections.abc.Sequence</li>
 <li>collections.abc.Reversible</li>
@@ -819,10 +912,6 @@ including unary.</p></div>
 <li>collections.abc.Sized</li>
 <li>collections.abc.Iterable</li>
 <li>collections.abc.Container</li>
-<li>typing.SupportsBytes</li>
-<li>typing.Protocol</li>
-<li>typing.Generic</li>
-<li>collections.abc.Hashable</li>
 </ul>
 <h3>Instance variables</h3>
 <dl>
@@ -836,6 +925,7 @@ Base 1 is handled particularly differently than other bases.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
+@override
 def base(self) -&gt; int:
     &#34;&#34;&#34;
     `base`
@@ -961,8 +1051,28 @@ will overrides the <code><a title="digint.notation_format" href="notation_format
 </p>
 <div class="desc inherited"><p><code>digit_length</code> …</p></div>
 </dd>
+<dt id="digint.ExtendedBasedIntiger.digit_rotate_left"><code class="name flex">
+<span>def <span class="ident">digit_rotate_left</span></span>(<span>self, amount: int = 1)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.digint.PositionalBasedIntiger" href="digint.html#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code>.<code><a title="digint.digint.PositionalBasedIntiger.digit_rotate_left" href="digint.html#digint.digint.PositionalBasedIntiger.digit_rotate_left">digit_rotate_left</a></code>
+</p>
+<div class="desc inherited"><p><code>digit_rotate_left</code> …</p></div>
+</dd>
+<dt id="digint.ExtendedBasedIntiger.digit_rotate_right"><code class="name flex">
+<span>def <span class="ident">digit_rotate_right</span></span>(<span>self, amount: int = 1)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.digint.PositionalBasedIntiger" href="digint.html#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code>.<code><a title="digint.digint.PositionalBasedIntiger.digit_rotate_right" href="digint.html#digint.digint.PositionalBasedIntiger.digit_rotate_right">digit_rotate_right</a></code>
+</p>
+<div class="desc inherited"><p><code>digit_rotate_right</code> …</p></div>
+</dd>
 <dt id="digint.ExtendedBasedIntiger.digit_shift_left"><code class="name flex">
-<span>def <span class="ident">digit_shift_left</span></span>(<span>self, amount: int)</span>
+<span>def <span class="ident">digit_shift_left</span></span>(<span>self, amount: int = 1)</span>
 </code></dt>
 <dd>
 <p class="inheritance">
@@ -972,7 +1082,7 @@ will overrides the <code><a title="digint.notation_format" href="notation_format
 <div class="desc inherited"><p><code>digit_shift_left</code> …</p></div>
 </dd>
 <dt id="digint.ExtendedBasedIntiger.digit_shift_right"><code class="name flex">
-<span>def <span class="ident">digit_shift_right</span></span>(<span>self, amount: int)</span>
+<span>def <span class="ident">digit_shift_right</span></span>(<span>self, amount: int = 1)</span>
 </code></dt>
 <dd>
 <p class="inheritance">
@@ -1000,6 +1110,16 @@ will overrides the <code><a title="digint.notation_format" href="notation_format
 <code><a title="digint.digint.PositionalBasedIntiger" href="digint.html#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code>.<code><a title="digint.digint.PositionalBasedIntiger.insert" href="digint.html#digint.digint.PositionalBasedIntiger.insert">insert</a></code>
 </p>
 <div class="desc inherited"><p><code>insert</code> …</p></div>
+</dd>
+<dt id="digint.ExtendedBasedIntiger.is_integer"><code class="name flex">
+<span>def <span class="ident">is_integer</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.digint.PositionalBasedIntiger" href="digint.html#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code>.<code><a title="digint.digint.PositionalBasedIntiger.is_integer" href="userint.html#digint.digint.PositionalBasedIntiger.is_integer">is_integer</a></code>
+</p>
+<div class="desc inherited"><p><code>is_integer</code> …</p></div>
 </dd>
 <dt id="digint.ExtendedBasedIntiger.iter_digits"><code class="name flex">
 <span>def <span class="ident">iter_digits</span></span>(<span>self, at_least: int = 0) ‑> Iterator[int]</span>
@@ -1088,6 +1208,16 @@ Will iterate 0 when all …</p></div>
 <code><a title="digint.digint.PositionalBasedIntiger" href="digint.html#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code>.<code><a title="digint.digint.PositionalBasedIntiger.set_digit" href="digint.html#digint.digint.PositionalBasedIntiger.set_digit">set_digit</a></code>
 </p>
 <div class="desc inherited"><p><code>set_digit</code> …</p></div>
+</dd>
+<dt id="digint.ExtendedBasedIntiger.to_bytes"><code class="name flex">
+<span>def <span class="ident">to_bytes</span></span>(<span>self, length: <class 'SupportsIndex'>, byteorder: Literal['little', 'big'], *, signed: bool = False) ‑> bytes</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.digint.PositionalBasedIntiger" href="digint.html#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code>.<code><a title="digint.digint.PositionalBasedIntiger.to_bytes" href="userint.html#digint.digint.PositionalBasedIntiger.to_bytes">to_bytes</a></code>
+</p>
+<div class="desc inherited"><p><code>to_bytes</code> …</p></div>
 </dd>
 <dt id="digint.ExtendedBasedIntiger.unset_digit"><code class="name flex">
 <span>def <span class="ident">unset_digit</span></span>(<span>self, index: Union[int, slice, range, Iterable[int]])</span>
@@ -1387,7 +1517,7 @@ if possible, otherwise returns <code>None</code>.</p></div>
 </dd>
 <dt id="digint.PositionalBasedIntiger"><code class="flex name class">
 <span>class <span class="ident">PositionalBasedIntiger</span></span>
-<span>(</span><span>value: Union[int, str] = 0, base: int = 10, *, notation_format: Optional[<a title="digint.notation_format.NotationFormat" href="notation_format.html#digint.notation_format.NotationFormat">NotationFormat</a>] = NotationFormat(value_symbols=('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'), undefined_symbol='?', positive_symbol='+', negative_symbol='-', radix_point_symbol='.', group_split_symbol=None, group_split_count=0, implicit_positive=True, implicit_negative=False))</span>
+<span>(</span><span>value: Union[int, str, Iterable[Union[int, str]], bytes, bytearray, memoryview] = 0, base: int = 10, *, notation_format: Optional[<a title="digint.notation_format.NotationFormat" href="notation_format.html#digint.notation_format.NotationFormat">NotationFormat</a>] = NotationFormat(value_symbols=('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'), undefined_symbol='?', positive_symbol='+', negative_symbol='-', radix_point_symbol='.', group_split_symbol=None, group_split_count=0, implicit_positive=True, implicit_negative=False))</span>
 </code></dt>
 <dd>
 <div class="desc"><p><code><a title="digint.PositionalBasedIntiger" href="#digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code></p>
@@ -1427,7 +1557,7 @@ casting the type back into a default intiger type when possible.</p>
     &#34;&#34;&#34;
 
     def __init__(self,
-                 value:Union[int, str] = 0,
+                 value:Union[int, str, Iterable[Union[int, str]], bytes, bytearray, memoryview] = 0,
                  base:int = 10,
                  *,
                  notation_format:Optional[NotationFormat] = DEFAULT_FORMAT
@@ -1436,9 +1566,19 @@ casting the type back into a default intiger type when possible.</p>
         super().__init__(0)
         self.__base:int = 2
 
-        self.x = int(value, base) if isinstance(value, str) else value
+        self.x = 0
         self.base = base
         self.notation_format:Optional[NotationFormat] = notation_format
+        if isinstance(value, int):
+            self.x = value
+        elif isinstance(value, str):
+            self.x = int(value, base)
+        else:
+            for digit_value in value:
+                digit_value = self._ensure_unnotated(digit_value)
+                if digit_value &gt;= base:
+                    raise ValueError(f&#34;Digit of value {digit_value} isn&#39;t possible in base {base}&#34;)
+                self.x = (self.x * base) + digit_value
 
     def copy(self,
              value:Optional[Union[int, str]] = None,
@@ -1495,7 +1635,9 @@ casting the type back into a default intiger type when possible.</p>
         radix
 
         Returns:
-            _description_
+            The absolute value of the base.
+            Will always return `base` when used in a `PositionalBasedIntiger`,
+            but may differ when using with a extended type.
         &#34;&#34;&#34;
         return abs(self.base)
 
@@ -1543,9 +1685,6 @@ casting the type back into a default intiger type when possible.</p>
     # slightly faster than the arbitrary insert method
     def _prepend(self, value:Union[int,str]):
         value = self._ensure_unnotated(value)
-
-        if self.base == 0:
-            raise BaseInvalidOpperationError(&#34;Base 0 digits cannot be pushed&#34;)
 
         if value &lt; 0 or value &gt;= self.base:
             raise ValueError(&#34;Digit value out of bounds of base&#34;)
@@ -1868,7 +2007,8 @@ casting the type back into a default intiger type when possible.</p>
         &#34;&#34;&#34;
         `insert`
 
-        Inserts the given value (or values) before the given index.
+        Inserts the given value (or values, following the order in which they are supplied)
+        before the given index.
         When given multiple values, each value will be inserted before the given index in order.
 
         Arguments:
@@ -1876,7 +2016,8 @@ casting the type back into a default intiger type when possible.</p>
             `value` -- The value (or values) to insert.
         &#34;&#34;&#34;
 
-        index = absindex(index, self.digit_length())
+        # not the current length, but the length this will have after the insert
+        index = absindex(index, self.digit_length() + 1)
 
         if isinstance(value, Iterable):
             value = (self._ensure_unnotated(v) for v in value)
@@ -1898,7 +2039,7 @@ casting the type back into a default intiger type when possible.</p>
                 continue
 
             high = self.copy()
-            high.unset_digit(slice(0, index+1))
+            high.unset_digit(slice(0, index))
 
             if high.x != 0:
                 self.x -= high.x
@@ -1906,7 +2047,7 @@ casting the type back into a default intiger type when possible.</p>
                 self.x += high.x
 
             v = self.copy(v)
-            v.x *= (v.base ** (index+1))
+            v.x *= (v.base ** (index))
             self.x += v.x
 
             self.x *= restore_sign
@@ -1993,7 +2134,7 @@ casting the type back into a default intiger type when possible.</p>
 
         return sum(self._mask_value_continuous(s.start, s.stop - s.start) for s in slices)
 
-    def digit_shift_left(self, amount:int):
+    def digit_shift_left(self, amount:int = 1):
         &#34;&#34;&#34;
         `digit_shift_left`
 
@@ -2011,7 +2152,7 @@ casting the type back into a default intiger type when possible.</p>
         else:
             self.x *= (self.base**amount)
 
-    def digit_shift_right(self, amount:int):
+    def digit_shift_right(self, amount:int = 1):
         &#34;&#34;&#34;
         `digit_shift_right`
 
@@ -2027,7 +2168,47 @@ casting the type back into a default intiger type when possible.</p>
         if self.base == 2:
             self.x = (abs(self.x) &gt;&gt; amount) * self.sign
         else:
-            self.x //= (self.base**amount)</code></pre>
+            self.x //= (self.base**amount)
+
+    def digit_rotate_left(self, amount:int = 1):
+        &#34;&#34;&#34;
+        `digit_rotate_left`
+
+        Similar to a binary rotate left, rotates the value left according to the set base.
+        This will pop the digit at the largest signifiant place value and inserts
+        it at the smallest place value spot.
+
+        Arguments:
+            amount -- The amount to rotate left. Will rotate right when negative.
+        &#34;&#34;&#34;
+
+        if amount &lt; 0:
+            self.digit_rotate_right(-amount)
+
+        for _ in range(amount):
+            popped = self.pop(-1)
+            self.digit_shift_left(1)
+            self.x += popped
+
+    def digit_rotate_right(self, amount:int = 1):
+        &#34;&#34;&#34;
+        `digit_rotate_right`
+
+        Similar to a binary rotate right, rotates the value right according to the set base.
+        This will pop the digit at the smallest signifiant place value and inserts
+        it at the largest place value spot.
+
+        Arguments:
+            amount -- The amount to rotate right. Will rotate left when negative.
+        &#34;&#34;&#34;
+
+        if amount &lt; 0:
+            self.digit_rotate_left(-amount)
+
+        for _ in range(amount):
+            popped = self.pop(0)
+            self.digit_shift_right(1)
+            self.append(popped)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -2039,6 +2220,9 @@ casting the type back into a default intiger type when possible.</p>
 <li>typing.SupportsComplex</li>
 <li>typing.SupportsRound</li>
 <li>typing.SupportsIndex</li>
+<li>typing.Protocol</li>
+<li>typing.Generic</li>
+<li>collections.abc.Hashable</li>
 <li>collections.abc.MutableSequence</li>
 <li>collections.abc.Sequence</li>
 <li>collections.abc.Reversible</li>
@@ -2046,10 +2230,6 @@ casting the type back into a default intiger type when possible.</p>
 <li>collections.abc.Sized</li>
 <li>collections.abc.Iterable</li>
 <li>collections.abc.Container</li>
-<li>typing.SupportsBytes</li>
-<li>typing.Protocol</li>
-<li>typing.Generic</li>
-<li>collections.abc.Hashable</li>
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
@@ -2105,7 +2285,9 @@ def base(self) -&gt; int:
 <dd>
 <div class="desc"><p>radix</p>
 <h2 id="returns">Returns</h2>
-<p><em>description</em></p></div>
+<p>The absolute value of the base.
+Will always return <code>base</code> when used in a <code><a title="digint.PositionalBasedIntiger" href="#digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code>,
+but may differ when using with a extended type.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2116,7 +2298,9 @@ def radix(self) -&gt; int:
     radix
 
     Returns:
-        _description_
+        The absolute value of the base.
+        Will always return `base` when used in a `PositionalBasedIntiger`,
+        but may differ when using with a extended type.
     &#34;&#34;&#34;
     return abs(self.base)</code></pre>
 </details>
@@ -2203,8 +2387,30 @@ Not to be confused with <code>digit_count</code>.</p>
 <h2 id="returns">Returns</h2>
 <p>The minimum necessary about of digits needed to display the number in full.</p></div>
 </dd>
+<dt id="digint.PositionalBasedIntiger.digit_rotate_left"><code class="name flex">
+<span>def <span class="ident">digit_rotate_left</span></span>(<span>self, amount: int = 1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>digit_rotate_left</code></p>
+<p>Similar to a binary rotate left, rotates the value left according to the set base.
+This will pop the digit at the largest signifiant place value and inserts
+it at the smallest place value spot.</p>
+<h2 id="arguments">Arguments</h2>
+<p>amount &ndash; The amount to rotate left. Will rotate right when negative.</p></div>
+</dd>
+<dt id="digint.PositionalBasedIntiger.digit_rotate_right"><code class="name flex">
+<span>def <span class="ident">digit_rotate_right</span></span>(<span>self, amount: int = 1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>digit_rotate_right</code></p>
+<p>Similar to a binary rotate right, rotates the value right according to the set base.
+This will pop the digit at the smallest signifiant place value and inserts
+it at the largest place value spot.</p>
+<h2 id="arguments">Arguments</h2>
+<p>amount &ndash; The amount to rotate right. Will rotate left when negative.</p></div>
+</dd>
 <dt id="digint.PositionalBasedIntiger.digit_shift_left"><code class="name flex">
-<span>def <span class="ident">digit_shift_left</span></span>(<span>self, amount: int)</span>
+<span>def <span class="ident">digit_shift_left</span></span>(<span>self, amount: int = 1)</span>
 </code></dt>
 <dd>
 <div class="desc"><p><code>digit_shift_left</code></p>
@@ -2213,7 +2419,7 @@ Not to be confused with <code>digit_count</code>.</p>
 <p>amount &ndash; The amount to shift left. Will shift right when negative.</p></div>
 </dd>
 <dt id="digint.PositionalBasedIntiger.digit_shift_right"><code class="name flex">
-<span>def <span class="ident">digit_shift_right</span></span>(<span>self, amount: int)</span>
+<span>def <span class="ident">digit_shift_right</span></span>(<span>self, amount: int = 1)</span>
 </code></dt>
 <dd>
 <div class="desc"><p><code>digit_shift_right</code></p>
@@ -2237,11 +2443,22 @@ Not to be confused with <code>digit_count</code>.</p>
 </code></dt>
 <dd>
 <div class="desc"><p><code>insert</code></p>
-<p>Inserts the given value (or values) before the given index.
+<p>Inserts the given value (or values, following the order in which they are supplied)
+before the given index.
 When given multiple values, each value will be inserted before the given index in order.</p>
 <h2 id="arguments">Arguments</h2>
 <p><code>index</code> &ndash; The index (or indexes) to be inserted before.
 <code>value</code> &ndash; The value (or values) to insert.</p></div>
+</dd>
+<dt id="digint.PositionalBasedIntiger.is_integer"><code class="name flex">
+<span>def <span class="ident">is_integer</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.userint.ExtendedUserInt" href="userint.html#digint.userint.ExtendedUserInt">ExtendedUserInt</a></code>.<code><a title="digint.userint.ExtendedUserInt.is_integer" href="userint.html#digint.userint.ExtendedUserInt.is_integer">is_integer</a></code>
+</p>
+<div class="desc inherited"><p><code>is_integer</code> …</p></div>
 </dd>
 <dt id="digint.PositionalBasedIntiger.iter_digits"><code class="name flex">
 <span>def <span class="ident">iter_digits</span></span>(<span>self, at_least: int = 0) ‑> Iterator[int]</span>
@@ -2360,6 +2577,16 @@ there must be a matching quantity of values to set at those indexes.</p>
 <h2 id="raises">Raises</h2>
 <p><code>ValueError</code>: Raised when the given value is out of bounds of the current <code>base</code>.</p></div>
 </dd>
+<dt id="digint.PositionalBasedIntiger.to_bytes"><code class="name flex">
+<span>def <span class="ident">to_bytes</span></span>(<span>self, length: <class 'SupportsIndex'>, byteorder: Literal['little', 'big'], *, signed: bool = False) ‑> bytes</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.userint.ExtendedUserInt" href="userint.html#digint.userint.ExtendedUserInt">ExtendedUserInt</a></code>.<code><a title="digint.userint.ExtendedUserInt.to_bytes" href="userint.html#digint.userint.ExtendedUserInt.to_bytes">to_bytes</a></code>
+</p>
+<div class="desc inherited"><p><code>to_bytes</code> …</p></div>
+</dd>
 <dt id="digint.PositionalBasedIntiger.unset_digit"><code class="name flex">
 <span>def <span class="ident">unset_digit</span></span>(<span>self, index: Union[int, slice, range, Iterable[int]])</span>
 </code></dt>
@@ -2376,7 +2603,24 @@ there must be a matching quantity of values to set at those indexes.</p>
 </article>
 <nav id="sidebar">
 <div class="toc">
-<ul></ul>
+<ul>
+<li><a href="#digint">digint</a><ul>
+<li><a href="#setup">Setup</a></li>
+<li><a href="#usage">Usage</a><ul>
+<li><a href="#create-an-integer-in-any-base">Create an integer in any base</a></li>
+<li><a href="#access-and-modify-digits-like-a-collection">Access and modify digits like a collection</a></li>
+<li><a href="#easy-notation">Easy notation</a></li>
+<li><a href="#full-mutable-collection-implementation-on-integers">Full mutable collection implementation on integers</a></li>
+<li><a href="#customizable-notation">Customizable Notation</a></li>
+<li><a href="#and-more">And More</a></li>
+</ul>
+</li>
+<li><a href="#licence">Licence</a></li>
+<li><a href="#contribute">Contribute</a></li>
+<li><a href="#credits">Credits</a></li>
+</ul>
+</li>
+</ul>
 </div>
 <ul id="index">
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
@@ -2416,10 +2660,13 @@ there must be a matching quantity of values to set at those indexes.</p>
 <li><code><a title="digint.ExtendedBasedIntiger.delete_digit" href="digint.html#digint.ExtendedBasedIntiger.delete_digit">delete_digit</a></code></li>
 <li><code><a title="digint.ExtendedBasedIntiger.digit_count" href="#digint.ExtendedBasedIntiger.digit_count">digit_count</a></code></li>
 <li><code><a title="digint.ExtendedBasedIntiger.digit_length" href="#digint.ExtendedBasedIntiger.digit_length">digit_length</a></code></li>
+<li><code><a title="digint.ExtendedBasedIntiger.digit_rotate_left" href="digint.html#digint.ExtendedBasedIntiger.digit_rotate_left">digit_rotate_left</a></code></li>
+<li><code><a title="digint.ExtendedBasedIntiger.digit_rotate_right" href="digint.html#digint.ExtendedBasedIntiger.digit_rotate_right">digit_rotate_right</a></code></li>
 <li><code><a title="digint.ExtendedBasedIntiger.digit_shift_left" href="#digint.ExtendedBasedIntiger.digit_shift_left">digit_shift_left</a></code></li>
 <li><code><a title="digint.ExtendedBasedIntiger.digit_shift_right" href="#digint.ExtendedBasedIntiger.digit_shift_right">digit_shift_right</a></code></li>
 <li><code><a title="digint.ExtendedBasedIntiger.get_digit" href="digint.html#digint.ExtendedBasedIntiger.get_digit">get_digit</a></code></li>
 <li><code><a title="digint.ExtendedBasedIntiger.insert" href="#digint.ExtendedBasedIntiger.insert">insert</a></code></li>
+<li><code><a title="digint.ExtendedBasedIntiger.is_integer" href="userint.html#digint.ExtendedBasedIntiger.is_integer">is_integer</a></code></li>
 <li><code><a title="digint.ExtendedBasedIntiger.iter_digits" href="digint.html#digint.ExtendedBasedIntiger.iter_digits">iter_digits</a></code></li>
 <li><code><a title="digint.ExtendedBasedIntiger.iter_symbols" href="digint.html#digint.ExtendedBasedIntiger.iter_symbols">iter_symbols</a></code></li>
 <li><code><a title="digint.ExtendedBasedIntiger.mask" href="digint.html#digint.ExtendedBasedIntiger.mask">mask</a></code></li>
@@ -2428,6 +2675,7 @@ there must be a matching quantity of values to set at those indexes.</p>
 <li><code><a title="digint.ExtendedBasedIntiger.reversed_iter_digits" href="digint.html#digint.ExtendedBasedIntiger.reversed_iter_digits">reversed_iter_digits</a></code></li>
 <li><code><a title="digint.ExtendedBasedIntiger.reversed_iter_symbols" href="digint.html#digint.ExtendedBasedIntiger.reversed_iter_symbols">reversed_iter_symbols</a></code></li>
 <li><code><a title="digint.ExtendedBasedIntiger.set_digit" href="#digint.ExtendedBasedIntiger.set_digit">set_digit</a></code></li>
+<li><code><a title="digint.ExtendedBasedIntiger.to_bytes" href="userint.html#digint.ExtendedBasedIntiger.to_bytes">to_bytes</a></code></li>
 <li><code><a title="digint.ExtendedBasedIntiger.unset_digit" href="#digint.ExtendedBasedIntiger.unset_digit">unset_digit</a></code></li>
 </ul>
 </li>
@@ -2448,10 +2696,13 @@ there must be a matching quantity of values to set at those indexes.</p>
 <li><code><a title="digint.PositionalBasedIntiger.delete_digit" href="#digint.PositionalBasedIntiger.delete_digit">delete_digit</a></code></li>
 <li><code><a title="digint.PositionalBasedIntiger.digit_count" href="#digint.PositionalBasedIntiger.digit_count">digit_count</a></code></li>
 <li><code><a title="digint.PositionalBasedIntiger.digit_length" href="#digint.PositionalBasedIntiger.digit_length">digit_length</a></code></li>
+<li><code><a title="digint.PositionalBasedIntiger.digit_rotate_left" href="#digint.PositionalBasedIntiger.digit_rotate_left">digit_rotate_left</a></code></li>
+<li><code><a title="digint.PositionalBasedIntiger.digit_rotate_right" href="#digint.PositionalBasedIntiger.digit_rotate_right">digit_rotate_right</a></code></li>
 <li><code><a title="digint.PositionalBasedIntiger.digit_shift_left" href="#digint.PositionalBasedIntiger.digit_shift_left">digit_shift_left</a></code></li>
 <li><code><a title="digint.PositionalBasedIntiger.digit_shift_right" href="#digint.PositionalBasedIntiger.digit_shift_right">digit_shift_right</a></code></li>
 <li><code><a title="digint.PositionalBasedIntiger.get_digit" href="#digint.PositionalBasedIntiger.get_digit">get_digit</a></code></li>
 <li><code><a title="digint.PositionalBasedIntiger.insert" href="#digint.PositionalBasedIntiger.insert">insert</a></code></li>
+<li><code><a title="digint.PositionalBasedIntiger.is_integer" href="userint.html#digint.PositionalBasedIntiger.is_integer">is_integer</a></code></li>
 <li><code><a title="digint.PositionalBasedIntiger.iter_digits" href="#digint.PositionalBasedIntiger.iter_digits">iter_digits</a></code></li>
 <li><code><a title="digint.PositionalBasedIntiger.iter_symbols" href="#digint.PositionalBasedIntiger.iter_symbols">iter_symbols</a></code></li>
 <li><code><a title="digint.PositionalBasedIntiger.mask" href="#digint.PositionalBasedIntiger.mask">mask</a></code></li>
@@ -2460,6 +2711,7 @@ there must be a matching quantity of values to set at those indexes.</p>
 <li><code><a title="digint.PositionalBasedIntiger.reversed_iter_digits" href="#digint.PositionalBasedIntiger.reversed_iter_digits">reversed_iter_digits</a></code></li>
 <li><code><a title="digint.PositionalBasedIntiger.reversed_iter_symbols" href="#digint.PositionalBasedIntiger.reversed_iter_symbols">reversed_iter_symbols</a></code></li>
 <li><code><a title="digint.PositionalBasedIntiger.set_digit" href="#digint.PositionalBasedIntiger.set_digit">set_digit</a></code></li>
+<li><code><a title="digint.PositionalBasedIntiger.to_bytes" href="userint.html#digint.PositionalBasedIntiger.to_bytes">to_bytes</a></code></li>
 <li><code><a title="digint.PositionalBasedIntiger.unset_digit" href="#digint.PositionalBasedIntiger.unset_digit">unset_digit</a></code></li>
 </ul>
 </li>
