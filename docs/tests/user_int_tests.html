@@ -68,7 +68,30 @@ not have a method with the specified name.</p></div>
         for _ in range(5000):
             v = randrange(-1000000000, 1000000000)
             vsign = 0 if v == 0 else (-1 if v &lt; 0 else 1)
-            self.assertEqual(ExtendedUserInt(v).sign, vsign)</code></pre>
+            self.assertEqual(ExtendedUserInt(v).sign, vsign)
+
+    def test_fixed_sign_binary_opperators_int(self):
+        &#34;&#34;&#34;
+        `test_binary_opperators_int`
+
+        Tests that all the non-inline binary opperators of `ExtendedUserInt`
+        behaves as expected with random values.
+        &#34;&#34;&#34;
+
+        for _ in range(5000):
+            v1 = randrange(-1000000000, 1000000000)
+            v2 = randrange(-1000000000, 1000000000)
+            xintobj1 = ExtendedUserInt(v1)
+            v1sign_nonzero = xintobj1.sign if xintobj1 != 0 else 1
+
+            self.assertEqual(xintobj1.fixed_sign_invert(), ~abs(v1) * v1sign_nonzero)
+            self.assertIsInstance(xintobj1.fixed_sign_invert(), int)
+            self.assertEqual(xintobj1.fixed_sign_and(v2), (abs(v1) &amp; v2) * v1sign_nonzero)
+            self.assertIsInstance(xintobj1.fixed_sign_and(v2), int)
+            self.assertEqual(xintobj1.fixed_sign_or(v2), (abs(v1) | v2) * v1sign_nonzero)
+            self.assertIsInstance(xintobj1.fixed_sign_or(v2), int)
+            self.assertEqual(xintobj1.fixed_sign_xor(v2), (abs(v1) ^ v2) * v1sign_nonzero)
+            self.assertIsInstance(xintobj1.fixed_sign_xor(v2), int)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -76,6 +99,14 @@ not have a method with the specified name.</p></div>
 </ul>
 <h3>Methods</h3>
 <dl>
+<dt id="digint.tests.user_int_tests.ExtendedUserIntTests.test_fixed_sign_binary_opperators_int"><code class="name flex">
+<span>def <span class="ident">test_fixed_sign_binary_opperators_int</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>test_binary_opperators_int</code></p>
+<p>Tests that all the non-inline binary opperators of <code>ExtendedUserInt</code>
+behaves as expected with random values.</p></div>
+</dd>
 <dt id="digint.tests.user_int_tests.ExtendedUserIntTests.test_sign"><code class="name flex">
 <span>def <span class="ident">test_sign</span></span>(<span>self)</span>
 </code></dt>
@@ -111,7 +142,7 @@ not have a method with the specified name.</p></div>
         &#34;&#34;&#34;
         `test_x`
 
-        Tests that the `x` property of `ExtendedUserInt`
+        Tests that the `x` property of `UserInt`
         holds and maintains it&#39;s value properly with random values.
         &#34;&#34;&#34;
         for _ in range(5000):
@@ -122,14 +153,14 @@ not have a method with the specified name.</p></div>
         &#34;&#34;&#34;
         `test_compairson_opperators_int`
 
-        Tests that all the compairson opperators of `ExtendedUserInt`
+        Tests that all the compairson opperators of `UserInt`
         behaves as expected with random values.
         &#34;&#34;&#34;
 
         for _ in range(5000):
             v1 = randrange(-1000000000, 1000000000)
             v2 = randrange(-1000000000, 1000000000)
-            xintobj1 = ExtendedUserInt(v1)
+            xintobj1 = UserInt(v1)
 
             self.assertTrue(xintobj1 == v1)
             self.assertFalse(xintobj1 != v1)
@@ -151,14 +182,14 @@ not have a method with the specified name.</p></div>
         &#34;&#34;&#34;
         `test_arithmetic_opperators_int`
 
-        Tests that all the non-inline arithmetic opperators of `ExtendedUserInt`
+        Tests that all the non-inline arithmetic opperators of `UserInt`
         behaves as expected with random values.
         &#34;&#34;&#34;
 
         for _ in range(5000):
             v1 = randrange(-1000000000, 1000000000)
             v2 = randrange(-1000000000, 1000000000)
-            xintobj1 = ExtendedUserInt(v1)
+            xintobj1 = UserInt(v1)
 
             self.assertEqual(xintobj1 + v2, v1 + v2)
             self.assertIsInstance(xintobj1 + v2, int)
@@ -186,7 +217,7 @@ not have a method with the specified name.</p></div>
         &#34;&#34;&#34;
         `test_binary_opperators_int`
 
-        Tests that all the non-inline binary opperators of `ExtendedUserInt`
+        Tests that all the non-inline binary opperators of `UserInt`
         behaves as expected with random values.
         &#34;&#34;&#34;
 
@@ -194,7 +225,7 @@ not have a method with the specified name.</p></div>
             v1 = randrange(-1000000000, 1000000000)
             v2 = randrange(-1000000000, 1000000000)
             v3 = randrange(0, 5)
-            xintobj1 = ExtendedUserInt(v1)
+            xintobj1 = UserInt(v1)
 
             self.assertEqual(~xintobj1, ~v1)
             self.assertIsInstance(~xintobj1, int)
@@ -213,14 +244,14 @@ not have a method with the specified name.</p></div>
         &#34;&#34;&#34;
         `test_rounding_opperators_int`
 
-        Tests that all the rounding opperators of `ExtendedUserInt`
+        Tests that all the rounding opperators of `UserInt`
         behaves as expected with random values.
         &#34;&#34;&#34;
 
         for _ in range(5000):
             v1 = randrange(-1000000000, 1000000000)
             v2 = randrange(0, 5)
-            xintobj1 = ExtendedUserInt(v1)
+            xintobj1 = UserInt(v1)
 
             self.assertEqual(trunc(xintobj1), trunc(v1))
             self.assertIsInstance(trunc(xintobj1), int)
@@ -237,14 +268,14 @@ not have a method with the specified name.</p></div>
         &#34;&#34;&#34;
         `test_conversion_opperators_int`
 
-        Tests that all the type conversion opperators of `ExtendedUserInt`
+        Tests that all the type conversion opperators of `UserInt`
         behaves as expected with random values.
         &#34;&#34;&#34;
 
         for _ in range(5000):
             v1 = randrange(-100000, 100000)
             byte_len = ceil(log2(abs(v1)) / 8) + 1 # +1 for an extra spot to hold the sign bit
-            xintobj1 = ExtendedUserInt(v1)
+            xintobj1 = UserInt(v1)
 
             self.assertEqual(int(xintobj1), int(v1))
             self.assertIsInstance(int(xintobj1), int)
@@ -269,13 +300,13 @@ not have a method with the specified name.</p></div>
         &#34;&#34;&#34;
         `test_hashing_opperators_int`
 
-        Tests that all the hashing opperators of `ExtendedUserInt`
+        Tests that all the hashing opperators of `UserInt`
         behaves as expected with random values.
         &#34;&#34;&#34;
 
         for _ in range(5000):
             v1 = randrange(-1000000000, 1000000000)
-            xintobj1 = ExtendedUserInt(v1)
+            xintobj1 = UserInt(v1)
 
             self.assertEqual(hash(xintobj1), hash(v1))</code></pre>
 </details>
@@ -290,7 +321,7 @@ not have a method with the specified name.</p></div>
 </code></dt>
 <dd>
 <div class="desc"><p><code>test_arithmetic_opperators_int</code></p>
-<p>Tests that all the non-inline arithmetic opperators of <code>ExtendedUserInt</code>
+<p>Tests that all the non-inline arithmetic opperators of <code>UserInt</code>
 behaves as expected with random values.</p></div>
 </dd>
 <dt id="digint.tests.user_int_tests.UserIntTests.test_binary_opperators_int"><code class="name flex">
@@ -298,7 +329,7 @@ behaves as expected with random values.</p></div>
 </code></dt>
 <dd>
 <div class="desc"><p><code>test_binary_opperators_int</code></p>
-<p>Tests that all the non-inline binary opperators of <code>ExtendedUserInt</code>
+<p>Tests that all the non-inline binary opperators of <code>UserInt</code>
 behaves as expected with random values.</p></div>
 </dd>
 <dt id="digint.tests.user_int_tests.UserIntTests.test_compairson_opperators_int"><code class="name flex">
@@ -306,7 +337,7 @@ behaves as expected with random values.</p></div>
 </code></dt>
 <dd>
 <div class="desc"><p><code>test_compairson_opperators_int</code></p>
-<p>Tests that all the compairson opperators of <code>ExtendedUserInt</code>
+<p>Tests that all the compairson opperators of <code>UserInt</code>
 behaves as expected with random values.</p></div>
 </dd>
 <dt id="digint.tests.user_int_tests.UserIntTests.test_conversion_opperators_int"><code class="name flex">
@@ -314,7 +345,7 @@ behaves as expected with random values.</p></div>
 </code></dt>
 <dd>
 <div class="desc"><p><code>test_conversion_opperators_int</code></p>
-<p>Tests that all the type conversion opperators of <code>ExtendedUserInt</code>
+<p>Tests that all the type conversion opperators of <code>UserInt</code>
 behaves as expected with random values.</p></div>
 </dd>
 <dt id="digint.tests.user_int_tests.UserIntTests.test_hashing_opperators_int"><code class="name flex">
@@ -322,7 +353,7 @@ behaves as expected with random values.</p></div>
 </code></dt>
 <dd>
 <div class="desc"><p><code>test_hashing_opperators_int</code></p>
-<p>Tests that all the hashing opperators of <code>ExtendedUserInt</code>
+<p>Tests that all the hashing opperators of <code>UserInt</code>
 behaves as expected with random values.</p></div>
 </dd>
 <dt id="digint.tests.user_int_tests.UserIntTests.test_rounding_opperators_int"><code class="name flex">
@@ -330,7 +361,7 @@ behaves as expected with random values.</p></div>
 </code></dt>
 <dd>
 <div class="desc"><p><code>test_rounding_opperators_int</code></p>
-<p>Tests that all the rounding opperators of <code>ExtendedUserInt</code>
+<p>Tests that all the rounding opperators of <code>UserInt</code>
 behaves as expected with random values.</p></div>
 </dd>
 <dt id="digint.tests.user_int_tests.UserIntTests.test_x"><code class="name flex">
@@ -338,7 +369,7 @@ behaves as expected with random values.</p></div>
 </code></dt>
 <dd>
 <div class="desc"><p><code>test_x</code></p>
-<p>Tests that the <code>x</code> property of <code>ExtendedUserInt</code>
+<p>Tests that the <code>x</code> property of <code>UserInt</code>
 holds and maintains it's value properly with random values.</p></div>
 </dd>
 </dl>
@@ -361,6 +392,7 @@ holds and maintains it's value properly with random values.</p></div>
 <li>
 <h4><code><a title="digint.tests.user_int_tests.ExtendedUserIntTests" href="#digint.tests.user_int_tests.ExtendedUserIntTests">ExtendedUserIntTests</a></code></h4>
 <ul class="">
+<li><code><a title="digint.tests.user_int_tests.ExtendedUserIntTests.test_fixed_sign_binary_opperators_int" href="#digint.tests.user_int_tests.ExtendedUserIntTests.test_fixed_sign_binary_opperators_int">test_fixed_sign_binary_opperators_int</a></code></li>
 <li><code><a title="digint.tests.user_int_tests.ExtendedUserIntTests.test_sign" href="#digint.tests.user_int_tests.ExtendedUserIntTests.test_sign">test_sign</a></code></li>
 </ul>
 </li>

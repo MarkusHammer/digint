@@ -12,7 +12,8 @@ PAUSE
 
 IF NOT EXIST "./%modulename%" GOTO :error
 
-IF NOT EXIST "./reports" MKDIR "./reports"
+IF EXIST "./reports" RMDIR "./reports" /q /s
+MKDIR "./reports"
 
 echo _____PIP INSTALL_____
 py -%targetpyver% -m pip install pipreqs validate-pyproject[all] build twine setuptools coverage pdoc3 pyright pylint flake8 || GOTO :error

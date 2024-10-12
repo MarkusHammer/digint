@@ -417,3 +417,43 @@ class ExtendedUserInt(UserInt):
             self.x = 0
         elif self.sign != value:
             self.x *= -1
+
+    def fixed_sign_invert(self) -> int:
+        """
+        `fixed_sign_invert`
+
+        Returns:
+            The absolute value of this intiger, inverted, with its sign restored after.
+                If this intiger is 0, the value returned is `~0` (`0` inverted), not `0`.
+        """
+        return (~abs(self.x)) * (-1 if self.x < 0 else 1)
+
+    def fixed_sign_and(self, value:int) -> int:
+        """
+        `fixed_sign_and`
+
+        Returns:
+            The absolute value of this intiger, and-ed with the given `value`,
+                with its sign restored after.
+        """
+        return (abs(self.x) & value) * (-1 if self.x < 0 else 1)
+
+    def fixed_sign_or(self, value:int) -> int:
+        """
+        `fixed_sign_or`
+
+        Returns:
+            The absolute value of this intiger, or-ed with the given `value`,
+                with its sign restored after.
+        """
+        return (abs(self.x) | value) * (-1 if self.x < 0 else 1)
+
+    def fixed_sign_xor(self, value:int) -> int:
+        """
+        `fixed_sign_xor`
+
+        Returns:
+            The absolute value of this intiger, xor-ed with the given `value`,
+                with its sign restored after.
+        """
+        return (abs(self.x) ^ value) * (-1 if self.x < 0 else 1)

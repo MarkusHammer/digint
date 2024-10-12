@@ -10,6 +10,8 @@ test_sized_negative_index (digint.tests.tools_tests.AbsIndexTests)
 `test_sized_negative_index` ... ok
 test_sized_positive_index (digint.tests.tools_tests.AbsIndexTests)
 `test_sized_positive_index` ... ok
+test_contains (digint.tests.digint_tests.DigitintPreset)
+`test_contains` ... ok
 test_del (digint.tests.digint_tests.DigitintPreset)
 `test_del` ... ok
 test_get (digint.tests.digint_tests.DigitintPreset)
@@ -30,6 +32,8 @@ test_digit_length_oct (digint.tests.digint_tests.DigitintRandom)
 `test_digit_length_oct` ... ok
 test_digit_length_unary (digint.tests.digint_tests.DigitintRandom)
 `test_digit_length_unary` ... ok
+test_fixed_sign_binary_opperators_int (digint.tests.user_int_tests.ExtendedUserIntTests)
+`test_binary_opperators_int` ... ok
 test_sign (digint.tests.user_int_tests.ExtendedUserIntTests)
 `test_sign` ... ok
 test_arithmetic_opperators_int (digint.tests.user_int_tests.UserIntTests)
@@ -48,6 +52,6 @@ test_x (digint.tests.user_int_tests.UserIntTests)
 `test_x` ... ok
 
 ----------------------------------------------------------------------
-Ran 24 tests in 4.051s
+Ran 26 tests in 3.364s
 
 OK

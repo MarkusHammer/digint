@@ -331,7 +331,32 @@ including unary.</p></div>
     def digit_shift_right(self, amount:int = 1):
         if self.base == 1:
             raise BaseInvalidOpperationError(&#34;This base cannot be shifted&#34;)
-        super().digit_shift_right(amount)</code></pre>
+        super().digit_shift_right(amount)
+
+    @override
+    def rstrip(self, value:Union[int,str,Iterable[Union[int,str]]]):
+        if self.base == 1:
+            raise BaseInvalidOpperationError(&#34;This base cannot be stripped&#34;)
+        super().rstrip(value)
+
+    @override
+    def lstrip(self, value:Union[int,str,Iterable[Union[int,str]]]):
+        if self.base == 1:
+            raise BaseInvalidOpperationError(&#34;This base cannot be stripped&#34;)
+        super().lstrip(value)
+
+    @override
+    def strip(self, value:Union[int,str,Iterable[Union[int,str]]]):
+        if self.base == 1:
+            raise BaseInvalidOpperationError(&#34;This base cannot be stripped&#34;)
+        super().strip(value)
+
+    @override
+    def contains(self, value:Union[int, str]) -&gt; bool:
+        if self.base == 1:
+            value = self._ensure_unnotated(value)
+            return (value == 1 and self.x != 0) or (value == 0 and self.x == 0)
+        return super().contains(value)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -381,6 +406,17 @@ def base(self) -&gt; int:
 </dl>
 <h3>Methods</h3>
 <dl>
+<dt id="digint.digint.ExtendedBasedIntiger.contains"><code class="name flex">
+<span>def <span class="ident">contains</span></span>(<span>self, value: Union[int, str]) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>contains</code></p>
+<p>Returns true if the digit value appears anywhere in this digit sequence.
+This will not include leading 0s,
+but will return true if the tested digit value is <code>0</code> and this intiger's value is also 0.</p>
+<h2 id="arguments">Arguments</h2>
+<p>value &ndash; The value to check for.</p></div>
+</dd>
 <dt id="digint.digint.ExtendedBasedIntiger.copy"><code class="name flex">
 <span>def <span class="ident">copy</span></span>(<span>self, value: Union[int, str, ForwardRef(None)] = None, base: Optional[int] = None, notation_format_override: Optional[<a title="digint.notation_format.NotationFormat" href="notation_format.html#digint.notation_format.NotationFormat">NotationFormat</a>] = None) ‑> <a title="digint.digint.ExtendedBasedIntiger" href="#digint.digint.ExtendedBasedIntiger">ExtendedBasedIntiger</a></span>
 </code></dt>
@@ -445,6 +481,23 @@ When given multiple values, each value will be inserted before the given index i
 <p><code>index</code> &ndash; The index (or indexes) to be inserted before.
 <code>value</code> &ndash; The value (or values) to insert.</p></div>
 </dd>
+<dt id="digint.digint.ExtendedBasedIntiger.lstrip"><code class="name flex">
+<span>def <span class="ident">lstrip</span></span>(<span>self, value: Union[int, str, Iterable[Union[int, str]]])</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>rstrip</code></p>
+<p>Removes the given digit (or digits) from the left hand (greatest place value) spot.
+Works similarly to <code>str.lstrip</code>,
+except for the fact that when <code>value</code> is a single string
+(<strong>not</strong> a iterable of strings)
+it will be treated as a single digit instead of a iterable of digits.
+This will not strip any leading <code>0</code> digit values,
+as these are already not notated by default
+nor would effect the digit length of this intiger.</p>
+<h2 id="arguments">Arguments</h2>
+<p>value &ndash; The value (or iterable of values) to strip.
+Can be either a intiger digit value, or a string corelating to a single digit.</p></div>
+</dd>
 <dt id="digint.digint.ExtendedBasedIntiger.notate"><code class="name flex">
 <span>def <span class="ident">notate</span></span>(<span>self, notation_format: Optional[<a title="digint.notation_format.NotationFormat" href="notation_format.html#digint.notation_format.NotationFormat">NotationFormat</a>] = None) ‑> str</span>
 </code></dt>
@@ -475,6 +528,20 @@ index &ndash; The target index to pop. Defaults to -1.</p>
 <h2 id="returns">Returns</h2>
 <p>The value at the given index before removal.</p></div>
 </dd>
+<dt id="digint.digint.ExtendedBasedIntiger.rstrip"><code class="name flex">
+<span>def <span class="ident">rstrip</span></span>(<span>self, value: Union[int, str, Iterable[Union[int, str]]])</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>rstrip</code></p>
+<p>Removes the given digit (or digits) from the right hand (units) spot.
+Works similarly to <code>str.rstrip</code>,
+except for the fact that when <code>value</code> is a single string
+(<strong>not</strong> a iterable of strings)
+it will be treated as a single digit instead of a iterable of digits.</p>
+<h2 id="arguments">Arguments</h2>
+<p>value &ndash; The value (or iterable of values) to strip.
+Can be either a intiger digit value, or a string corelating to a single digit.</p></div>
+</dd>
 <dt id="digint.digint.ExtendedBasedIntiger.set_digit"><code class="name flex">
 <span>def <span class="ident">set_digit</span></span>(<span>self, index: Union[int, slice, range, Iterable[int]], value: Union[int, str, Iterable[Union[int, str]]])</span>
 </code></dt>
@@ -488,6 +555,23 @@ there must be a matching quantity of values to set at those indexes.</p>
 <code>value</code> &ndash; The value (or values) to set the index (or indexes) to.</p>
 <h2 id="raises">Raises</h2>
 <p><code>ValueError</code>: Raised when the given value is out of bounds of the current <code>base</code>.</p></div>
+</dd>
+<dt id="digint.digint.ExtendedBasedIntiger.strip"><code class="name flex">
+<span>def <span class="ident">strip</span></span>(<span>self, value: Union[int, str, Iterable[Union[int, str]]])</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>rstrip</code></p>
+<p>Removes the given digit (or digits) from both sides.
+Works similarly to <code>str.strip</code>,
+except for the fact that when <code>value</code> is a single string
+(<strong>not</strong> a iterable of strings)
+it will be treated as a single digit instead of a iterable of digits.
+This will not strip any leading <code>0</code> digit values,
+as these are already not notated by default
+nor would effect the digit length of this intiger.</p>
+<h2 id="arguments">Arguments</h2>
+<p>value &ndash; The value (or iterable of values) to strip.
+Can be either a intiger digit value, or a string corelating to a single digit.</p></div>
 </dd>
 <dt id="digint.digint.ExtendedBasedIntiger.unset_digit"><code class="name flex">
 <span>def <span class="ident">unset_digit</span></span>(<span>self, index: Union[int, slice, range, Iterable[int]])</span>
@@ -794,7 +878,32 @@ including unary.</p></div>
     def digit_shift_right(self, amount:int = 1):
         if self.base == 1:
             raise BaseInvalidOpperationError(&#34;This base cannot be shifted&#34;)
-        super().digit_shift_right(amount)</code></pre>
+        super().digit_shift_right(amount)
+
+    @override
+    def rstrip(self, value:Union[int,str,Iterable[Union[int,str]]]):
+        if self.base == 1:
+            raise BaseInvalidOpperationError(&#34;This base cannot be stripped&#34;)
+        super().rstrip(value)
+
+    @override
+    def lstrip(self, value:Union[int,str,Iterable[Union[int,str]]]):
+        if self.base == 1:
+            raise BaseInvalidOpperationError(&#34;This base cannot be stripped&#34;)
+        super().lstrip(value)
+
+    @override
+    def strip(self, value:Union[int,str,Iterable[Union[int,str]]]):
+        if self.base == 1:
+            raise BaseInvalidOpperationError(&#34;This base cannot be stripped&#34;)
+        super().strip(value)
+
+    @override
+    def contains(self, value:Union[int, str]) -&gt; bool:
+        if self.base == 1:
+            value = self._ensure_unnotated(value)
+            return (value == 1 and self.x != 0) or (value == 0 and self.x == 0)
+        return super().contains(value)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -912,6 +1021,16 @@ def base(self) -&gt; int:
 </p>
 <div class="desc inherited"><p><code>bit_count</code> …</p></div>
 </dd>
+<dt id="digint.digint.ExtendedBasedIntiger.contains"><code class="name flex">
+<span>def <span class="ident">contains</span></span>(<span>self, value: Union[int, str]) ‑> bool</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.digint.PositionalBasedIntiger" href="#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code>.<code><a title="digint.digint.PositionalBasedIntiger.contains" href="#digint.digint.PositionalBasedIntiger.contains">contains</a></code>
+</p>
+<div class="desc inherited"><p><code>contains</code> …</p></div>
+</dd>
 <dt id="digint.digint.ExtendedBasedIntiger.copy"><code class="name flex">
 <span>def <span class="ident">copy</span></span>(<span>self, value: Union[int, str, ForwardRef(None)] = None, base: Optional[int] = None, notation_format_override: Optional[<a title="digint.notation_format.NotationFormat" href="notation_format.html#digint.notation_format.NotationFormat">NotationFormat</a>] = None) ‑> <a title="digint.digint.ExtendedBasedIntiger" href="#digint.digint.ExtendedBasedIntiger">ExtendedBasedIntiger</a></span>
 </code></dt>
@@ -996,6 +1115,46 @@ will overrides the <code>notation_format</code> of the copy.</p>
 </p>
 <div class="desc inherited"><p><code>digit_shift_right</code> …</p></div>
 </dd>
+<dt id="digint.digint.ExtendedBasedIntiger.fixed_sign_and"><code class="name flex">
+<span>def <span class="ident">fixed_sign_and</span></span>(<span>self, value: int) ‑> int</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.digint.PositionalBasedIntiger" href="#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code>.<code><a title="digint.digint.PositionalBasedIntiger.fixed_sign_and" href="userint.html#digint.digint.PositionalBasedIntiger.fixed_sign_and">fixed_sign_and</a></code>
+</p>
+<div class="desc inherited"><p><code>fixed_sign_and</code> …</p></div>
+</dd>
+<dt id="digint.digint.ExtendedBasedIntiger.fixed_sign_invert"><code class="name flex">
+<span>def <span class="ident">fixed_sign_invert</span></span>(<span>self) ‑> int</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.digint.PositionalBasedIntiger" href="#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code>.<code><a title="digint.digint.PositionalBasedIntiger.fixed_sign_invert" href="userint.html#digint.digint.PositionalBasedIntiger.fixed_sign_invert">fixed_sign_invert</a></code>
+</p>
+<div class="desc inherited"><p><code>fixed_sign_invert</code> …</p></div>
+</dd>
+<dt id="digint.digint.ExtendedBasedIntiger.fixed_sign_or"><code class="name flex">
+<span>def <span class="ident">fixed_sign_or</span></span>(<span>self, value: int) ‑> int</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.digint.PositionalBasedIntiger" href="#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code>.<code><a title="digint.digint.PositionalBasedIntiger.fixed_sign_or" href="userint.html#digint.digint.PositionalBasedIntiger.fixed_sign_or">fixed_sign_or</a></code>
+</p>
+<div class="desc inherited"><p><code>fixed_sign_or</code> …</p></div>
+</dd>
+<dt id="digint.digint.ExtendedBasedIntiger.fixed_sign_xor"><code class="name flex">
+<span>def <span class="ident">fixed_sign_xor</span></span>(<span>self, value: int) ‑> int</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.digint.PositionalBasedIntiger" href="#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code>.<code><a title="digint.digint.PositionalBasedIntiger.fixed_sign_xor" href="userint.html#digint.digint.PositionalBasedIntiger.fixed_sign_xor">fixed_sign_xor</a></code>
+</p>
+<div class="desc inherited"><p><code>fixed_sign_xor</code> …</p></div>
+</dd>
 <dt id="digint.digint.ExtendedBasedIntiger.get_digit"><code class="name flex">
 <span>def <span class="ident">get_digit</span></span>(<span>self, index: Union[int, slice, range, Iterable[int]]) ‑> Union[int, List[int]]</span>
 </code></dt>
@@ -1048,6 +1207,16 @@ Will iterate 0 when all other …</p></div>
 <code><a title="digint.digint.PositionalBasedIntiger" href="#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code>.<code><a title="digint.digint.PositionalBasedIntiger.iter_symbols" href="#digint.digint.PositionalBasedIntiger.iter_symbols">iter_symbols</a></code>
 </p>
 <div class="desc inherited"><p><code>iter_symbols</code> …</p></div>
+</dd>
+<dt id="digint.digint.ExtendedBasedIntiger.lstrip"><code class="name flex">
+<span>def <span class="ident">lstrip</span></span>(<span>self, value: Union[int, str, Iterable[Union[int, str]]])</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.digint.PositionalBasedIntiger" href="#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code>.<code><a title="digint.digint.PositionalBasedIntiger.lstrip" href="#digint.digint.PositionalBasedIntiger.lstrip">lstrip</a></code>
+</p>
+<div class="desc inherited"><p><code>rstrip</code> …</p></div>
 </dd>
 <dt id="digint.digint.ExtendedBasedIntiger.mask"><code class="name flex">
 <span>def <span class="ident">mask</span></span>(<span>self, index: Union[int, slice, range, Iterable[int]]) ‑> int</span>
@@ -1104,6 +1273,16 @@ Will iterate 0 when all …</p></div>
 </p>
 <div class="desc inherited"><p><code>reversed_iter_symbols</code> …</p></div>
 </dd>
+<dt id="digint.digint.ExtendedBasedIntiger.rstrip"><code class="name flex">
+<span>def <span class="ident">rstrip</span></span>(<span>self, value: Union[int, str, Iterable[Union[int, str]]])</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.digint.PositionalBasedIntiger" href="#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code>.<code><a title="digint.digint.PositionalBasedIntiger.rstrip" href="#digint.digint.PositionalBasedIntiger.rstrip">rstrip</a></code>
+</p>
+<div class="desc inherited"><p><code>rstrip</code> …</p></div>
+</dd>
 <dt id="digint.digint.ExtendedBasedIntiger.set_digit"><code class="name flex">
 <span>def <span class="ident">set_digit</span></span>(<span>self, index: Union[int, slice, range, Iterable[int]], value: Union[int, str, Iterable[Union[int, str]]])</span>
 </code></dt>
@@ -1113,6 +1292,16 @@ Will iterate 0 when all …</p></div>
 <code><a title="digint.digint.PositionalBasedIntiger" href="#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code>.<code><a title="digint.digint.PositionalBasedIntiger.set_digit" href="#digint.digint.PositionalBasedIntiger.set_digit">set_digit</a></code>
 </p>
 <div class="desc inherited"><p><code>set_digit</code> …</p></div>
+</dd>
+<dt id="digint.digint.ExtendedBasedIntiger.strip"><code class="name flex">
+<span>def <span class="ident">strip</span></span>(<span>self, value: Union[int, str, Iterable[Union[int, str]]])</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.digint.PositionalBasedIntiger" href="#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></code>.<code><a title="digint.digint.PositionalBasedIntiger.strip" href="#digint.digint.PositionalBasedIntiger.strip">strip</a></code>
+</p>
+<div class="desc inherited"><p><code>rstrip</code> …</p></div>
 </dd>
 <dt id="digint.digint.ExtendedBasedIntiger.to_bytes"><code class="name flex">
 <span>def <span class="ident">to_bytes</span></span>(<span>self, length: <class 'SupportsIndex'>, byteorder: Literal['little', 'big'], *, signed: bool = False) ‑> bytes</span>
@@ -1829,7 +2018,112 @@ casting the type back into a default intiger type when possible.</p>
         for _ in range(amount):
             popped = self.pop(0)
             self.digit_shift_right(1)
-            self.append(popped)</code></pre>
+            self.append(popped)
+
+    def rstrip(self, value:Union[int,str,Iterable[Union[int,str]]]):
+        &#34;&#34;&#34;
+        `rstrip`
+
+        Removes the given digit (or digits) from the right hand (units) spot.
+        Works similarly to ``str.rstrip``,
+        except for the fact that when ``value`` is a single string
+        (**not** a iterable of strings)
+        it will be treated as a single digit instead of a iterable of digits.
+
+        Arguments:
+            value -- The value (or iterable of values) to strip.
+                Can be either a intiger digit value, or a string corelating to a single digit.
+        &#34;&#34;&#34;
+
+        if isinstance(value, Iterable):
+            value = tuple(self._ensure_unnotated(v) for v in value)
+        else:
+            value = (self._ensure_unnotated(value), )
+
+        if len(value) == 0:
+            return
+
+        while self.x != 0 and self._get_single_digit(0) in value:
+            self._pop_first()
+
+    def lstrip(self, value:Union[int,str,Iterable[Union[int,str]]]):
+        &#34;&#34;&#34;
+        `rstrip`
+
+        Removes the given digit (or digits) from the left hand (greatest place value) spot.
+        Works similarly to ``str.lstrip``,
+        except for the fact that when ``value`` is a single string
+        (**not** a iterable of strings)
+        it will be treated as a single digit instead of a iterable of digits.
+        This will not strip any leading `0` digit values,
+        as these are already not notated by default
+        nor would effect the digit length of this intiger.
+
+        Arguments:
+            value -- The value (or iterable of values) to strip.
+                Can be either a intiger digit value, or a string corelating to a single digit.
+        &#34;&#34;&#34;
+        if isinstance(value, Iterable):
+            value = [self._ensure_unnotated(v) for v in value]
+        else:
+            value = [self._ensure_unnotated(value)]
+
+        value.remove(0)
+
+        if len(value) == 0:
+            return
+
+        while self.x != 0 and self._get_single_digit(-1) in value:
+            self.pop(-1)
+
+    def strip(self, value:Union[int,str,Iterable[Union[int,str]]]):
+        &#34;&#34;&#34;
+        `rstrip`
+
+        Removes the given digit (or digits) from both sides.
+        Works similarly to ``str.strip``,
+        except for the fact that when ``value`` is a single string
+        (**not** a iterable of strings)
+        it will be treated as a single digit instead of a iterable of digits.
+        This will not strip any leading `0` digit values,
+        as these are already not notated by default
+        nor would effect the digit length of this intiger.
+
+        Arguments:
+            value -- The value (or iterable of values) to strip.
+                Can be either a intiger digit value, or a string corelating to a single digit.
+        &#34;&#34;&#34;
+        self.rstrip(value)
+        self.lstrip(value)
+
+    def contains(self, value:Union[int, str]) -&gt; bool:
+        &#34;&#34;&#34;
+        `contains`
+
+        Returns true if the digit value appears anywhere in this digit sequence.
+        This will not include leading 0s,
+        but will return true if the tested digit value is `0` and this intiger&#39;s value is also 0.
+
+        Arguments:
+            value -- The value to check for.
+        &#34;&#34;&#34;
+        value = self._ensure_unnotated(value)
+
+        if self.x == 0:
+            return value == 0
+
+        working_value = abs(self.x)
+        while working_value &gt; 0:
+            if self.base == 2:
+                if working_value &amp; 0b1 == value:
+                    return True
+                working_value &gt;&gt;= 1
+            else:
+                if working_value % self.base == value:
+                    return True
+                working_value //= self.base
+        return False
+    __contains__ = contains</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1965,6 +2259,17 @@ def radix(self) -&gt; int:
 </p>
 <div class="desc inherited"><p><code>bit_count</code> …</p></div>
 </dd>
+<dt id="digint.digint.PositionalBasedIntiger.contains"><code class="name flex">
+<span>def <span class="ident">contains</span></span>(<span>self, value: Union[int, str]) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>contains</code></p>
+<p>Returns true if the digit value appears anywhere in this digit sequence.
+This will not include leading 0s,
+but will return true if the tested digit value is <code>0</code> and this intiger's value is also 0.</p>
+<h2 id="arguments">Arguments</h2>
+<p>value &ndash; The value to check for.</p></div>
+</dd>
 <dt id="digint.digint.PositionalBasedIntiger.copy"><code class="name flex">
 <span>def <span class="ident">copy</span></span>(<span>self, value: Union[int, str, ForwardRef(None)] = None, base: Optional[int] = None, notation_format_override: Optional[<a title="digint.notation_format.NotationFormat" href="notation_format.html#digint.notation_format.NotationFormat">NotationFormat</a>] = None) ‑> <a title="digint.digint.PositionalBasedIntiger" href="#digint.digint.PositionalBasedIntiger">PositionalBasedIntiger</a></span>
 </code></dt>
@@ -2048,6 +2353,46 @@ it at the largest place value spot.</p>
 <h2 id="arguments">Arguments</h2>
 <p>amount &ndash; The amount to shift right. Will shift left when negative.</p></div>
 </dd>
+<dt id="digint.digint.PositionalBasedIntiger.fixed_sign_and"><code class="name flex">
+<span>def <span class="ident">fixed_sign_and</span></span>(<span>self, value: int) ‑> int</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.userint.ExtendedUserInt" href="userint.html#digint.userint.ExtendedUserInt">ExtendedUserInt</a></code>.<code><a title="digint.userint.ExtendedUserInt.fixed_sign_and" href="userint.html#digint.userint.ExtendedUserInt.fixed_sign_and">fixed_sign_and</a></code>
+</p>
+<div class="desc inherited"><p><code>fixed_sign_and</code> …</p></div>
+</dd>
+<dt id="digint.digint.PositionalBasedIntiger.fixed_sign_invert"><code class="name flex">
+<span>def <span class="ident">fixed_sign_invert</span></span>(<span>self) ‑> int</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.userint.ExtendedUserInt" href="userint.html#digint.userint.ExtendedUserInt">ExtendedUserInt</a></code>.<code><a title="digint.userint.ExtendedUserInt.fixed_sign_invert" href="userint.html#digint.userint.ExtendedUserInt.fixed_sign_invert">fixed_sign_invert</a></code>
+</p>
+<div class="desc inherited"><p><code>fixed_sign_invert</code> …</p></div>
+</dd>
+<dt id="digint.digint.PositionalBasedIntiger.fixed_sign_or"><code class="name flex">
+<span>def <span class="ident">fixed_sign_or</span></span>(<span>self, value: int) ‑> int</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.userint.ExtendedUserInt" href="userint.html#digint.userint.ExtendedUserInt">ExtendedUserInt</a></code>.<code><a title="digint.userint.ExtendedUserInt.fixed_sign_or" href="userint.html#digint.userint.ExtendedUserInt.fixed_sign_or">fixed_sign_or</a></code>
+</p>
+<div class="desc inherited"><p><code>fixed_sign_or</code> …</p></div>
+</dd>
+<dt id="digint.digint.PositionalBasedIntiger.fixed_sign_xor"><code class="name flex">
+<span>def <span class="ident">fixed_sign_xor</span></span>(<span>self, value: int) ‑> int</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="digint.userint.ExtendedUserInt" href="userint.html#digint.userint.ExtendedUserInt">ExtendedUserInt</a></code>.<code><a title="digint.userint.ExtendedUserInt.fixed_sign_xor" href="userint.html#digint.userint.ExtendedUserInt.fixed_sign_xor">fixed_sign_xor</a></code>
+</p>
+<div class="desc inherited"><p><code>fixed_sign_xor</code> …</p></div>
+</dd>
 <dt id="digint.digint.PositionalBasedIntiger.get_digit"><code class="name flex">
 <span>def <span class="ident">get_digit</span></span>(<span>self, index: Union[int, slice, range, Iterable[int]]) ‑> Union[int, List[int]]</span>
 </code></dt>
@@ -2111,6 +2456,23 @@ Defaults to 1.</p>
 <p>An iterator of symbols.</p>
 <h2 id="yields">Yields</h2>
 <p>Digit symdols, starting at the units spot.</p></div>
+</dd>
+<dt id="digint.digint.PositionalBasedIntiger.lstrip"><code class="name flex">
+<span>def <span class="ident">lstrip</span></span>(<span>self, value: Union[int, str, Iterable[Union[int, str]]])</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>rstrip</code></p>
+<p>Removes the given digit (or digits) from the left hand (greatest place value) spot.
+Works similarly to <code>str.lstrip</code>,
+except for the fact that when <code>value</code> is a single string
+(<strong>not</strong> a iterable of strings)
+it will be treated as a single digit instead of a iterable of digits.
+This will not strip any leading <code>0</code> digit values,
+as these are already not notated by default
+nor would effect the digit length of this intiger.</p>
+<h2 id="arguments">Arguments</h2>
+<p>value &ndash; The value (or iterable of values) to strip.
+Can be either a intiger digit value, or a string corelating to a single digit.</p></div>
 </dd>
 <dt id="digint.digint.PositionalBasedIntiger.mask"><code class="name flex">
 <span>def <span class="ident">mask</span></span>(<span>self, index: Union[int, slice, range, Iterable[int]]) ‑> int</span>
@@ -2184,6 +2546,20 @@ Defaults to 1.</p>
 <h2 id="yields">Yields</h2>
 <p>Digit symdols, ending at the units spot.</p></div>
 </dd>
+<dt id="digint.digint.PositionalBasedIntiger.rstrip"><code class="name flex">
+<span>def <span class="ident">rstrip</span></span>(<span>self, value: Union[int, str, Iterable[Union[int, str]]])</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>rstrip</code></p>
+<p>Removes the given digit (or digits) from the right hand (units) spot.
+Works similarly to <code>str.rstrip</code>,
+except for the fact that when <code>value</code> is a single string
+(<strong>not</strong> a iterable of strings)
+it will be treated as a single digit instead of a iterable of digits.</p>
+<h2 id="arguments">Arguments</h2>
+<p>value &ndash; The value (or iterable of values) to strip.
+Can be either a intiger digit value, or a string corelating to a single digit.</p></div>
+</dd>
 <dt id="digint.digint.PositionalBasedIntiger.set_digit"><code class="name flex">
 <span>def <span class="ident">set_digit</span></span>(<span>self, index: Union[int, slice, range, Iterable[int]], value: Union[int, str, Iterable[Union[int, str]]])</span>
 </code></dt>
@@ -2197,6 +2573,23 @@ there must be a matching quantity of values to set at those indexes.</p>
 <code>value</code> &ndash; The value (or values) to set the index (or indexes) to.</p>
 <h2 id="raises">Raises</h2>
 <p><code>ValueError</code>: Raised when the given value is out of bounds of the current <code>base</code>.</p></div>
+</dd>
+<dt id="digint.digint.PositionalBasedIntiger.strip"><code class="name flex">
+<span>def <span class="ident">strip</span></span>(<span>self, value: Union[int, str, Iterable[Union[int, str]]])</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>rstrip</code></p>
+<p>Removes the given digit (or digits) from both sides.
+Works similarly to <code>str.strip</code>,
+except for the fact that when <code>value</code> is a single string
+(<strong>not</strong> a iterable of strings)
+it will be treated as a single digit instead of a iterable of digits.
+This will not strip any leading <code>0</code> digit values,
+as these are already not notated by default
+nor would effect the digit length of this intiger.</p>
+<h2 id="arguments">Arguments</h2>
+<p>value &ndash; The value (or iterable of values) to strip.
+Can be either a intiger digit value, or a string corelating to a single digit.</p></div>
 </dd>
 <dt id="digint.digint.PositionalBasedIntiger.to_bytes"><code class="name flex">
 <span>def <span class="ident">to_bytes</span></span>(<span>self, length: <class 'SupportsIndex'>, byteorder: Literal['little', 'big'], *, signed: bool = False) ‑> bytes</span>
@@ -2237,15 +2630,19 @@ there must be a matching quantity of values to set at those indexes.</p>
 <li>
 <h4><code><a title="digint.digint.ExtendedBasedIntiger" href="#digint.digint.ExtendedBasedIntiger">ExtendedBasedIntiger</a></code></h4>
 <ul class="two-column">
+<li><code><a title="digint.digint.ExtendedBasedIntiger.contains" href="#digint.digint.ExtendedBasedIntiger.contains">contains</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.copy" href="#digint.digint.ExtendedBasedIntiger.copy">copy</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.digit_count" href="#digint.digint.ExtendedBasedIntiger.digit_count">digit_count</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.digit_length" href="#digint.digint.ExtendedBasedIntiger.digit_length">digit_length</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.digit_shift_left" href="#digint.digint.ExtendedBasedIntiger.digit_shift_left">digit_shift_left</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.digit_shift_right" href="#digint.digint.ExtendedBasedIntiger.digit_shift_right">digit_shift_right</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.insert" href="#digint.digint.ExtendedBasedIntiger.insert">insert</a></code></li>
+<li><code><a title="digint.digint.ExtendedBasedIntiger.lstrip" href="#digint.digint.ExtendedBasedIntiger.lstrip">lstrip</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.notate" href="#digint.digint.ExtendedBasedIntiger.notate">notate</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.pop" href="#digint.digint.ExtendedBasedIntiger.pop">pop</a></code></li>
+<li><code><a title="digint.digint.ExtendedBasedIntiger.rstrip" href="#digint.digint.ExtendedBasedIntiger.rstrip">rstrip</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.set_digit" href="#digint.digint.ExtendedBasedIntiger.set_digit">set_digit</a></code></li>
+<li><code><a title="digint.digint.ExtendedBasedIntiger.strip" href="#digint.digint.ExtendedBasedIntiger.strip">strip</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.unset_digit" href="#digint.digint.ExtendedBasedIntiger.unset_digit">unset_digit</a></code></li>
 </ul>
 </li>
@@ -2254,6 +2651,7 @@ there must be a matching quantity of values to set at those indexes.</p>
 <ul class="">
 <li><code><a title="digint.digint.ExtendedBasedIntiger.bit_count" href="userint.html#digint.digint.ExtendedBasedIntiger.bit_count">bit_count</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.bit_length" href="userint.html#digint.digint.ExtendedBasedIntiger.bit_length">bit_length</a></code></li>
+<li><code><a title="digint.digint.ExtendedBasedIntiger.contains" href="#digint.digint.ExtendedBasedIntiger.contains">contains</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.copy" href="#digint.digint.ExtendedBasedIntiger.copy">copy</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.delete_digit" href="#digint.digint.ExtendedBasedIntiger.delete_digit">delete_digit</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.digit_count" href="#digint.digint.ExtendedBasedIntiger.digit_count">digit_count</a></code></li>
@@ -2262,17 +2660,24 @@ there must be a matching quantity of values to set at those indexes.</p>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.digit_rotate_right" href="#digint.digint.ExtendedBasedIntiger.digit_rotate_right">digit_rotate_right</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.digit_shift_left" href="#digint.digint.ExtendedBasedIntiger.digit_shift_left">digit_shift_left</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.digit_shift_right" href="#digint.digint.ExtendedBasedIntiger.digit_shift_right">digit_shift_right</a></code></li>
+<li><code><a title="digint.digint.ExtendedBasedIntiger.fixed_sign_and" href="userint.html#digint.digint.ExtendedBasedIntiger.fixed_sign_and">fixed_sign_and</a></code></li>
+<li><code><a title="digint.digint.ExtendedBasedIntiger.fixed_sign_invert" href="userint.html#digint.digint.ExtendedBasedIntiger.fixed_sign_invert">fixed_sign_invert</a></code></li>
+<li><code><a title="digint.digint.ExtendedBasedIntiger.fixed_sign_or" href="userint.html#digint.digint.ExtendedBasedIntiger.fixed_sign_or">fixed_sign_or</a></code></li>
+<li><code><a title="digint.digint.ExtendedBasedIntiger.fixed_sign_xor" href="userint.html#digint.digint.ExtendedBasedIntiger.fixed_sign_xor">fixed_sign_xor</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.get_digit" href="#digint.digint.ExtendedBasedIntiger.get_digit">get_digit</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.insert" href="#digint.digint.ExtendedBasedIntiger.insert">insert</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.is_integer" href="userint.html#digint.digint.ExtendedBasedIntiger.is_integer">is_integer</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.iter_digits" href="#digint.digint.ExtendedBasedIntiger.iter_digits">iter_digits</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.iter_symbols" href="#digint.digint.ExtendedBasedIntiger.iter_symbols">iter_symbols</a></code></li>
+<li><code><a title="digint.digint.ExtendedBasedIntiger.lstrip" href="#digint.digint.ExtendedBasedIntiger.lstrip">lstrip</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.mask" href="#digint.digint.ExtendedBasedIntiger.mask">mask</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.notate" href="#digint.digint.ExtendedBasedIntiger.notate">notate</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.pop" href="#digint.digint.ExtendedBasedIntiger.pop">pop</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.reversed_iter_digits" href="#digint.digint.ExtendedBasedIntiger.reversed_iter_digits">reversed_iter_digits</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.reversed_iter_symbols" href="#digint.digint.ExtendedBasedIntiger.reversed_iter_symbols">reversed_iter_symbols</a></code></li>
+<li><code><a title="digint.digint.ExtendedBasedIntiger.rstrip" href="#digint.digint.ExtendedBasedIntiger.rstrip">rstrip</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.set_digit" href="#digint.digint.ExtendedBasedIntiger.set_digit">set_digit</a></code></li>
+<li><code><a title="digint.digint.ExtendedBasedIntiger.strip" href="#digint.digint.ExtendedBasedIntiger.strip">strip</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.to_bytes" href="userint.html#digint.digint.ExtendedBasedIntiger.to_bytes">to_bytes</a></code></li>
 <li><code><a title="digint.digint.ExtendedBasedIntiger.unset_digit" href="#digint.digint.ExtendedBasedIntiger.unset_digit">unset_digit</a></code></li>
 </ul>
@@ -2282,6 +2687,7 @@ there must be a matching quantity of values to set at those indexes.</p>
 <ul class="">
 <li><code><a title="digint.digint.PositionalBasedIntiger.bit_count" href="userint.html#digint.digint.PositionalBasedIntiger.bit_count">bit_count</a></code></li>
 <li><code><a title="digint.digint.PositionalBasedIntiger.bit_length" href="userint.html#digint.digint.PositionalBasedIntiger.bit_length">bit_length</a></code></li>
+<li><code><a title="digint.digint.PositionalBasedIntiger.contains" href="#digint.digint.PositionalBasedIntiger.contains">contains</a></code></li>
 <li><code><a title="digint.digint.PositionalBasedIntiger.copy" href="#digint.digint.PositionalBasedIntiger.copy">copy</a></code></li>
 <li><code><a title="digint.digint.PositionalBasedIntiger.delete_digit" href="#digint.digint.PositionalBasedIntiger.delete_digit">delete_digit</a></code></li>
 <li><code><a title="digint.digint.PositionalBasedIntiger.digit_count" href="#digint.digint.PositionalBasedIntiger.digit_count">digit_count</a></code></li>
@@ -2290,17 +2696,24 @@ there must be a matching quantity of values to set at those indexes.</p>
 <li><code><a title="digint.digint.PositionalBasedIntiger.digit_rotate_right" href="#digint.digint.PositionalBasedIntiger.digit_rotate_right">digit_rotate_right</a></code></li>
 <li><code><a title="digint.digint.PositionalBasedIntiger.digit_shift_left" href="#digint.digint.PositionalBasedIntiger.digit_shift_left">digit_shift_left</a></code></li>
 <li><code><a title="digint.digint.PositionalBasedIntiger.digit_shift_right" href="#digint.digint.PositionalBasedIntiger.digit_shift_right">digit_shift_right</a></code></li>
+<li><code><a title="digint.digint.PositionalBasedIntiger.fixed_sign_and" href="userint.html#digint.digint.PositionalBasedIntiger.fixed_sign_and">fixed_sign_and</a></code></li>
+<li><code><a title="digint.digint.PositionalBasedIntiger.fixed_sign_invert" href="userint.html#digint.digint.PositionalBasedIntiger.fixed_sign_invert">fixed_sign_invert</a></code></li>
+<li><code><a title="digint.digint.PositionalBasedIntiger.fixed_sign_or" href="userint.html#digint.digint.PositionalBasedIntiger.fixed_sign_or">fixed_sign_or</a></code></li>
+<li><code><a title="digint.digint.PositionalBasedIntiger.fixed_sign_xor" href="userint.html#digint.digint.PositionalBasedIntiger.fixed_sign_xor">fixed_sign_xor</a></code></li>
 <li><code><a title="digint.digint.PositionalBasedIntiger.get_digit" href="#digint.digint.PositionalBasedIntiger.get_digit">get_digit</a></code></li>
 <li><code><a title="digint.digint.PositionalBasedIntiger.insert" href="#digint.digint.PositionalBasedIntiger.insert">insert</a></code></li>
 <li><code><a title="digint.digint.PositionalBasedIntiger.is_integer" href="userint.html#digint.digint.PositionalBasedIntiger.is_integer">is_integer</a></code></li>
 <li><code><a title="digint.digint.PositionalBasedIntiger.iter_digits" href="#digint.digint.PositionalBasedIntiger.iter_digits">iter_digits</a></code></li>
 <li><code><a title="digint.digint.PositionalBasedIntiger.iter_symbols" href="#digint.digint.PositionalBasedIntiger.iter_symbols">iter_symbols</a></code></li>
+<li><code><a title="digint.digint.PositionalBasedIntiger.lstrip" href="#digint.digint.PositionalBasedIntiger.lstrip">lstrip</a></code></li>
 <li><code><a title="digint.digint.PositionalBasedIntiger.mask" href="#digint.digint.PositionalBasedIntiger.mask">mask</a></code></li>
 <li><code><a title="digint.digint.PositionalBasedIntiger.notate" href="#digint.digint.PositionalBasedIntiger.notate">notate</a></code></li>
 <li><code><a title="digint.digint.PositionalBasedIntiger.pop" href="#digint.digint.PositionalBasedIntiger.pop">pop</a></code></li>
 <li><code><a title="digint.digint.PositionalBasedIntiger.reversed_iter_digits" href="#digint.digint.PositionalBasedIntiger.reversed_iter_digits">reversed_iter_digits</a></code></li>
 <li><code><a title="digint.digint.PositionalBasedIntiger.reversed_iter_symbols" href="#digint.digint.PositionalBasedIntiger.reversed_iter_symbols">reversed_iter_symbols</a></code></li>
+<li><code><a title="digint.digint.PositionalBasedIntiger.rstrip" href="#digint.digint.PositionalBasedIntiger.rstrip">rstrip</a></code></li>
 <li><code><a title="digint.digint.PositionalBasedIntiger.set_digit" href="#digint.digint.PositionalBasedIntiger.set_digit">set_digit</a></code></li>
+<li><code><a title="digint.digint.PositionalBasedIntiger.strip" href="#digint.digint.PositionalBasedIntiger.strip">strip</a></code></li>
 <li><code><a title="digint.digint.PositionalBasedIntiger.to_bytes" href="userint.html#digint.digint.PositionalBasedIntiger.to_bytes">to_bytes</a></code></li>
 <li><code><a title="digint.digint.PositionalBasedIntiger.unset_digit" href="#digint.digint.PositionalBasedIntiger.unset_digit">unset_digit</a></code></li>
 </ul>

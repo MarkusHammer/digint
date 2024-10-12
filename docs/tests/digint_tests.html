@@ -196,7 +196,23 @@ not have a method with the specified name.</p></div>
             expected_result = digitint(test_set[&#34;whole&#34;], test_set[&#34;base&#34;])
             inserted = digitint(test_set[&#34;remainder&#34;], test_set[&#34;base&#34;])
             inserted.insert(test_set[&#34;index&#34;], test_set[&#34;popped&#34;])
-            self.assertEqual(expected_result, inserted)</code></pre>
+            self.assertEqual(expected_result, inserted)
+
+    def test_contains(self):
+        &#34;&#34;&#34;
+        `test_contains`
+
+        Tests that the `digitint` class&#39;s `contains` behaves as expected
+        using the tests case&#39;s contant examples.
+        &#34;&#34;&#34;
+
+        for test_set in self.CONSTS:
+            sequence = digitint(test_set[&#34;whole&#34;], test_set[&#34;base&#34;])
+            contents = test_set[&#34;popped&#34;]
+            if isinstance(contents, (int, str)):
+                contents = [contents]
+            for content in contents:
+                self.assertTrue(sequence.contains(content))</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -211,6 +227,14 @@ not have a method with the specified name.</p></div>
 </dl>
 <h3>Methods</h3>
 <dl>
+<dt id="digint.tests.digint_tests.DigitintPreset.test_contains"><code class="name flex">
+<span>def <span class="ident">test_contains</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>test_contains</code></p>
+<p>Tests that the <code>digitint</code> class's <code>contains</code> behaves as expected
+using the tests case's contant examples.</p></div>
+</dd>
 <dt id="digint.tests.digint_tests.DigitintPreset.test_del"><code class="name flex">
 <span>def <span class="ident">test_del</span></span>(<span>self)</span>
 </code></dt>
@@ -413,7 +437,8 @@ with random values in base 1.</p></div>
 <ul>
 <li>
 <h4><code><a title="digint.tests.digint_tests.DigitintPreset" href="#digint.tests.digint_tests.DigitintPreset">DigitintPreset</a></code></h4>
-<ul class="">
+<ul class="two-column">
+<li><code><a title="digint.tests.digint_tests.DigitintPreset.test_contains" href="#digint.tests.digint_tests.DigitintPreset.test_contains">test_contains</a></code></li>
 <li><code><a title="digint.tests.digint_tests.DigitintPreset.test_del" href="#digint.tests.digint_tests.DigitintPreset.test_del">test_del</a></code></li>
 <li><code><a title="digint.tests.digint_tests.DigitintPreset.test_get" href="#digint.tests.digint_tests.DigitintPreset.test_get">test_get</a></code></li>
 <li><code><a title="digint.tests.digint_tests.DigitintPreset.test_insert" href="#digint.tests.digint_tests.DigitintPreset.test_insert">test_insert</a></code></li>

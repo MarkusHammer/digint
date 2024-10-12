@@ -147,7 +147,47 @@ hljs.highlightAll();
         if value == 0:
             self.x = 0
         elif self.sign != value:
-            self.x *= -1</code></pre>
+            self.x *= -1
+
+    def fixed_sign_invert(self) -&gt; int:
+        &#34;&#34;&#34;
+        `fixed_sign_invert`
+
+        Returns:
+            The absolute value of this intiger, inverted, with its sign restored after.
+                If this intiger is 0, the value returned is `~0` (`0` inverted), not `0`.
+        &#34;&#34;&#34;
+        return (~abs(self.x)) * (-1 if self.x &lt; 0 else 1)
+
+    def fixed_sign_and(self, value:int) -&gt; int:
+        &#34;&#34;&#34;
+        `fixed_sign_and`
+
+        Returns:
+            The absolute value of this intiger, and-ed with the given `value`,
+                with its sign restored after.
+        &#34;&#34;&#34;
+        return (abs(self.x) &amp; value) * (-1 if self.x &lt; 0 else 1)
+
+    def fixed_sign_or(self, value:int) -&gt; int:
+        &#34;&#34;&#34;
+        `fixed_sign_or`
+
+        Returns:
+            The absolute value of this intiger, or-ed with the given `value`,
+                with its sign restored after.
+        &#34;&#34;&#34;
+        return (abs(self.x) | value) * (-1 if self.x &lt; 0 else 1)
+
+    def fixed_sign_xor(self, value:int) -&gt; int:
+        &#34;&#34;&#34;
+        `fixed_sign_xor`
+
+        Returns:
+            The absolute value of this intiger, xor-ed with the given `value`,
+                with its sign restored after.
+        &#34;&#34;&#34;
+        return (abs(self.x) ^ value) * (-1 if self.x &lt; 0 else 1)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -284,6 +324,42 @@ def x(self) -&gt; int:
 <code><a title="digint.userint.UserInt" href="#digint.userint.UserInt">UserInt</a></code>.<code><a title="digint.userint.UserInt.bit_length" href="#digint.userint.UserInt.bit_length">bit_length</a></code>
 </p>
 <div class="desc inherited"><p><code>bit_count</code> …</p></div>
+</dd>
+<dt id="digint.userint.ExtendedUserInt.fixed_sign_and"><code class="name flex">
+<span>def <span class="ident">fixed_sign_and</span></span>(<span>self, value: int) ‑> int</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>fixed_sign_and</code></p>
+<h2 id="returns">Returns</h2>
+<p>The absolute value of this intiger, and-ed with the given <code>value</code>,
+with its sign restored after.</p></div>
+</dd>
+<dt id="digint.userint.ExtendedUserInt.fixed_sign_invert"><code class="name flex">
+<span>def <span class="ident">fixed_sign_invert</span></span>(<span>self) ‑> int</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>fixed_sign_invert</code></p>
+<h2 id="returns">Returns</h2>
+<p>The absolute value of this intiger, inverted, with its sign restored after.
+If this intiger is 0, the value returned is <code>~0</code> (<code>0</code> inverted), not <code>0</code>.</p></div>
+</dd>
+<dt id="digint.userint.ExtendedUserInt.fixed_sign_or"><code class="name flex">
+<span>def <span class="ident">fixed_sign_or</span></span>(<span>self, value: int) ‑> int</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>fixed_sign_or</code></p>
+<h2 id="returns">Returns</h2>
+<p>The absolute value of this intiger, or-ed with the given <code>value</code>,
+with its sign restored after.</p></div>
+</dd>
+<dt id="digint.userint.ExtendedUserInt.fixed_sign_xor"><code class="name flex">
+<span>def <span class="ident">fixed_sign_xor</span></span>(<span>self, value: int) ‑> int</span>
+</code></dt>
+<dd>
+<div class="desc"><p><code>fixed_sign_xor</code></p>
+<h2 id="returns">Returns</h2>
+<p>The absolute value of this intiger, xor-ed with the given <code>value</code>,
+with its sign restored after.</p></div>
 </dd>
 <dt id="digint.userint.ExtendedUserInt.is_integer"><code class="name flex">
 <span>def <span class="ident">is_integer</span></span>(<span>self) ‑> bool</span>
@@ -790,9 +866,13 @@ as the operators of it's containing class as well.</p></div>
 <ul>
 <li>
 <h4><code><a title="digint.userint.ExtendedUserInt" href="#digint.userint.ExtendedUserInt">ExtendedUserInt</a></code></h4>
-<ul class="">
+<ul class="two-column">
 <li><code><a title="digint.userint.ExtendedUserInt.bit_count" href="#digint.userint.ExtendedUserInt.bit_count">bit_count</a></code></li>
 <li><code><a title="digint.userint.ExtendedUserInt.bit_length" href="#digint.userint.ExtendedUserInt.bit_length">bit_length</a></code></li>
+<li><code><a title="digint.userint.ExtendedUserInt.fixed_sign_and" href="#digint.userint.ExtendedUserInt.fixed_sign_and">fixed_sign_and</a></code></li>
+<li><code><a title="digint.userint.ExtendedUserInt.fixed_sign_invert" href="#digint.userint.ExtendedUserInt.fixed_sign_invert">fixed_sign_invert</a></code></li>
+<li><code><a title="digint.userint.ExtendedUserInt.fixed_sign_or" href="#digint.userint.ExtendedUserInt.fixed_sign_or">fixed_sign_or</a></code></li>
+<li><code><a title="digint.userint.ExtendedUserInt.fixed_sign_xor" href="#digint.userint.ExtendedUserInt.fixed_sign_xor">fixed_sign_xor</a></code></li>
 <li><code><a title="digint.userint.ExtendedUserInt.is_integer" href="#digint.userint.ExtendedUserInt.is_integer">is_integer</a></code></li>
 <li><code><a title="digint.userint.ExtendedUserInt.to_bytes" href="#digint.userint.ExtendedUserInt.to_bytes">to_bytes</a></code></li>
 </ul>

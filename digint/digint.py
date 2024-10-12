@@ -691,6 +691,111 @@ class PositionalBasedIntiger(*tuple(__POSITIONAL_BASED_INT_BASES)):
             self.digit_shift_right(1)
             self.append(popped)
 
+    def rstrip(self, value:Union[int,str,Iterable[Union[int,str]]]):
+        """
+        `rstrip`
+
+        Removes the given digit (or digits) from the right hand (units) spot.
+        Works similarly to ``str.rstrip``,
+        except for the fact that when ``value`` is a single string
+        (**not** a iterable of strings)
+        it will be treated as a single digit instead of a iterable of digits.
+
+        Arguments:
+            value -- The value (or iterable of values) to strip.
+                Can be either a intiger digit value, or a string corelating to a single digit.
+        """
+
+        if isinstance(value, Iterable):
+            value = tuple(self._ensure_unnotated(v) for v in value)
+        else:
+            value = (self._ensure_unnotated(value), )
+
+        if len(value) == 0:
+            return
+
+        while self.x != 0 and self._get_single_digit(0) in value:
+            self._pop_first()
+
+    def lstrip(self, value:Union[int,str,Iterable[Union[int,str]]]):
+        """
+        `rstrip`
+
+        Removes the given digit (or digits) from the left hand (greatest place value) spot.
+        Works similarly to ``str.lstrip``,
+        except for the fact that when ``value`` is a single string
+        (**not** a iterable of strings)
+        it will be treated as a single digit instead of a iterable of digits.
+        This will not strip any leading `0` digit values,
+        as these are already not notated by default
+        nor would effect the digit length of this intiger.
+
+        Arguments:
+            value -- The value (or iterable of values) to strip.
+                Can be either a intiger digit value, or a string corelating to a single digit.
+        """
+        if isinstance(value, Iterable):
+            value = [self._ensure_unnotated(v) for v in value]
+        else:
+            value = [self._ensure_unnotated(value)]
+
+        value.remove(0)
+
+        if len(value) == 0:
+            return
+
+        while self.x != 0 and self._get_single_digit(-1) in value:
+            self.pop(-1)
+
+    def strip(self, value:Union[int,str,Iterable[Union[int,str]]]):
+        """
+        `rstrip`
+
+        Removes the given digit (or digits) from both sides.
+        Works similarly to ``str.strip``,
+        except for the fact that when ``value`` is a single string
+        (**not** a iterable of strings)
+        it will be treated as a single digit instead of a iterable of digits.
+        This will not strip any leading `0` digit values,
+        as these are already not notated by default
+        nor would effect the digit length of this intiger.
+
+        Arguments:
+            value -- The value (or iterable of values) to strip.
+                Can be either a intiger digit value, or a string corelating to a single digit.
+        """
+        self.rstrip(value)
+        self.lstrip(value)
+
+    def contains(self, value:Union[int, str]) -> bool:
+        """
+        `contains`
+
+        Returns true if the digit value appears anywhere in this digit sequence.
+        This will not include leading 0s,
+        but will return true if the tested digit value is `0` and this intiger's value is also 0.
+
+        Arguments:
+            value -- The value to check for.
+        """
+        value = self._ensure_unnotated(value)
+
+        if self.x == 0:
+            return value == 0
+
+        working_value = abs(self.x)
+        while working_value > 0:
+            if self.base == 2:
+                if working_value & 0b1 == value:
+                    return True
+                working_value >>= 1
+            else:
+                if working_value % self.base == value:
+                    return True
+                working_value //= self.base
+        return False
+    __contains__ = contains
+
 
 class ExtendedBasedIntiger(PositionalBasedIntiger):
     """
@@ -936,6 +1041,31 @@ class ExtendedBasedIntiger(PositionalBasedIntiger):
         if self.base == 1:
             raise BaseInvalidOpperationError("This base cannot be shifted")
         super().digit_shift_right(amount)
+
+    @override
+    def rstrip(self, value:Union[int,str,Iterable[Union[int,str]]]):
+        if self.base == 1:
+            raise BaseInvalidOpperationError("This base cannot be stripped")
+        super().rstrip(value)
+
+    @override
+    def lstrip(self, value:Union[int,str,Iterable[Union[int,str]]]):
+        if self.base == 1:
+            raise BaseInvalidOpperationError("This base cannot be stripped")
+        super().lstrip(value)
+
+    @override
+    def strip(self, value:Union[int,str,Iterable[Union[int,str]]]):
+        if self.base == 1:
+            raise BaseInvalidOpperationError("This base cannot be stripped")
+        super().strip(value)
+
+    @override
+    def contains(self, value:Union[int, str]) -> bool:
+        if self.base == 1:
+            value = self._ensure_unnotated(value)
+            return (value == 1 and self.x != 0) or (value == 0 and self.x == 0)
+        return super().contains(value)
 
 
 # give it a more common name

@@ -157,6 +157,22 @@ class DigitintPreset(TestCase):
             inserted.insert(test_set["index"], test_set["popped"])
             self.assertEqual(expected_result, inserted)
 
+    def test_contains(self):
+        """
+        `test_contains`
+
+        Tests that the `digitint` class's `contains` behaves as expected
+        using the tests case's contant examples.
+        """
+
+        for test_set in self.CONSTS:
+            sequence = digitint(test_set["whole"], test_set["base"])
+            contents = test_set["popped"]
+            if isinstance(contents, (int, str)):
+                contents = [contents]
+            for content in contents:
+                self.assertTrue(sequence.contains(content))
+
 
 class DigitintRandom(TestCase):
     """

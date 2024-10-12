@@ -21,7 +21,7 @@ class UserIntTests(TestCase):
         """
         `test_x`
 
-        Tests that the `x` property of `ExtendedUserInt`
+        Tests that the `x` property of `UserInt`
         holds and maintains it's value properly with random values.
         """
         for _ in range(5000):
@@ -32,14 +32,14 @@ class UserIntTests(TestCase):
         """
         `test_compairson_opperators_int`
 
-        Tests that all the compairson opperators of `ExtendedUserInt`
+        Tests that all the compairson opperators of `UserInt`
         behaves as expected with random values.
         """
 
         for _ in range(5000):
             v1 = randrange(-1000000000, 1000000000)
             v2 = randrange(-1000000000, 1000000000)
-            xintobj1 = ExtendedUserInt(v1)
+            xintobj1 = UserInt(v1)
 
             self.assertTrue(xintobj1 == v1)
             self.assertFalse(xintobj1 != v1)
@@ -61,14 +61,14 @@ class UserIntTests(TestCase):
         """
         `test_arithmetic_opperators_int`
 
-        Tests that all the non-inline arithmetic opperators of `ExtendedUserInt`
+        Tests that all the non-inline arithmetic opperators of `UserInt`
         behaves as expected with random values.
         """
 
         for _ in range(5000):
             v1 = randrange(-1000000000, 1000000000)
             v2 = randrange(-1000000000, 1000000000)
-            xintobj1 = ExtendedUserInt(v1)
+            xintobj1 = UserInt(v1)
 
             self.assertEqual(xintobj1 + v2, v1 + v2)
             self.assertIsInstance(xintobj1 + v2, int)
@@ -96,7 +96,7 @@ class UserIntTests(TestCase):
         """
         `test_binary_opperators_int`
 
-        Tests that all the non-inline binary opperators of `ExtendedUserInt`
+        Tests that all the non-inline binary opperators of `UserInt`
         behaves as expected with random values.
         """
 
@@ -104,7 +104,7 @@ class UserIntTests(TestCase):
             v1 = randrange(-1000000000, 1000000000)
             v2 = randrange(-1000000000, 1000000000)
             v3 = randrange(0, 5)
-            xintobj1 = ExtendedUserInt(v1)
+            xintobj1 = UserInt(v1)
 
             self.assertEqual(~xintobj1, ~v1)
             self.assertIsInstance(~xintobj1, int)
@@ -123,14 +123,14 @@ class UserIntTests(TestCase):
         """
         `test_rounding_opperators_int`
 
-        Tests that all the rounding opperators of `ExtendedUserInt`
+        Tests that all the rounding opperators of `UserInt`
         behaves as expected with random values.
         """
 
         for _ in range(5000):
             v1 = randrange(-1000000000, 1000000000)
             v2 = randrange(0, 5)
-            xintobj1 = ExtendedUserInt(v1)
+            xintobj1 = UserInt(v1)
 
             self.assertEqual(trunc(xintobj1), trunc(v1))
             self.assertIsInstance(trunc(xintobj1), int)
@@ -147,14 +147,14 @@ class UserIntTests(TestCase):
         """
         `test_conversion_opperators_int`
 
-        Tests that all the type conversion opperators of `ExtendedUserInt`
+        Tests that all the type conversion opperators of `UserInt`
         behaves as expected with random values.
         """
 
         for _ in range(5000):
             v1 = randrange(-100000, 100000)
             byte_len = ceil(log2(abs(v1)) / 8) + 1 # +1 for an extra spot to hold the sign bit
-            xintobj1 = ExtendedUserInt(v1)
+            xintobj1 = UserInt(v1)
 
             self.assertEqual(int(xintobj1), int(v1))
             self.assertIsInstance(int(xintobj1), int)
@@ -179,13 +179,13 @@ class UserIntTests(TestCase):
         """
         `test_hashing_opperators_int`
 
-        Tests that all the hashing opperators of `ExtendedUserInt`
+        Tests that all the hashing opperators of `UserInt`
         behaves as expected with random values.
         """
 
         for _ in range(5000):
             v1 = randrange(-1000000000, 1000000000)
-            xintobj1 = ExtendedUserInt(v1)
+            xintobj1 = UserInt(v1)
 
             self.assertEqual(hash(xintobj1), hash(v1))
 
@@ -208,6 +208,29 @@ class ExtendedUserIntTests(TestCase):
             v = randrange(-1000000000, 1000000000)
             vsign = 0 if v == 0 else (-1 if v < 0 else 1)
             self.assertEqual(ExtendedUserInt(v).sign, vsign)
+
+    def test_fixed_sign_binary_opperators_int(self):
+        """
+        `test_binary_opperators_int`
+
+        Tests that all the non-inline binary opperators of `ExtendedUserInt`
+        behaves as expected with random values.
+        """
+
+        for _ in range(5000):
+            v1 = randrange(-1000000000, 1000000000)
+            v2 = randrange(-1000000000, 1000000000)
+            xintobj1 = ExtendedUserInt(v1)
+            v1sign_nonzero = xintobj1.sign if xintobj1 != 0 else 1
+
+            self.assertEqual(xintobj1.fixed_sign_invert(), ~abs(v1) * v1sign_nonzero)
+            self.assertIsInstance(xintobj1.fixed_sign_invert(), int)
+            self.assertEqual(xintobj1.fixed_sign_and(v2), (abs(v1) & v2) * v1sign_nonzero)
+            self.assertIsInstance(xintobj1.fixed_sign_and(v2), int)
+            self.assertEqual(xintobj1.fixed_sign_or(v2), (abs(v1) | v2) * v1sign_nonzero)
+            self.assertIsInstance(xintobj1.fixed_sign_or(v2), int)
+            self.assertEqual(xintobj1.fixed_sign_xor(v2), (abs(v1) ^ v2) * v1sign_nonzero)
+            self.assertIsInstance(xintobj1.fixed_sign_xor(v2), int)
 
 
 if __name__ == '__main__':
