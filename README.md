@@ -2,6 +2,8 @@
 
 > Base-Agnostic Integer Manipulation
 
+[![CodeQL](https://github.com/MarkusHammer/digint/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/MarkusHammer/digint/actions/workflows/github-code-scanning/codeql)
+
 `digint` is a module focused on easy high-level integer manipulation across any numerical base. Works with binary, decimal, or any other base. `digint` seeks to make complex digit-level and notation operations easy, just like they were `Collection`s.
 
 [Documentation](https://MarkusHammer.github.io/digint)
