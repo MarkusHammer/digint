@@ -6,18 +6,28 @@ Holds the main digitwise intiger classes `digint` module.
 
 from sys import version_info
 
-from .typings import * # pylint:disable=unused-wildcard-import, wildcard-import
+from .typings import (Union,
+                      List,
+                      Type,
+                      MutableSequenceABC,
+                      Iterable,
+                      Iterator,
+                      overload,
+                      cast,
+                      Optional,
+                      override
+                      )
 from .userint import ExtendedUserInt
 from .tools import absindex, slice_to_range, iter_to_slices
 from .notation_format import NotationFormat, DEFAULT_FORMAT
 from .errors import NotationError, BaseInvalidOpperationError, BaseValueError
 
-__POSITIONAL_BASED_INT_BASES:List[Type] = [ExtendedUserInt]
+_POSITIONAL_BASED_INT_BASES:List[Type] = [ExtendedUserInt]
 if version_info.major >= 3 and version_info.minor >= 10:
-    __POSITIONAL_BASED_INT_BASES.append(MutableSequenceABC)
+    _POSITIONAL_BASED_INT_BASES.append(MutableSequenceABC)
 
 
-class PositionalBasedIntiger(*tuple(__POSITIONAL_BASED_INT_BASES)):
+class PositionalBasedIntiger(*tuple(_POSITIONAL_BASED_INT_BASES)):
     """
     `PositionalBasedIntiger`
 
@@ -60,6 +70,34 @@ class PositionalBasedIntiger(*tuple(__POSITIONAL_BASED_INT_BASES)):
                 if digit_value >= base:
                     raise ValueError(f"Digit of value {digit_value} isn't possible in base {base}")
                 self.x = (self.x * base) + digit_value
+
+    if MutableSequenceABC not in _POSITIONAL_BASED_INT_BASES:
+        # welp, guess I have to hard code inheritance...
+        def append(self, value:Union[int,str]):
+            """
+            append
+
+            appends the `value` to this int
+            after the largest siginifigant placevalue
+
+            Arguments:
+                value: The value to append.
+            """
+            self.insert(len(self), value)
+
+        def reverse(self):
+            n = len(self)
+            for i in range(n//2):
+                self[i], self[n-i-1] = self[n-i-1], self[i]
+
+        def extend(self, values:Iterable[Union[int,str]]):
+            if values is self:
+                values = list(values)
+            for v in values:
+                self.append(v)
+
+        def remove(self, value: Union[int, str]):
+            del self.self[self.index(value)]
 
     def copy(self,
              value:Optional[Union[int, str]] = None,
@@ -123,23 +161,23 @@ class PositionalBasedIntiger(*tuple(__POSITIONAL_BASED_INT_BASES)):
         return abs(self.base)
 
     def _ensure_notated(self, value:Union[int,str]) -> str:
-        if self.notation_format is None:
-            raise NotationError("Cannot reference a symbol without a notation format")
-
         if isinstance(value, str):
             return value
-        else:
-            dig = self.notation_format.get_digit(value)
-            if dig is None:
-                raise NotationError(f"Could not find digit for {value} in current notation format")
-            return dig
 
-    def _ensure_unnotated(self, value:Union[int,str]) -> int:
         if self.notation_format is None:
             raise NotationError("Cannot reference a symbol without a notation format")
 
+        dig = self.notation_format.get_digit(value)
+        if dig is None:
+            raise NotationError(f"Could not find digit for {value} in current notation format")
+        return dig
+
+    def _ensure_unnotated(self, value:Union[int,str]) -> int:
         if isinstance(value, int):
             return value
+
+        if self.notation_format is None:
+            raise NotationError("Cannot reference a symbol without a notation format")
 
         v = self.notation_format.get_value(value)
         if v is None:
@@ -183,11 +221,11 @@ class PositionalBasedIntiger(*tuple(__POSITIONAL_BASED_INT_BASES)):
 
         dindex = absindex(dindex, self.digit_length())
 
-        if self.base == 2: # binary optimisable
+        if self.base == 2:  # binary optimisable
             return abs(self.x) & (((0b1 << (count - 1)) - 1) << dindex)
         else:
             pv1 = self.base ** dindex
-            pv2 = pv1 * (self.base ** count) # aka ```self.base ** (dindex + count)```
+            pv2 = pv1 * (self.base ** count)  # aka ```self.base ** (dindex + count)```
             return (abs(self.x) % pv2) - (abs(self.x) % pv1)
 
     def iter_digits(self, at_least:int = 0) -> Iterator[int]:
@@ -395,7 +433,7 @@ class PositionalBasedIntiger(*tuple(__POSITIONAL_BASED_INT_BASES)):
             if v < 0 or v >= self.base:
                 raise ValueError("Digit value out of bounds of base")
             i = absindex(i, self.digit_length())
-            if self.base == 2: # binary optimisable
+            if self.base == 2:  # binary optimisable
                 if v == 1:
                     self.x |= (0b1 << i)
                 else:
@@ -447,7 +485,7 @@ class PositionalBasedIntiger(*tuple(__POSITIONAL_BASED_INT_BASES)):
         sign = self.sign
         self.x = abs(self.x)
 
-        if self.base == 2: # binary optimization
+        if self.base == 2:  # binary optimization
             for i in index:
                 i = absindex(i, self.digit_length())
                 self.x = (self.x >> 1) << 1
@@ -562,6 +600,9 @@ class PositionalBasedIntiger(*tuple(__POSITIONAL_BASED_INT_BASES)):
 
         return popped
 
+    def clear(self):
+        self.x = 0
+
     def digit_count(self) -> int:
         """
         `digit_count`
@@ -588,19 +629,19 @@ class PositionalBasedIntiger(*tuple(__POSITIONAL_BASED_INT_BASES)):
 
     # gets the specified digits with their place value as an int
     # a higher level implementation of the concept of bit masking done with binary numbers
-    def mask(self, index:Union[int,slice,range,Iterable[int]]) -> int:
-        """
-        `mask`
+    def index_mask(self, index:Union[int,slice,range,Iterable[int]]) -> int:
+        # """
+        # `mask`
 
-        Similar to the concept of a 'bit mask', but on a arbitrary base.
-        Returns a value with all digits unset except for the given index (or indexes).
+        # Similar to the concept of a 'bit mask', but on a arbitrary base.
+        # Returns a value with all digits unset except for the given index (or indexes).
 
-        Arguments:
-            index -- The index (or indexes) to mask the digits of.
+        # Arguments:
+        #     index -- The index (or indexes) to mask the digits of.
 
-        Returns:
-            The value with all digits unset except for the given index (or indexes).
-        """
+        # Returns:
+        #     The value with all digits unset except for the given index (or indexes).
+        # """
         if isinstance(index, int):
             return self._mask_value_continuous(index)
 
@@ -614,6 +655,20 @@ class PositionalBasedIntiger(*tuple(__POSITIONAL_BASED_INT_BASES)):
             slices = iter_to_slices(cast(Iterable[int], index), self.digit_length())
 
         return sum(self._mask_value_continuous(s.start, s.stop - s.start) for s in slices)
+
+    def bool_mask(self, bools:Iterable[bool]) -> int:
+        acc = 0
+        for index, bool_select in enumerate(bools):
+            if bool_select:
+                acc += self._mask_value_continuous(index)
+        return acc
+
+    def bit_mask(self, bitmask:int) -> int:
+        acc = 0
+        for index in range(bitmask.bit_length()):
+            if bitmask & (0b1 << index) == 1:
+                acc += self._mask_value_continuous(index)
+        return acc
 
     def digit_shift_left(self, amount:int = 1):
         """
@@ -993,7 +1048,7 @@ class ExtendedBasedIntiger(PositionalBasedIntiger):
                   ):
         if self.base == 1:
             raise BaseInvalidOpperationError("Digits cannot be set in base 1")
-        super().set_digit(index, value) # type:ignore[reportCallIssue]
+        super().set_digit(index, value)  # type:ignore[reportCallIssue]
 
     @override
     def unset_digit(self, index:Union[int,slice,range,Iterable[int]]):
@@ -1069,5 +1124,5 @@ class ExtendedBasedIntiger(PositionalBasedIntiger):
 
 
 # give it a more common name
-digitint = ExtendedBasedIntiger # pylint:disable=invalid-name
+digitint = ExtendedBasedIntiger  # pylint:disable=invalid-name
 """ @private """

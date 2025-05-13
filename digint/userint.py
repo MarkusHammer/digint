@@ -7,17 +7,31 @@ Holds the `UserInt` and `ExtendedUserInt` classes.
 import operator
 from functools import partialmethod, total_ordering
 from sys import version_info
-from .typings import * # pylint:disable=unused-wildcard-import, wildcard-import
+from .typings import (Optional,
+                      Any,
+                      Callable,
+                      Type,
+                      Union,
+                      HashableABC,
+                      SupportsIndex,
+                      SupportsAbs,
+                      SupportsFloat,
+                      SupportsComplex,
+                      SupportsRound,
+                      SupportsInt,
+                      Literal,
+                      List,
+                      Tuple)
 
 
-class attr_forward_operators: # pylint:disable=invalid-name
+class attr_forward_operators:  # pylint:disable=invalid-name
     """
     `attr_forward_operators`
 
     Used to set an attribute of a class's opperators
     as the operators of it's containing class as well.
     """
-    class partial_opperator: # pylint:disable=invalid-name
+    class partial_opperator:  # pylint:disable=invalid-name
         """
         `partial_opperator`
 
@@ -40,7 +54,7 @@ class attr_forward_operators: # pylint:disable=invalid-name
             """
             return partialmethod(self)
 
-    class partial_inline_opperator: # pylint:disable=invalid-name
+    class partial_inline_opperator:  # pylint:disable=invalid-name
         """
         `partial_inline_opperator`
 
@@ -156,7 +170,7 @@ class attr_forward_operators: # pylint:disable=invalid-name
                 raise NameError(f"Operator {op_name} was not found in the operators module")
 
             op = self.partial_opperator(operator_name, self.instance_attr_name)
-            targets = {dundered : op.callable_method()}
+            targets = {dundered: op.callable_method()}
 
             if self.set_undundered:
                 targets[undundered] = op.callable_method()
@@ -178,14 +192,14 @@ class attr_forward_operators: # pylint:disable=invalid-name
         return cls
 
 
-__USERINT_ABCS:List[Type] = [SupportsInt,
-                             SupportsFloat,
-                             SupportsAbs,
-                             SupportsComplex,
-                             SupportsRound]
+_USERINT_ABCS:List[Type] = [SupportsInt,
+                            SupportsFloat,
+                            SupportsAbs,
+                            SupportsComplex,
+                            SupportsRound]
 if version_info.major >= 3 and version_info.minor >= 10:
-    __USERINT_ABCS.append(SupportsIndex)
-    __USERINT_ABCS.append(HashableABC)
+    _USERINT_ABCS.append(SupportsIndex)
+    _USERINT_ABCS.append(HashableABC)
 
 
 @attr_forward_operators("x", "xor", "lshift", "rshift", replace_existing=True, set_inline=True)
@@ -196,7 +210,7 @@ if version_info.major >= 3 and version_info.minor >= 10:
 @attr_forward_operators("x", "add", "sub", "mul", "truediv", set_inline=True)
 @total_ordering
 @attr_forward_operators("x", "lt", "eq", "gt", "le", "ge", replace_existing=True)
-class UserInt(*tuple(__USERINT_ABCS)):
+class UserInt(*tuple(_USERINT_ABCS)):
     """
     `UserInt`
 
@@ -360,7 +374,7 @@ class ExtendedUserInt(UserInt):
         old = self.__x
         self.__x = value
         if callable(self.on_changed):
-            self.on_changed(self, old) # pylint:disable=not-callable
+            self.on_changed(self, old)  # pylint:disable=not-callable
 
     @property
     def limit_high(self) -> Optional[int]:

@@ -7,7 +7,15 @@ Also provides a pre defined `DEFAULT_FORMAT`, a common notation formating.
 
 from dataclasses import FrozenInstanceError, dataclass, asdict
 from string import digits, ascii_uppercase, ascii_lowercase
-from .typings import * # pylint:disable=unused-wildcard-import, wildcard-import
+from .typings import (Optional,
+                      SequenceABC,
+                      HashableABC,
+                      Tuple,
+                      Any,
+                      overload,
+                      LiteralString,
+                      Iterator,
+                      Union)
 
 
 @dataclass(init=False)

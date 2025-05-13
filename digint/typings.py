@@ -46,6 +46,11 @@ except ImportError:
     from typing_extensions import Callable
 
 try:
+    from typing import Sized
+except ImportError:
+    from typing_extensions import Sized
+
+try:
     from typing import override # type:ignore[reportMissingImports]
 except ImportError:
     try:
@@ -64,26 +69,38 @@ try:
 except ImportError:
     from typing_extensions import Type
 
+HAS_PROTOCOL = False
+try:
+    from typing import Protocol, runtime_checkable as proto_runtime_checkable
+    HAS_PROTOCOL = True
+except ImportError:
+    try:
+        from typing_extensions import Protocol, runtime_checkable as proto_runtime_checkable
+        HAS_PROTOCOL = True
+    except ImportError:
+        def proto_runtime_checkable(cls:Type) -> Type:  # pylint:disable=missing-function-docstring
+            return cls
+
 try:
     from typing import overload
 except ImportError:
     from typing_extensions import overload
 
 try:
-    from typing import LiteralString # type:ignore[reportMissingImports]
+    from typing import LiteralString  # type:ignore[reportMissingImports]
 except ImportError:
     try:
-        from typing_extensions import LiteralString # type:ignore[reportMissingImports]
+        from typing_extensions import LiteralString  # type:ignore[reportMissingImports]
     except ImportError:
         try:
-            from typing import TypeAlias # type:ignore[reportMissingImports]
-            LiteralString:TypeAlias = str # type:ignore[reportRedeclaration]
+            from typing import TypeAlias  # type:ignore[reportMissingImports]
+            LiteralString:TypeAlias = str  # type:ignore[reportRedeclaration]
         except ImportError:
             try:
                 from typing_extensions import TypeAlias
-                LiteralString:TypeAlias = str # type:ignore[reportRedeclaration]
+                LiteralString:TypeAlias = str  # type:ignore[reportRedeclaration]
             except ImportError:
-                LiteralString = str # type:ignore[reportRedeclaration]
+                LiteralString = str  # type:ignore[reportRedeclaration]
 
 try:
     from typing import Literal
@@ -104,6 +121,11 @@ try:
     from typing import Optional
 except ImportError:
     from typing_extensions import Optional
+
+try:
+    from typing import Dict
+except ImportError:
+    from typing_extensions import Dict
 
 try:
     from typing import Tuple
@@ -128,6 +150,11 @@ except ImportError:
     from typing_extensions import Hashable
 
 from collections.abc import Hashable as HashableABC
+
+try:
+    from typing import Container
+except ImportError:
+    from typing_extensions import Container
 
 try:
     from typing import Iterable

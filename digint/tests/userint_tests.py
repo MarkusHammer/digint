@@ -5,9 +5,16 @@ Holds test cases that specifically test the `UserInt` and `ExtendedUserInt` clas
 """
 
 from math import trunc, floor, ceil, log2
+from sys import version_info
 from unittest import TestCase, main
 from random import randrange
 from ..userint import UserInt, ExtendedUserInt
+from ..typings import (HAS_PROTOCOL,
+                       SupportsAbs,
+                       SupportsInt,
+                       SupportsFloat,
+                       SupportsComplex,
+                       SupportsRound)
 
 
 class UserIntTests(TestCase):
@@ -82,8 +89,8 @@ class UserIntTests(TestCase):
             self.assertIsInstance(xintobj1 // v2, int)
             self.assertEqual(xintobj1 % v2, v1 % v2)
             self.assertIsInstance(xintobj1 % v2, int)
-            self.assertEqual(xintobj1 ** (abs(v2)%5), v1 ** (abs(v2)%5))
-            self.assertIsInstance(xintobj1 ** (abs(v2)%5), int)
+            self.assertEqual(xintobj1 ** (abs(v2) % 5), v1 ** (abs(v2) % 5))
+            self.assertIsInstance(xintobj1 ** (abs(v2) % 5), int)
 
             self.assertEqual(-xintobj1, -v1)
             self.assertIsInstance(-xintobj1, int)
@@ -153,7 +160,10 @@ class UserIntTests(TestCase):
 
         for _ in range(5000):
             v1 = randrange(-100000, 100000)
-            byte_len = ceil(log2(abs(v1)) / 8) + 1 # +1 for an extra spot to hold the sign bit
+            byte_len = 0
+            if v1 != 0:
+                byte_len = log2(abs(v1)) / 8
+            byte_len = ceil(byte_len) + 1  # +1 for an extra spot to hold the sign bit
             xintobj1 = UserInt(v1)
 
             self.assertEqual(int(xintobj1), int(v1))
@@ -188,6 +198,29 @@ class UserIntTests(TestCase):
             xintobj1 = UserInt(v1)
 
             self.assertEqual(hash(xintobj1), hash(v1))
+
+
+class UserIntAPITests(TestCase):
+    """
+    `DigintAPI`
+
+    Tests the `digitint` class's API.
+    """
+    if HAS_PROTOCOL and version_info.major >= 3 and version_info.minor >= 10:
+        # versions this before don't support checking protocalls against instances
+        def test_protocol(self):
+            """
+            `test_protocol`
+
+            Tests that `UserInt` is a protocol and has all the correct
+            protocol methods. Only available in python 3.10 and up.
+            """
+            u = UserInt(0)
+            self.assertIsInstance(u, SupportsFloat)
+            self.assertIsInstance(u, SupportsInt)
+            self.assertIsInstance(u, SupportsComplex)
+            self.assertIsInstance(u, SupportsRound)
+            self.assertIsInstance(u, SupportsAbs)
 
 
 class ExtendedUserIntTests(TestCase):

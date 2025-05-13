@@ -4,7 +4,7 @@ tools
 Holds common tool functions and classes used in the `dint` module.
 """
 
-from .typings import * # pylint:disable=unused-wildcard-import, wildcard-import
+from .typings import Union, Sized, Iterable, Tuple
 
 
 def absindex(index:int, reference_length:Union[Sized, int]) -> int:
