@@ -8,6 +8,8 @@
         "fmt",
         "iop",
         "ndigits",
+        "nodupe",
+        "noduplicates",
         "outv",
         "pdigits",
         "slicetorange",

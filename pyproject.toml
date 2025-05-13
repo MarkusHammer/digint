@@ -58,6 +58,9 @@
             "pylint",
             "flake8"
         ]
+        examples = [
+            "sympy"
+        ]
     [project.urls]
         Homepage = "https://github.com/MarkusHammer/digint"
         Documentation = "https://MarkusHammer.github.io/digint"
